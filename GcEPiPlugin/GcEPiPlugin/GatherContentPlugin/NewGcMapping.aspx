@@ -10,11 +10,9 @@
         <h4>
             <asp:Label runat="server" ID="txtAccountName" AssociatedControlID="rblGcProjects"></asp:Label> 
         </h4>
-        <p>
             <asp:RadioButtonList runat="server" ID="rblGcProjects"/>
-        </p>
         <p>
-            <asp:Button runat="server" ID="btnSave" Text="Save" OnClick="BtnSave_OnClick"/> 
+            <asp:Button runat="server" ID="btnNextStep" Text="Next Step" PostBackUrl="~/GatherContentPlugin/NewGcMappingV2.aspx" OnClick="BtnNextStep_OnClick"/> 
         </p>
     </fieldset>
 </form>

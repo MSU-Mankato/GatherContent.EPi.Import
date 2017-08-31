@@ -6,6 +6,7 @@ using GatherContentConnect;
 using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
+using EPiServer.Framework.Web.Resources;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 
 namespace GcEPiPlugin.GatherContentPlugin
@@ -45,7 +46,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             }
             else
             {
-                Response.Write("<script>alert('Invalid Email Address or ApiKey! Try again! ')</script>");
+                Response.Write("<script>alert('Invalid Email Address or ApiKey! Try again!')</script>");
                 GcDynamicCredentials.ClearStore();
                 GcDynamicSettings.ClearStore();
             }
@@ -63,7 +64,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             _client = new GcConnectClient(apiKey,email);
             var accounts = _client.GetAccounts();
             accounts.ToList().ForEach(i => ddlGcAccounts.Items.Add(new ListItem(i.Name, i.Id, true)));
-            if (settingsStore.Count <= 0 || settingsStore.ToList().First().AccountId == "")
+            if (settingsStore.Count <= 0 || settingsStore.ToList().First().AccountId == string.Empty)
             {
                 _settings = new GcDynamicSettings(ddlGcAccounts.SelectedValue);
                 GcDynamicSettings.SaveStore(_settings);

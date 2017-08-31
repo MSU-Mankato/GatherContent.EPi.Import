@@ -25,6 +25,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -200,6 +201,8 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ItemGroup>
+    <Compile Include="GatherContentPlugin\ClientResourceProvider.cs" />
+    <Compile Include="GatherContentPlugin\ClientResourceRegister.cs" />
     <Compile Include="GatherContentPlugin\GatherContent.aspx.cs">
       <DependentUpon>GatherContent.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -216,6 +219,13 @@
     <Compile Include="GatherContentPlugin\NewGcMapping.aspx.designer.cs">
       <DependentUpon>NewGcMapping.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GatherContentPlugin\NewGcMappingV2.aspx.cs">
+      <DependentUpon>NewGcMappingV2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GatherContentPlugin\NewGcMappingV2.aspx.designer.cs">
+      <DependentUpon>NewGcMappingV2.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -228,6 +238,7 @@
   <ItemGroup>
     <Content Include="GatherContentPlugin\GatherContent.aspx" />
     <Content Include="GatherContentPlugin\NewGcMapping.aspx" />
+    <Content Include="GatherContentPlugin\NewGcMappingV2.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="App_Data\GeoLiteCity.dat" />
