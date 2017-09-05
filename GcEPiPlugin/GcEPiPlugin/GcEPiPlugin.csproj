@@ -212,6 +212,7 @@
     </Compile>
     <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicCredentials.cs" />
     <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicSettings.cs" />
+    <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiContentTypeMap.cs" />
     <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiStatusMap.cs" />
     <Compile Include="GatherContentPlugin\GcEpiUserControls\TemplateMapUserControl.ascx.cs">
       <DependentUpon>TemplateMapUserControl.ascx</DependentUpon>

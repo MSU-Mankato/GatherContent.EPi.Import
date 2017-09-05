@@ -1,10 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using EPiServer.Core;
-using EPiServer.DataAbstraction;
+﻿using EPiServer.Core;
 using EPiServer.DataAnnotations;
 
-namespace GcEPiPlugin.Models
+namespace GcEPiPlugin.Models.Blocks
 {
     [ContentType(DisplayName = "SampleBlock", GUID = "aea8ae83-cd8e-4e00-a9b9-d5e7438d0fb5", Description = "")]
     public class SampleBlock : BlockData
