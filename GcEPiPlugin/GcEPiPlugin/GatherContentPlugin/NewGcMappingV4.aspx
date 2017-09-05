@@ -15,7 +15,7 @@
         </asp:Table>
     </fieldset>
     <p>
-        <asp:Button ID="btnPreviousStep" runat="server" PostBackUrl="~/GatherContentPlugin/NewGcMappingV3.aspx" Text="Previous Step" />
+        <asp:Button ID="btnPreviousStep" runat="server" PostBackUrl="NewGcMappingV3.aspx" Text="Previous Step" />
         <asp:Button runat="server" ID="btnSaveMapping" Text="Save Mapping" OnClick="BtnSaveMapping_OnClick"/> 
     </p>
 </form>

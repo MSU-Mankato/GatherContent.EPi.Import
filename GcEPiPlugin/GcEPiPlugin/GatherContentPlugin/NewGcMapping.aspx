@@ -13,7 +13,7 @@
         </h4>
         <asp:RadioButtonList runat="server" ID="rblGcProjects"/>
         <p>
-            <asp:Button ID="btnApiStep" runat="server" PostBackUrl="~/GatherContentPlugin/GatherContent.aspx" Text="Back to API step" />
+            <asp:Button ID="btnApiStep" runat="server" PostBackUrl="GatherContent.aspx" Text="Back to API step" />
             <asp:Button runat="server" ID="btnNextStep" Text="Next Step" OnClick="BtnNextStep_OnClick"/> 
         </p>
     </fieldset>
