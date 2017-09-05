@@ -7,10 +7,10 @@
 <form id="form1" runat="server">
     <h1>GatherContent</h1>
     <fieldset>
+        <h3>Next, Select a template to map.</h3>
         <h4>
-            <asp:Label runat="server" ID="txtProjectName" AssociatedControlID="rblGcTemplates"></asp:Label> 
+            <asp:Label runat="server" ID="projectName" AssociatedControlID="rblGcTemplates"></asp:Label> 
         </h4>
-        
         <asp:RadioButtonList ID="rblGcTemplates" runat="server"/>
         <p>
             <asp:Button ID="btnPreviousStep" runat="server" PostBackUrl="~/GatherContentPlugin/NewGcMapping.aspx" Text="Previous Step" />

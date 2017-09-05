@@ -10,7 +10,7 @@
 namespace GcEPiPlugin.GatherContentPlugin {
     
     
-    public partial class NewGcMappingV2 {
+    public partial class NewGcMappingV3 {
         
         /// <summary>
         /// Head1 control.
@@ -31,6 +31,24 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// templateName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label templateName;
+        
+        /// <summary>
+        /// templateDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label templateDescription;
+        
+        /// <summary>
         /// projectName control.
         /// </summary>
         /// <remarks>
@@ -40,13 +58,40 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.WebControls.Label projectName;
         
         /// <summary>
-        /// rblGcTemplates control.
+        /// ddlPostTypes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rblGcTemplates;
+        protected global::System.Web.UI.WebControls.DropDownList ddlPostTypes;
+        
+        /// <summary>
+        /// ddlAuthors control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlAuthors;
+        
+        /// <summary>
+        /// ddlStatuses control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlStatuses;
+        
+        /// <summary>
+        /// tableGcStatusesMap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Table tableGcStatusesMap;
         
         /// <summary>
         /// btnPreviousStep control.

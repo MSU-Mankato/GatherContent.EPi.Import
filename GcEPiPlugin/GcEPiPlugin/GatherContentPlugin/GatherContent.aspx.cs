@@ -64,7 +64,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             _client = new GcConnectClient(apiKey,email);
             var accounts = _client.GetAccounts();
             accounts.ToList().ForEach(i => ddlGcAccounts.Items.Add(new ListItem(i.Name, i.Id, true)));
-            if (settingsStore.Count <= 0 || settingsStore.ToList().First().AccountId == string.Empty)
+            if (settingsStore.Count <= 0 || string.IsNullOrEmpty(settingsStore.ToList().First().AccountId))
             {
                 _settings = new GcDynamicSettings(ddlGcAccounts.SelectedValue);
                 GcDynamicSettings.SaveStore(_settings);

@@ -33,17 +33,17 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             var settingsStore = GcDynamicSettings.RetrieveStore();
-            if (credentialsStore.Count <= 0)
+            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0)
             {
                 Visible = false;
                 return;
             }
             _client = new GcConnectClient(credentialsStore.ToList().First().ApiKey,credentialsStore.ToList().First().Email);
             var accountId = Convert.ToInt32(settingsStore.ToList().First().AccountId);
-            txtAccountName.Text = _client.GetAccountById(accountId).Name;
+            accountName.Text = _client.GetAccountById(accountId).Name;
             var projects = _client.GetProjectsByAccountId(accountId);
             projects.ToList().ForEach(i => rblGcProjects.Items.Add(new ListItem(i.Name, i.Id.ToString())));
-            if (settingsStore.Count <= 0 || settingsStore.ToList().First().ProjectId == string.Empty)
+            if (settingsStore.Count <= 0 || string.IsNullOrEmpty(settingsStore.ToList().First().ProjectId))
             {
                 rblGcProjects.SelectedIndex = 0;
                 _settings = new GcDynamicSettings(projectId: rblGcProjects.SelectedValue);
@@ -59,7 +59,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             var selectedValue = Request.Form["rblGcProjects"];
             _settings = new GcDynamicSettings(projectId: selectedValue);
             GcDynamicSettings.SaveStore(_settings);
-            PopulateForm();
+            Response.Redirect("~/GatherContentPlugin/NewGcMappingV2.aspx");
         }
     }
 }

@@ -10,7 +10,7 @@
 namespace GcEPiPlugin.GatherContentPlugin {
     
     
-    public partial class NewGcMappingV2 {
+    public partial class NewGcMappingV4 {
         
         /// <summary>
         /// Head1 control.
@@ -31,6 +31,24 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// templateName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label templateName;
+        
+        /// <summary>
+        /// templateDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label templateDescription;
+        
+        /// <summary>
         /// projectName control.
         /// </summary>
         /// <remarks>
@@ -40,13 +58,13 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.WebControls.Label projectName;
         
         /// <summary>
-        /// rblGcTemplates control.
+        /// tableMappings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rblGcTemplates;
+        protected global::System.Web.UI.WebControls.Table tableMappings;
         
         /// <summary>
         /// btnPreviousStep control.
@@ -58,12 +76,12 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.WebControls.Button btnPreviousStep;
         
         /// <summary>
-        /// btnNextStep control.
+        /// btnSaveMapping control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnNextStep;
+        protected global::System.Web.UI.WebControls.Button btnSaveMapping;
     }
 }

@@ -212,6 +212,14 @@
     </Compile>
     <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicCredentials.cs" />
     <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicSettings.cs" />
+    <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiStatusMap.cs" />
+    <Compile Include="GatherContentPlugin\GcEpiUserControls\TemplateMapUserControl.ascx.cs">
+      <DependentUpon>TemplateMapUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GatherContentPlugin\GcEpiUserControls\TemplateMapUserControl.ascx.designer.cs">
+      <DependentUpon>TemplateMapUserControl.ascx</DependentUpon>
+    </Compile>
     <Compile Include="GatherContentPlugin\NewGcMapping.aspx.cs">
       <DependentUpon>NewGcMapping.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -226,19 +234,41 @@
     <Compile Include="GatherContentPlugin\NewGcMappingV2.aspx.designer.cs">
       <DependentUpon>NewGcMappingV2.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GatherContentPlugin\NewGcMappingV3.aspx.cs">
+      <DependentUpon>NewGcMappingV3.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GatherContentPlugin\NewGcMappingV3.aspx.designer.cs">
+      <DependentUpon>NewGcMappingV3.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GatherContentPlugin\NewGcMappingV4.aspx.cs">
+      <DependentUpon>NewGcMappingV4.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GatherContentPlugin\NewGcMappingV4.aspx.designer.cs">
+      <DependentUpon>NewGcMappingV4.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Blocks\SampleBlock.cs" />
+    <Compile Include="Models\Pages\SamplePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Business\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Models\ViewModels\" />
     <Folder Include="Static\" />
+    <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GatherContentPlugin\GatherContent.aspx" />
+    <Content Include="GatherContentPlugin\GcEpiUserControls\TemplateMapUserControl.ascx" />
     <Content Include="GatherContentPlugin\NewGcMapping.aspx" />
     <Content Include="GatherContentPlugin\NewGcMappingV2.aspx" />
+    <Content Include="GatherContentPlugin\NewGcMappingV3.aspx" />
+    <Content Include="GatherContentPlugin\NewGcMappingV4.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="App_Data\GeoLiteCity.dat" />
