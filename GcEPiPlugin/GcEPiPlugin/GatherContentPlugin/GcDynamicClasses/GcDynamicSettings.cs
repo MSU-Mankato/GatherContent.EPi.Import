@@ -19,6 +19,7 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
         public string Author { get; set; }
         public string EPiStatus { get; set; }
         public List<GcEpiStatusMap> StatusMaps { get; set; }
+        public List<GcEpiContentTypeMap> ContentTypeMaps { get; set; }
         //Parameter-less constructor required for the dynamic data store.
         public GcDynamicSettings()
         {
@@ -31,13 +32,16 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
             Author = string.Empty;
             EPiStatus = string.Empty;
             StatusMaps = new List<GcEpiStatusMap>();
+            ContentTypeMaps = new List<GcEpiContentTypeMap>();
         }                                                                                                                                                                                                                                                                                                                   
 
         public GcDynamicSettings([Optional] string accountId, [Optional] string projectId, [Optional] string templateId
-            , [Optional] string postType, [Optional] string author, [Optional] string epiStatus, [Optional] List<GcEpiStatusMap> statusMaps)
+            , [Optional] string postType, [Optional] string author, [Optional] string epiStatus, [Optional] List<GcEpiStatusMap> statusMaps
+            , [Optional] List<GcEpiContentTypeMap> contentTypeMaps)
         {
             //Assign the properties with actual values.
             Id = Identity.NewIdentity(Guid.NewGuid());
+
             if (accountId != null)
                 AccountId = accountId;
             else
@@ -79,6 +83,12 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
             else
             {
                 StatusMaps = RetrieveStore().Count > 0 ? RetrieveStore().ToList()[0].StatusMaps : new List<GcEpiStatusMap>();
+            }
+            if (contentTypeMaps != null)
+                ContentTypeMaps = contentTypeMaps;
+            else
+            {
+                ContentTypeMaps = RetrieveStore().Count > 0 ? RetrieveStore().ToList()[0].ContentTypeMaps : new List<GcEpiContentTypeMap>();
             }
         }
         public static void SaveStore(GcDynamicSettings dds)
