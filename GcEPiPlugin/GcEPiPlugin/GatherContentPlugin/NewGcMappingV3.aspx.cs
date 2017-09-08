@@ -93,8 +93,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                         var mapsInStore = settingsStore.ToList().First().StatusMaps;
                         if (mapsInStore.Count > 0)
                         {
-                            if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
-                                mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId)
+                            if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
+                                mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId)
                             {
                                 ddlOnImportGcStatuses.SelectedValue = mapsInStore[storeIndex].OnImportChangeGcStatus;
                             }
@@ -116,8 +116,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                         var mapsInStore = GcDynamicSettings.RetrieveStore().ToList().First().StatusMaps;
                         if (mapsInStore.Count > 0)  
                         {
-                            if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
-                                mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId)
+                            if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
+                                mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId)
                             {
                                 ddlEpiStatuses.SelectedValue = mapsInStore[storeIndex].MappedEpiserverStatus;
                             }

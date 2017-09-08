@@ -211,6 +211,7 @@
       <DependentUpon>GatherContent.aspx</DependentUpon>
     </Compile>
     <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicCredentials.cs" />
+    <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicMappings.cs" />
     <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicSettings.cs" />
     <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiContentTypeMap.cs" />
     <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiStatusMap.cs" />
