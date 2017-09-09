@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Security;
 using System.Web.UI.WebControls;
+using Castle.Core.Internal;
 using EPiServer;
 using EPiServer.DataAccess;
 using EPiServer.PlugIn;
@@ -91,10 +92,10 @@ namespace GcEPiPlugin.GatherContentPlugin
                         gcStatuses.ToList().ForEach(i => ddlOnImportGcStatuses.Items.Add(new ListItem(i.Name, i.Id)));
                         ddlOnImportGcStatuses.ID = "onImportGc-" + status.Id;
                         var mapsInStore = settingsStore.ToList().First().StatusMaps;
-                        if (mapsInStore.Count > 0)
+                        if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == gcStatuses.Count)
                         {
-                            if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId)
+                            if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
+                                mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId)
                             {
                                 ddlOnImportGcStatuses.SelectedValue = mapsInStore[storeIndex].OnImportChangeGcStatus;
                             }
@@ -114,10 +115,10 @@ namespace GcEPiPlugin.GatherContentPlugin
                         ddlEpiStatuses.Items.Add(new ListItem("Do Not Change", "noChange"));
                         ddlEpiStatuses.ID = "mappedEPi-" + status.Id;
                         var mapsInStore = GcDynamicSettings.RetrieveStore().ToList().First().StatusMaps;
-                        if (mapsInStore.Count > 0)  
+                        if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == gcStatuses.Count)  
                         {
-                            if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId)
+                            if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
+                                mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId)
                             {
                                 ddlEpiStatuses.SelectedValue = mapsInStore[storeIndex].MappedEpiserverStatus;
                             }

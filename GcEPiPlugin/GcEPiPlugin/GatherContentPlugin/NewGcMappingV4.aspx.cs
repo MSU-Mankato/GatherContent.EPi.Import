@@ -61,6 +61,8 @@ namespace GcEPiPlugin.GatherContentPlugin
             tableMappings.Rows.Add(tHeadRow);
             var gcConfigs = _client.GetTemplateById(templateId).Config.ToList();
             var storeIndex = 0;
+            var elementsCount = 0;
+            gcConfigs.ForEach(i => elementsCount += i.Elements.Count);
             foreach (var gcConfig in gcConfigs)
             {
                 foreach (var element in gcConfig.Elements)
@@ -88,7 +90,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 pageTypes.ForEach(i => ddlContentTypes.Items.Add(new ListItem(i.Name, i.Name)));
                                 ddlContentTypes.ID = "cType-" + element.Label;
                                 var mapsInStore = settingsStore.ToList().First().ContentTypeMaps;
-                                if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == ddlContentTypes.Items.Count)
+                                if (!mapsInStore.IsNullOrEmpty() && elementsCount == mapsInStore.Count)
                                 {
                                     if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
                                         mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId &&
@@ -112,7 +114,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 myProperty.PropertyDefinitions.ToList().ForEach(i => 
                                     ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
                                 ddlMetaData.ID = "meta-" + element.Label;
-                                if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == ddlMetaData.Items.Count)
+                                if (!mapsInStore.IsNullOrEmpty() && elementsCount == mapsInStore.Count)
                                 {
                                     if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
                                         mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId &&
@@ -139,7 +141,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 blockTypes.ForEach(i => ddlContentTypes.Items.Add(new ListItem(i.Name, i.Name)));
                                 ddlContentTypes.ID = "cType-" + element.Label;
                                 var mapsInStore = settingsStore.ToList().First().ContentTypeMaps;
-                                if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == ddlContentTypes.Items.Count)
+                                if (!mapsInStore.IsNullOrEmpty() && elementsCount == mapsInStore.Count)
                                 {
                                     if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
                                         mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId &&
@@ -163,7 +165,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 myProperty.PropertyDefinitions.ToList().ForEach(i =>
                                     ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
                                 ddlMetaData.ID = "meta-" + element.Label;
-                                if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == ddlMetaData.Items.Count)
+                                if (!mapsInStore.IsNullOrEmpty() && elementsCount == mapsInStore.Count)
                                 {
                                     if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
                                         mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId &&
