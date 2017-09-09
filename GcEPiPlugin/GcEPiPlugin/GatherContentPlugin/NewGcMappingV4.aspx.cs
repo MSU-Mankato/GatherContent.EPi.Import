@@ -59,11 +59,11 @@ namespace GcEPiPlugin.GatherContentPlugin
             tHeadRow.Cells.Add(new TableCell { Text = "GatherContent Field" });
             tHeadRow.Cells.Add(new TableCell { Text = "Mapped EPiServer Field" });
             tableMappings.Rows.Add(tHeadRow);
-            var gcFields = _client.GetTemplateById(templateId).Config.ToList();
+            var gcConfigs = _client.GetTemplateById(templateId).Config.ToList();
             var storeIndex = 0;
-            foreach (var field in gcFields)
+            foreach (var gcConfig in gcConfigs)
             {
-                foreach (var element in field.Elements)
+                foreach (var element in gcConfig.Elements)
                 {
                     var tRow = new TableRow();
                     tableMappings.Rows.Add(tRow);
@@ -88,11 +88,11 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 pageTypes.ForEach(i => ddlContentTypes.Items.Add(new ListItem(i.Name, i.Name)));
                                 ddlContentTypes.ID = "cType-" + element.Label;
                                 var mapsInStore = settingsStore.ToList().First().ContentTypeMaps;
-                                if (!mapsInStore.IsNullOrEmpty())
+                                if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == ddlContentTypes.Items.Count)
                                 {
-                                    if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                        mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId &&
-                                        mapsInStore.First().PostType == settingsStore.ToList().First().PostType)
+                                    if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
+                                        mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId &&
+                                        mapsInStore[storeIndex].PostType == settingsStore.ToList().First().PostType)
                                     {
                                         ddlContentTypes.SelectedValue = mapsInStore[storeIndex].ContentType;
                                     }
@@ -112,11 +112,11 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 myProperty.PropertyDefinitions.ToList().ForEach(i => 
                                     ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
                                 ddlMetaData.ID = "meta-" + element.Label;
-                                if (!mapsInStore.IsNullOrEmpty())
+                                if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == ddlMetaData.Items.Count)
                                 {
-                                    if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                        mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId &&
-                                        mapsInStore.First().PostType == settingsStore.ToList().First().PostType)
+                                    if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
+                                        mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId &&
+                                        mapsInStore[storeIndex].PostType == settingsStore.ToList().First().PostType)
                                     {
                                         ddlMetaData.SelectedValue = mapsInStore[storeIndex].Metadata;
                                     }
@@ -139,11 +139,11 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 blockTypes.ForEach(i => ddlContentTypes.Items.Add(new ListItem(i.Name, i.Name)));
                                 ddlContentTypes.ID = "cType-" + element.Label;
                                 var mapsInStore = settingsStore.ToList().First().ContentTypeMaps;
-                                if (!mapsInStore.IsNullOrEmpty())
+                                if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == ddlContentTypes.Items.Count)
                                 {
-                                    if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                        mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId &&
-                                        mapsInStore.First().PostType == settingsStore.ToList().First().PostType)
+                                    if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
+                                        mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId &&
+                                        mapsInStore[storeIndex].PostType == settingsStore.ToList().First().PostType)
                                     {
                                         ddlContentTypes.SelectedValue = mapsInStore[storeIndex].ContentType;
                                     }
@@ -163,11 +163,11 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 myProperty.PropertyDefinitions.ToList().ForEach(i =>
                                     ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
                                 ddlMetaData.ID = "meta-" + element.Label;
-                                if (!mapsInStore.IsNullOrEmpty())
+                                if (!mapsInStore.IsNullOrEmpty() && mapsInStore.Count == ddlMetaData.Items.Count)
                                 {
-                                    if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                        mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId &&
-                                        mapsInStore.First().PostType == settingsStore.ToList().First().PostType)
+                                    if (mapsInStore[storeIndex].ProjectId == settingsStore.ToList().First().ProjectId &&
+                                        mapsInStore[storeIndex].TemplateId == settingsStore.ToList().First().TemplateId &&
+                                        mapsInStore[storeIndex].PostType == settingsStore.ToList().First().PostType)
                                     {
                                         ddlMetaData.SelectedValue = mapsInStore[storeIndex].Metadata;
                                     }
@@ -212,7 +212,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                 }).ToList();
             _settings = new GcDynamicSettings(contentTypeMaps: gcEpiContentTypeMaps);
             GcDynamicSettings.SaveStore(_settings);
-            var mappings = new GcDynamicMappings(GcDynamicSettings.RetrieveStore());
+            var mappings = new GcDynamicMappings(GcDynamicSettings.RetrieveStore().ToList().First());
             GcDynamicMappings.SaveStore(mappings);
             PopulateForm();
         }
