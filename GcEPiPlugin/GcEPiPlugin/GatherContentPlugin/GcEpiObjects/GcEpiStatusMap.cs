@@ -9,7 +9,5 @@ namespace GcEPiPlugin.GatherContentPlugin.GcEpiObjects
         public string MappedEpiserverStatus { get; set; }
         //getter and setter for on import, change GatherContent status.
         public string OnImportChangeGcStatus { get; set; }
-        public string ProjectId { get; set; }
-        public string TemplateId { get; set; }
     }
 }

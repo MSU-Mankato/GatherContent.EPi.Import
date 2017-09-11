@@ -40,18 +40,15 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             var settingsStore = GcDynamicSettings.RetrieveStore();
-            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 ||
-                string.IsNullOrEmpty(settingsStore.ToList().First().ProjectId) || string.IsNullOrEmpty(settingsStore.ToList().First().TemplateId) || 
-                string.IsNullOrEmpty(settingsStore.ToList().First().PostType) || string.IsNullOrEmpty(settingsStore.ToList().First().Author) || 
-                string.IsNullOrEmpty(settingsStore.ToList().First().EPiStatus))
+            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 )
             {
                 Visible = false;
                 return;
             }
             _client = new GcConnectClient(credentialsStore.ToList().First().ApiKey,
                 credentialsStore.ToList().First().Email);
-            var projectId = Convert.ToInt32(settingsStore.ToList().First().ProjectId);
-            var templateId = Convert.ToInt32(settingsStore.ToList().First().TemplateId);
+            var projectId = Convert.ToInt32(Session["ProjectId"]);
+            var templateId = Convert.ToInt32(Session["TemplateId"]);
             projectName.Text = _client.GetProjectById(projectId).Name;
             templateName.Text = _client.GetTemplateById(templateId).Name;
             templateDescription.Text = _client.GetTemplateById(templateId).Description;
@@ -79,7 +76,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                         else
                         {
                             var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
-                            if (settingsStore.ToList().First().PostType is "PageType")
+                            if (Session["PostType"].ToString() is "PageType")
                             {
                                 var contentTypeList = contentTypeRepository.List().OfType<PageType>();
                                 var myProperty = new PageType();
@@ -87,22 +84,11 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 var pageTypes = contentTypeList as IList<PageType> ?? contentTypeList.ToList();
                                 pageTypes.ForEach(i => ddlContentTypes.Items.Add(new ListItem(i.Name, i.Name)));
                                 ddlContentTypes.ID = "cType-" + element.Label;
-                                var mapsInStore = settingsStore.ToList().First().ContentTypeMaps;
+                                var mapsInStore = (List<GcEpiContentTypeMap>)Session["GcEpiContentTypeMaps"];
                                 if (!mapsInStore.IsNullOrEmpty())
                                 {
-                                    if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                        mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId &&
-                                        mapsInStore.First().PostType == settingsStore.ToList().First().PostType)
-                                    {
-                                        ddlContentTypes.SelectedValue = mapsInStore[storeIndex].ContentType;
-                                    }
-                                    else
-                                    {
-                                        var noMap = new List<GcEpiContentTypeMap>();
-                                        var store = new GcDynamicSettings(contentTypeMaps: noMap);
-                                        GcDynamicSettings.SaveStore(store);
-                                    }
-                                }
+									ddlContentTypes.SelectedValue = mapsInStore[storeIndex].ContentType;
+								}
                                 foreach (var i in pageTypes)
                                 {
                                     if (ddlContentTypes.SelectedValue != i.Name) continue;
@@ -114,19 +100,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 ddlMetaData.ID = "meta-" + element.Label;
                                 if (!mapsInStore.IsNullOrEmpty())
                                 {
-                                    if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                        mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId &&
-                                        mapsInStore.First().PostType == settingsStore.ToList().First().PostType)
-                                    {
-                                        ddlMetaData.SelectedValue = mapsInStore[storeIndex].Metadata;
-                                    }
-                                    else
-                                    {
-                                        var noMap = new List<GcEpiContentTypeMap>();
-                                        var store = new GcDynamicSettings(contentTypeMaps: noMap);
-                                        GcDynamicSettings.SaveStore(store);
-                                    }
-                                }
+									ddlMetaData.SelectedValue = mapsInStore[storeIndex].Metadata;
+								}
                                 tCell.Controls.Add(ddlContentTypes);
                                 tCell.Controls.Add(ddlMetaData);
                             }
@@ -138,22 +113,11 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 var blockTypes = contentTypeList as IList<BlockType> ?? contentTypeList.ToList();
                                 blockTypes.ForEach(i => ddlContentTypes.Items.Add(new ListItem(i.Name, i.Name)));
                                 ddlContentTypes.ID = "cType-" + element.Label;
-                                var mapsInStore = settingsStore.ToList().First().ContentTypeMaps;
+                                var mapsInStore = (List<GcEpiContentTypeMap>) Session["GcEpiContentTypeMaps"];
                                 if (!mapsInStore.IsNullOrEmpty())
                                 {
-                                    if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                        mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId &&
-                                        mapsInStore.First().PostType == settingsStore.ToList().First().PostType)
-                                    {
-                                        ddlContentTypes.SelectedValue = mapsInStore[storeIndex].ContentType;
-                                    }
-                                    else
-                                    {
-                                        var noMap = new List<GcEpiContentTypeMap>();
-                                        var store = new GcDynamicSettings(contentTypeMaps: noMap);
-                                        GcDynamicSettings.SaveStore(store);
-                                    }
-                                }
+									ddlContentTypes.SelectedValue = mapsInStore[storeIndex].ContentType;
+								}
                                 foreach (var i in blockTypes)
                                 {
                                     if (ddlContentTypes.SelectedValue != i.Name) continue;
@@ -165,19 +129,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 ddlMetaData.ID = "meta-" + element.Label;
                                 if (!mapsInStore.IsNullOrEmpty())
                                 {
-                                    if (mapsInStore.First().ProjectId == settingsStore.ToList().First().ProjectId &&
-                                        mapsInStore.First().TemplateId == settingsStore.ToList().First().TemplateId &&
-                                        mapsInStore.First().PostType == settingsStore.ToList().First().PostType)
-                                    {
-                                        ddlMetaData.SelectedValue = mapsInStore[storeIndex].Metadata;
-                                    }
-                                    else
-                                    {
-                                        var noMap = new List<GcEpiContentTypeMap>();
-                                        var store = new GcDynamicSettings(contentTypeMaps: noMap);
-                                        GcDynamicSettings.SaveStore(store);
-                                    }
-                                }
+									ddlMetaData.SelectedValue = mapsInStore[storeIndex].Metadata;
+								}
                                 tCell.Controls.Add(ddlContentTypes);
                                 tCell.Controls.Add(ddlMetaData);
                             }
@@ -197,23 +150,14 @@ namespace GcEPiPlugin.GatherContentPlugin
 
         protected void BtnSaveMapping_OnClick(object sender, EventArgs e)
         {
-            var projectId = GcDynamicSettings.RetrieveStore().ToList().First().ProjectId;
-            var templateId = GcDynamicSettings.RetrieveStore().ToList().First().TemplateId;
-            var postType = GcDynamicSettings.RetrieveStore().ToList().First().PostType;
-            var gcEpiContentTypeMaps = (from string key in Request.Form.Keys
-                where key.StartsWith("cType-")
-                select new GcEpiContentTypeMap()
-                {
-                    ContentType = Request.Form[key],
-                    Metadata = Request.Form[key.Replace("cType-", "meta-")],
-                    ProjectId = projectId,
-                    TemplateId = templateId,
-                    PostType = postType
-                }).ToList();
-            _settings = new GcDynamicSettings(contentTypeMaps: gcEpiContentTypeMaps);
-            GcDynamicSettings.SaveStore(_settings);
-            var mappings = new GcDynamicMappings(GcDynamicSettings.RetrieveStore());
-            GcDynamicMappings.SaveStore(mappings);
+			var gcEpiContentTypeMaps = (from string key in Request.Form.Keys
+            where key.StartsWith("cType-")
+            select new GcEpiContentTypeMap()
+            {
+                ContentType = Request.Form[key],
+                Metadata = Request.Form[key.Replace("cType-", "meta-")]
+            }).ToList();
+			Session["GcEpiContentTypeMaps"] = gcEpiContentTypeMaps;
             PopulateForm();
         }
     }

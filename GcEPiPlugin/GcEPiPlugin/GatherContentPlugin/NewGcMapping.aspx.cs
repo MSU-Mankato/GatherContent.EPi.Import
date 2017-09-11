@@ -43,22 +43,20 @@ namespace GcEPiPlugin.GatherContentPlugin
             accountName.Text = _client.GetAccountById(accountId).Name;
             var projects = _client.GetProjectsByAccountId(accountId);
             projects.ToList().ForEach(i => rblGcProjects.Items.Add(new ListItem(i.Name, i.Id.ToString())));
-            if (settingsStore.Count <= 0 || string.IsNullOrEmpty(settingsStore.ToList().First().ProjectId))
+			if (Session["ProjectId"] == null)
             {
                 rblGcProjects.SelectedIndex = 0;
-                _settings = new GcDynamicSettings(projectId: rblGcProjects.SelectedValue);
-                GcDynamicSettings.SaveStore(_settings);
-                settingsStore = GcDynamicSettings.RetrieveStore();
+				Session["ProjectId"] = rblGcProjects.SelectedValue;
             }
-            var projectId = settingsStore.ToList().First().ProjectId;
+            var projectId = Session["ProjectId"].ToString();
             rblGcProjects.SelectedValue = projectId;
+			
         }
 
         protected void BtnNextStep_OnClick(object sender, EventArgs e)
         {
-            var selectedValue = Request.Form["rblGcProjects"];
-            _settings = new GcDynamicSettings(projectId: selectedValue);
-            GcDynamicSettings.SaveStore(_settings);
+			var selectedValue = Request.Form["rblGcProjects"];
+			Session["ProjectId"] = selectedValue;
             Response.Redirect("~/GatherContentPlugin/NewGcMappingV2.aspx");
         }
     }

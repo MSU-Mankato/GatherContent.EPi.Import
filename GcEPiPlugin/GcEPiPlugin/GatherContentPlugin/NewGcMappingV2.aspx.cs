@@ -14,7 +14,6 @@ namespace GcEPiPlugin.GatherContentPlugin
     {
 
         private GcConnectClient _client;
-        private GcDynamicSettings _settings;
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -34,34 +33,31 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             var settingsStore = GcDynamicSettings.RetrieveStore();
-            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 || string.IsNullOrEmpty(settingsStore.ToList().First().ProjectId))
+            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 )
             {
                 Visible = false;
                 return;
             }
             _client = new GcConnectClient(credentialsStore.ToList().First().ApiKey, credentialsStore.ToList().First().Email);
-            var projectId = Convert.ToInt32(settingsStore.ToList().First().ProjectId);
+            var projectId = Convert.ToInt32(Session["ProjectId"]);
             projectName.Text = _client.GetProjectById(projectId).Name;
-            var templates = _client.GetTemplatesByProjectId(settingsStore.ToList().First().ProjectId);
+            var templates = _client.GetTemplatesByProjectId(Session["ProjectId"].ToString());
             templates.ToList().ForEach(template => rblGcTemplates.Items.Add(
                 new ListItem(template.Name + "<br>" + template.Description, template.Id.ToString())));
-            if (settingsStore.Count <= 0 || string.IsNullOrEmpty(settingsStore.ToList().First().TemplateId))
+            if (Session["TemplateId"] == null)
             {
                 rblGcTemplates.SelectedIndex = 0;
-                _settings = new GcDynamicSettings(templateId: rblGcTemplates.SelectedValue);
-                GcDynamicSettings.SaveStore(_settings);
-                settingsStore = GcDynamicSettings.RetrieveStore();
+				Session["TemplateId"] = rblGcTemplates.SelectedValue;
             }
-            var templateId = settingsStore.ToList().First().TemplateId;
-            rblGcTemplates.SelectedValue = templateId;
+            var templateId = Session["TemplateId"];
+            rblGcTemplates.SelectedValue = templateId.ToString();
         }
 
         protected void BtnNextStep_OnClick(object sender, EventArgs e)
         {
-            var selectedValue = Request.Form["rblGcTemplates"];
-            _settings = new GcDynamicSettings(templateId: selectedValue);
-            GcDynamicSettings.SaveStore(_settings);
-            Response.Redirect("~/GatherContentPlugin/NewGcMappingV3.aspx");
+			var selectedValue = Request.Form["rblGcTemplates"];
+			Session["TemplateId"] = selectedValue;
+			Response.Redirect("~/GatherContentPlugin/NewGcMappingV3.aspx");
         }
     }
 }

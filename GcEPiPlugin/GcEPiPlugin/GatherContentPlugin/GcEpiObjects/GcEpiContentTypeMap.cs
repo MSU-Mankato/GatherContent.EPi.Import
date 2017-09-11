@@ -9,8 +9,5 @@ namespace GcEPiPlugin.GatherContentPlugin.GcEpiObjects
         public string ContentType { get; set; }
         //getter and setter for Content Type Metadata.
         public string Metadata { get; set; }
-        public string ProjectId { get; set; }
-        public string TemplateId { get; set; }
-        public string PostType { get; set; }
     }
 }
