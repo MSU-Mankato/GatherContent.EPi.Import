@@ -13,7 +13,6 @@ namespace GcEPiPlugin.GatherContentPlugin
     public partial class NewGcMapping : SimplePage
     {
         private GcConnectClient _client;
-        private GcDynamicSettings _settings;
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
