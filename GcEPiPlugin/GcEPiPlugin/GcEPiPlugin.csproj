@@ -216,6 +216,13 @@
     <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicSettings.cs" />
     <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiContentTypeMap.cs" />
     <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiStatusMap.cs" />
+    <Compile Include="GatherContentPlugin\GcEpiTemplateMappings.aspx.cs">
+      <DependentUpon>GcEpiTemplateMappings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GatherContentPlugin\GcEpiTemplateMappings.aspx.designer.cs">
+      <DependentUpon>GcEpiTemplateMappings.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GatherContentPlugin\GcEpiUserControls\TemplateMapUserControl.ascx.cs">
       <DependentUpon>TemplateMapUserControl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -267,6 +274,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="GatherContentPlugin\GatherContent.aspx" />
+    <Content Include="GatherContentPlugin\GcEpiTemplateMappings.aspx" />
     <Content Include="GatherContentPlugin\GcEpiUserControls\TemplateMapUserControl.ascx" />
     <Content Include="GatherContentPlugin\NewGcMapping.aspx" />
     <Content Include="GatherContentPlugin\NewGcMappingV2.aspx" />

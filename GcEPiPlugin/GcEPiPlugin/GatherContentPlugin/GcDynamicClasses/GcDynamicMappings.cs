@@ -11,20 +11,20 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
     public class GcDynamicMappings : IDynamicData
     {
         public Identity Id { get; set; }
-        public List<GcDynamicSettings> Mappings { get; set; }
+        public GcDynamicSettings Mapping { get; set; }
 
         //Parameter-less constructor required for the dynamic data store.
         public GcDynamicMappings()
         {
             // Generate a new ID.
             Id = Identity.NewIdentity(Guid.NewGuid());
-            Mappings = new List<GcDynamicSettings>();
+            Mapping = new GcDynamicSettings();
         }
-        public GcDynamicMappings(List<GcDynamicSettings> mappings)
+        public GcDynamicMappings(GcDynamicSettings mapping)
         {
             // Generate a new ID.
             Id = Identity.NewIdentity(Guid.NewGuid());
-            Mappings = mappings.IsNullOrEmpty() ? new List<GcDynamicSettings>() : mappings;
+            Mapping = mapping;
         }
         public static void SaveStore(GcDynamicMappings dds)
         {
