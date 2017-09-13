@@ -12,6 +12,8 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
         public Identity Id { get; set; }
         public string Email { get; set; }
         public string ApiKey { get; set; }
+        public string AccountId { get; set; }
+
         //Parameter-less constructor required for the dynamic data store.
         public GcDynamicCredentials()
         {
@@ -19,13 +21,15 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
             Id = Identity.NewIdentity(Guid.NewGuid());
             Email = string.Empty;
             ApiKey = string.Empty;
+            AccountId = string.Empty;
         }
-        public GcDynamicCredentials(string email, string apiKey)
+        public GcDynamicCredentials(string email, string apiKey, string accountId)
         {
             //Assign the properties with actual values.
             Email = email;
             ApiKey = apiKey;
             Id = Identity.NewIdentity(Guid.NewGuid());
+            AccountId = accountId;
         }
         //Save the Credentials.
         public static void SaveStore(GcDynamicCredentials dds)

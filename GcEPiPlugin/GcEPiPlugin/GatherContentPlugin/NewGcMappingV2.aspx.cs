@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Web.UI.WebControls;
+using Castle.Core.Internal;
 using EPiServer.PlugIn;
 using EPiServer;
 using EPiServer.Security;
@@ -32,8 +33,7 @@ namespace GcEPiPlugin.GatherContentPlugin
         private void PopulateForm()
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
-            var settingsStore = GcDynamicSettings.RetrieveStore();
-            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 || Session["ProjectId"] == null )
+            if (credentialsStore.IsNullOrEmpty() || Session["ProjectId"] == null )
             {
                 Visible = false;
                 return;

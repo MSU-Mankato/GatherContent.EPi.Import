@@ -18,7 +18,6 @@ namespace GcEPiPlugin.GatherContentPlugin
     {
         private GcConnectClient _client;
         private GcDynamicCredentials _credentials;
-        private GcDynamicSettings _settings;
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -38,42 +37,46 @@ namespace GcEPiPlugin.GatherContentPlugin
             var apiKey = HttpUtility.HtmlEncode(txtApiKey.Text);
             var emailAddress = HttpUtility.HtmlEncode(txtEmailAddress.Text);
             _client = new GcConnectClient(apiKey,emailAddress);
-            if (_client.GetAccounts() != null && _client.GetAccounts().Count > 0 )
+            if (!_client.GetAccounts().IsNullOrEmpty())
             {
-                _credentials = new GcDynamicCredentials(emailAddress, apiKey);
+                var selectedAccount = Request.Form["ddlGcAccounts"];
+                if (selectedAccount.IsNullOrEmpty())
+                {
+                    selectedAccount = _client.GetAccounts().ToList().First().Id;
+                }
+                _credentials = new GcDynamicCredentials(emailAddress, apiKey, selectedAccount);
                 GcDynamicCredentials.SaveStore(_credentials);
-                var selectedValue = Request.Form["ddlGcAccounts"];
-                _settings = new GcDynamicSettings(accountId:selectedValue);
-                GcDynamicSettings.SaveStore(_settings);
             }
             else
             {
                 Response.Write("<script>alert('Invalid Email Address or ApiKey! Try again!')</script>");
+                txtPlatformUrl.Text = "";
                 GcDynamicCredentials.ClearStore();
-                GcDynamicSettings.ClearStore();
             }
             PopulateForm();
         }
         private void PopulateForm()
         {
-            var settingsStore = GcDynamicSettings.RetrieveStore();
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
-            if (credentialsStore.Count <= 0) return;
-            var email = credentialsStore.ToList().First().Email;
-            var apiKey = credentialsStore.ToList().First().ApiKey;
-            txtEmailAddress.Text = email;
-            txtApiKey.Text = apiKey;
-            _client = new GcConnectClient(apiKey,email);
+            if (credentialsStore.IsNullOrEmpty()) return;
+            txtEmailAddress.Text = credentialsStore.ToList().First().Email;
+            txtApiKey.Text = credentialsStore.ToList().First().ApiKey;
+            _client = new GcConnectClient(credentialsStore.ToList().First().ApiKey, credentialsStore.ToList().First().Email);
             var accounts = _client.GetAccounts();
-            accounts.ToList().ForEach(i => ddlGcAccounts.Items.Add(new ListItem(i.Name, i.Id, true)));
-            if (settingsStore.Count <= 0 || string.IsNullOrEmpty(settingsStore.ToList().First().AccountId))
+            accounts.ToList().ForEach(i => ddlGcAccounts.Items.Add(new ListItem(i.Name, i.Id)));
+            if (!credentialsStore.ToList().First().AccountId.IsNullOrEmpty())
             {
-                _settings = new GcDynamicSettings(ddlGcAccounts.SelectedValue);
-                GcDynamicSettings.SaveStore(_settings);
-                settingsStore = GcDynamicSettings.RetrieveStore();
+                ddlGcAccounts.SelectedValue = credentialsStore.ToList().First().AccountId;
+                txtPlatformUrl.Text =
+                    $"https://{_client.GetAccountById(Convert.ToInt32(credentialsStore.ToList().First().AccountId)).Slug}.gathercontent.com";
+            }   
+            else
+            {
+                ddlGcAccounts.SelectedIndex = 0;
+                txtPlatformUrl.Text =
+                    $"https://{_client.GetAccountById(Convert.ToInt32(ddlGcAccounts.SelectedValue)).Slug}.gathercontent.com";
             }
-            ddlGcAccounts.SelectedValue = settingsStore.ToList().First().AccountId;
-            txtPlatformUrl.Text = $"https://{_client.GetAccountById(Convert.ToInt32(settingsStore.ToList().First().AccountId)).Slug}.gathercontent.com";
+            
         }
     }
 }
