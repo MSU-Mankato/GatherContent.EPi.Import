@@ -42,8 +42,12 @@ namespace GcEPiPlugin.GatherContentPlugin
             var projectId = Convert.ToInt32(Session["ProjectId"]);
             projectName.Text = _client.GetProjectById(projectId).Name;
             var templates = _client.GetTemplatesByProjectId(Session["ProjectId"].ToString());
-            templates.ToList().ForEach(template => rblGcTemplates.Items.Add(
-                new ListItem(template.Name + "<br>" + template.Description, template.Id.ToString())));
+            var mappings = GcDynamicTemplateMappings.RetrieveStore();
+            foreach (var template in templates)
+            {
+                rblGcTemplates.Items.Add(
+                    new ListItem(template.Name + "<br>" + template.Description, template.Id.ToString()));
+            }
             rblGcTemplates.SelectedIndex = 0;
 			Session["TemplateId"] = rblGcTemplates.SelectedValue;
             Session["PostType"] = null;

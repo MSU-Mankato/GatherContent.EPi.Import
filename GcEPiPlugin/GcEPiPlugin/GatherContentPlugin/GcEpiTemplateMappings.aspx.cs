@@ -58,7 +58,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                             tCell.Controls.Add(linkBtnTemplate);
                             break;
                         case 2:
-                            tCell.Text = "Published <br>" + DateTime.Now.ToLocalTime();
+                            tCell.Text = "Published <br>" + i.PublishedDateTime;
                             break;
                         case 3:
                             var linkBtnSlug = new LinkButton

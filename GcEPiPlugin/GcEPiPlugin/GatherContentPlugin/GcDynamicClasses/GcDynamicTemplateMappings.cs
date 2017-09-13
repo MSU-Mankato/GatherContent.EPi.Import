@@ -22,6 +22,7 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
         public string EpiContentType { get; set; }
         public List<GcEpiStatusMap> StatusMaps { get; set; }
         public List<string> EpiFieldMaps { get; set; }
+        public string PublishedDateTime { get; set; }
 
         //Parameter-less constructor required for the dynamic data store.
         public GcDynamicTemplateMappings()
@@ -36,10 +37,11 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
             EpiContentType = string.Empty;
             StatusMaps = new List<GcEpiStatusMap>();
             EpiFieldMaps = new List<string>();
+            PublishedDateTime = string.Empty;
         }
 
         public GcDynamicTemplateMappings(string accountId, string projectId, string templateId, string postType, string author,
-            string defaultStatus, string epiContentType, List<GcEpiStatusMap> statusMaps, List<string> epiFieldMaps)
+            string defaultStatus, string epiContentType, List<GcEpiStatusMap> statusMaps, List<string> epiFieldMaps, string publishedDateTime)
         {
             Id = Identity.NewIdentity(Guid.NewGuid());
             AccountId = accountId;
@@ -51,6 +53,7 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
             EpiContentType = epiContentType;
             StatusMaps = statusMaps;
             EpiFieldMaps = epiFieldMaps;
+            PublishedDateTime = publishedDateTime;
         }
 
         //Save the Mappings.
