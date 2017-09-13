@@ -39,6 +39,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             }
             _client = new GcConnectClient(credentialsStore.ToList().First().ApiKey,credentialsStore.ToList().First().Email);
             var accountId = Convert.ToInt32(credentialsStore.ToList().First().AccountId);
+            Session["AccountId"] = accountId;
             accountName.Text = _client.GetAccountById(accountId).Name;
             var projects = _client.GetProjectsByAccountId(accountId);
             projects.ToList().ForEach(i => rblGcProjects.Items.Add(new ListItem(i.Name, i.Id.ToString())));

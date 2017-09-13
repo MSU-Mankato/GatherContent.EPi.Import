@@ -9,7 +9,7 @@ using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
 namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
 {
     [EPiServerDataStore(AutomaticallyRemapStore = true)]
-    public class GcDynamicMappings : IDynamicData
+    public class GcDynamicTemplateMaps : IDynamicData
     {
         //getter and setter to store the mapped template settings.
         public Identity Id { get; set; }
@@ -21,10 +21,10 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
         public string DefaultStatus { get; set; }
         public string EpiContentType { get; set; }
         public List<GcEpiStatusMap> StatusMaps { get; set; }
-        public List<string> EpiFieldMaps { get; set; }
+        public IEnumerable<string> EpiFieldMaps { get; set; }
 
         //Parameter-less constructor required for the dynamic data store.
-        public GcDynamicMappings()
+        public GcDynamicTemplateMaps()
         {
             Id = Identity.NewIdentity(Guid.NewGuid());
             AccountId = string.Empty;
@@ -38,8 +38,8 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
             EpiFieldMaps = new List<string>();
         }
 
-        public GcDynamicMappings(string accountId, string projectId, string templateId, string postType, string author,
-            string defaultStatus, string epiContentType, List<GcEpiStatusMap> statusMaps, List<string> epiFieldMaps)
+        public GcDynamicTemplateMaps(string accountId, string projectId, string templateId, string postType, string author,
+            string defaultStatus, string epiContentType, List<GcEpiStatusMap> statusMaps, IEnumerable<string> epiFieldMaps)
         {
             Id = Identity.NewIdentity(Guid.NewGuid());
             AccountId = accountId;
@@ -54,22 +54,22 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
         }
 
         //Save the Mappings.
-        public static void SaveStore(GcDynamicMappings dds)
+        public static void SaveStore(GcDynamicTemplateMaps dds)
         {
             // Create a data store (but only if one doesn't exist, we won't overwrite an existing one)
-            var store = DynamicDataStoreFactory.Instance.CreateStore(typeof(GcDynamicMappings));
+            var store = DynamicDataStoreFactory.Instance.CreateStore(typeof(GcDynamicTemplateMaps));
             store.Save(dds);
         }
-        public static List<GcDynamicMappings> RetrieveStore()
+        public static List<GcDynamicTemplateMaps> RetrieveStore()
         {
-            var store = DynamicDataStoreFactory.Instance.CreateStore(typeof(GcDynamicMappings));
-            var stores = store.Items<GcDynamicMappings>();
+            var store = DynamicDataStoreFactory.Instance.CreateStore(typeof(GcDynamicTemplateMaps));
+            var stores = store.Items<GcDynamicTemplateMaps>();
             return stores.ToList();
         }
         //Deletes all the data in the data store.
         public static void ClearStore()
         {
-            var store = DynamicDataStoreFactory.Instance.CreateStore(typeof(GcDynamicMappings));
+            var store = DynamicDataStoreFactory.Instance.CreateStore(typeof(GcDynamicTemplateMaps));
             store.DeleteAll();
         }
     }

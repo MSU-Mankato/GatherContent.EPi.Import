@@ -78,6 +78,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                     var pageTypes = contentTypeList as IList<PageType> ?? contentTypeList.ToList();
                     pageTypes.ForEach(i => ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "page-" + i.Name)));
                     ddlEpiContentTypes.Enabled = true;
+                    btnNextStep.Enabled = true;
                 }
                 else if (Session["PostType"].ToString() is "BlockType")
                 {
@@ -85,11 +86,13 @@ namespace GcEPiPlugin.GatherContentPlugin
                     var pageTypes = contentTypeList as IList<BlockType> ?? contentTypeList.ToList();
                     pageTypes.ForEach(i => ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "block-" + i.Name)));
                     ddlEpiContentTypes.Enabled = true;
+                    btnNextStep.Enabled = true;
                 }
                 else if (Session["PostType"].ToString() is "MediaType")
                 {
                     ddlEpiContentTypes.Items.Add(new ListItem("Media Data", "MediaType"));
                     ddlEpiContentTypes.Enabled = true;
+                    btnNextStep.Enabled = true;
                 }
                 if (Session["EpiContentType"] != null)
                 {

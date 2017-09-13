@@ -11,7 +11,7 @@ namespace GcEPiPlugin.GatherContentPlugin
     [GuiPlugIn(DisplayName = "Template Mappings", Description = "Shows all the template mappings for a particular account.", Area = PlugInArea.AdminMenu, Url = "~/GatherContentPlugin/GcEpiTemplateMappings.aspx")]
     public partial class GcEpiTemplateMappings : SimplePage
     {
-        private List<GcDynamicMappings> _mappings;
+        private List<GcDynamicTemplateMaps> _mappings;
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -29,8 +29,8 @@ namespace GcEPiPlugin.GatherContentPlugin
 
         private void PopulateForm()
         {
-            GcDynamicMappings.ClearStore();
-            _mappings = GcDynamicMappings.RetrieveStore();
+            GcDynamicTemplateMaps.ClearStore();
+            _mappings = GcDynamicTemplateMaps.RetrieveStore();
         }
 
         protected void BtnAddNew_OnClick(object sender, EventArgs e)

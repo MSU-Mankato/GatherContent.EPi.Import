@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Providers.Entities;
 using System.Web.UI.WebControls;
 using Castle.Core.Internal;
 using EPiServer.PlugIn;
@@ -10,6 +11,7 @@ using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 using GatherContentConnect;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
 
 namespace GcEPiPlugin.GatherContentPlugin
 {
@@ -17,7 +19,6 @@ namespace GcEPiPlugin.GatherContentPlugin
         Url = "~/GatherContentPlugin/NewGcMappingV4.aspx")]
     public partial class NewGcMappingV4 : SimplePage
     {
-
         private GcConnectClient _client;
         protected override void OnLoad(EventArgs e)
         {
@@ -38,7 +39,7 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty() || Session["ProjectId"] == null || Session["TemplateId"] == null 
-                    || Session["PostType"] == null)
+                    || Session["PostType"] == null || (string) Session["PostType"] == "-1")
             {
                 Visible = false;
                 return;
@@ -94,7 +95,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                                     }
                                     var ddlMetaData = new DropDownList {Height = 28, Width = 194};
                                     myProperty.PropertyDefinitions.ToList().ForEach(i =>
-                                        ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
+                                        ddlMetaData.Items.Add(new ListItem(i.Name, i.Name)));
                                     ddlMetaData.ID = "meta-" + element.Label;
                                     tCell.Controls.Add(ddlMetaData);
                                 }
@@ -111,7 +112,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 }
                                 var ddlMetaData = new DropDownList {Height = 28, Width = 194};
                                 myProperty.PropertyDefinitions.ToList().ForEach(i =>
-                                    ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
+                                    ddlMetaData.Items.Add(new ListItem(i.Name, i.Name)));
                                 ddlMetaData.ID = "meta-" + element.Label;
                                 tCell.Controls.Add(ddlMetaData);
                                 }
@@ -127,8 +128,13 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             var epiFieldMaps = from string key in Request.Form.Keys
                 where key.StartsWith("meta-")
-                select new List<string> {Request.Form[key]};
+                select Request.Form[key];
 			Session["EpiFieldMaps"] = epiFieldMaps;
+            var mappingsStore = new GcDynamicTemplateMaps(Session["AccountId"].ToString(), Session["ProjectId"].ToString(), 
+                Session["TemplateId"].ToString(), Session["PostType"].ToString(), Session["Author"].ToString(),
+                Session["DefaultStatus"].ToString(), Session["EpiContentType"].ToString(), (List<GcEpiStatusMap>) Session["StatusMaps"], 
+                (IEnumerable<string>) Session["EpiFieldMaps"]);
+            GcDynamicTemplateMaps.SaveStore(mappingsStore);
             PopulateForm();
         }
     }
