@@ -7,7 +7,9 @@
 <form id="form1" runat="server">
     <h1>GatherContent</h1>
     <h2>Template Mappings</h2>
-    <asp:Button runat="server" Text="Add new" ID="btnAddnew" OnClick="BtnAddNew_OnClick"/>
+    <p>
+        <asp:Button runat="server" Text="Add new" ID="btnAddnew" OnClick="BtnAddNew_OnClick"/>
+    </p>
     <fieldset>      
         <asp:Table runat="server" ID="tableTemplateMappings" Width="100%">
         </asp:Table>
