@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
-using Castle.Core.Internal;
 using EPiServer.PlugIn;
 using EPiServer.Security;
 using EPiServer;
@@ -10,7 +9,6 @@ using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 using GatherContentConnect;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
-using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
 
 namespace GcEPiPlugin.GatherContentPlugin
 {
@@ -39,7 +37,8 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             var settingsStore = GcDynamicSettings.RetrieveStore();
-            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 )
+            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 || Session["ProjectId"] == null || Session["TemplateId"] == null 
+                    || Session["PostType"] == null)
             {
                 Visible = false;
                 return;
@@ -56,7 +55,6 @@ namespace GcEPiPlugin.GatherContentPlugin
             tHeadRow.Cells.Add(new TableCell { Text = "Mapped EPiServer Field" });
             tableMappings.Rows.Add(tHeadRow);
             var gcFields = _client.GetTemplateById(templateId).Config.ToList();
-            var storeIndex = 0;
             foreach (var field in gcFields)
             {
                 foreach (var element in field.Elements)
@@ -75,88 +73,62 @@ namespace GcEPiPlugin.GatherContentPlugin
                         else
                         {
                             var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
-                            if (Session["PostType"].ToString() is "PageType")
+                            if (Session["EpiContentType"].ToString() is "MediaType")
                             {
-                                var contentTypeList = contentTypeRepository.List().OfType<PageType>();
-                                var myProperty = new PageType();
-                                var ddlContentTypes = new DropDownList { Height = 28, Width = 194 };
-                                var pageTypes = contentTypeList as IList<PageType> ?? contentTypeList.ToList();
-                                pageTypes.ForEach(i => ddlContentTypes.Items.Add(new ListItem(i.Name, i.Name)));
-                                ddlContentTypes.ID = "cType-" + element.Label;
-                                var mapsInStore = (List<GcEpiContentTypeMap>)Session["GcEpiContentTypeMaps"];
-                                if (!mapsInStore.IsNullOrEmpty())
-                                {
-									ddlContentTypes.SelectedValue = mapsInStore[storeIndex].ContentType;
-								}
-                                foreach (var i in pageTypes)
-                                {
-                                    if (ddlContentTypes.SelectedValue != i.Name) continue;
-                                    myProperty = i;
-                                }
-                                var ddlMetaData = new DropDownList { Height = 28, Width = 194 };
-                                myProperty.PropertyDefinitions.ToList().ForEach(i => 
-                                    ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
-                                ddlMetaData.ID = "meta-" + element.Label;
-                                if (!mapsInStore.IsNullOrEmpty())
-                                {
-									ddlMetaData.SelectedValue = mapsInStore[storeIndex].Metadata;
-								}
-                                tCell.Controls.Add(ddlContentTypes);
-                                tCell.Controls.Add(ddlMetaData);
-                            }
-                            else if (settingsStore.ToList().First().PostType is "BlockType")
-                            {
-                                var contentTypeList = contentTypeRepository.List().OfType<BlockType>();
-                                var myProperty = new BlockType();
-                                var ddlContentTypes = new DropDownList { Height = 28, Width = 194 };
-                                var blockTypes = contentTypeList as IList<BlockType> ?? contentTypeList.ToList();
-                                blockTypes.ForEach(i => ddlContentTypes.Items.Add(new ListItem(i.Name, i.Name)));
-                                ddlContentTypes.ID = "cType-" + element.Label;
-                                var mapsInStore = (List<GcEpiContentTypeMap>) Session["GcEpiContentTypeMaps"];
-                                if (!mapsInStore.IsNullOrEmpty())
-                                {
-									ddlContentTypes.SelectedValue = mapsInStore[storeIndex].ContentType;
-								}
-                                foreach (var i in blockTypes)
-                                {
-                                    if (ddlContentTypes.SelectedValue != i.Name) continue;
-                                    myProperty = i;
-                                }
-                                var ddlMetaData = new DropDownList { Height = 28, Width = 194 };
-                                myProperty.PropertyDefinitions.ToList().ForEach(i =>
-                                    ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
-                                ddlMetaData.ID = "meta-" + element.Label;
-                                if (!mapsInStore.IsNullOrEmpty())
-                                {
-									ddlMetaData.SelectedValue = mapsInStore[storeIndex].Metadata;
-								}
-                                tCell.Controls.Add(ddlContentTypes);
+                                var ddlMetaData = new DropDownList {Height = 28, Width = 194};
+                                ddlMetaData.Items.Add(new ListItem("Media Content", "MediaContent"));
                                 tCell.Controls.Add(ddlMetaData);
                             }
                             else
                             {
-                                var ddlContentTypes = new DropDownList { Height = 28, Width = 194 };
-                                ddlContentTypes.Items.Add(new ListItem("Media Content", "MediaContent"));
-                                tCell.Controls.Add(ddlContentTypes);
+                                if (Session["EpiContentType"].ToString().StartsWith("block-"))
+                                {
+                                    var contentTypeList = contentTypeRepository.List().OfType<BlockType>();
+                                    var myProperty = new BlockType();
+                                    var blockTypes = contentTypeList as IList<BlockType> ?? contentTypeList.ToList();
+                                    foreach (var i in blockTypes)
+                                    {
+                                        if (Session["EpiContentType"].ToString().Substring(6) != i.Name) continue;
+                                        myProperty = i;
+                                        break;
+                                    }
+                                    var ddlMetaData = new DropDownList {Height = 28, Width = 194};
+                                    myProperty.PropertyDefinitions.ToList().ForEach(i =>
+                                        ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
+                                    ddlMetaData.ID = "meta-" + element.Label;
+                                    tCell.Controls.Add(ddlMetaData);
+                                }
+                                else if (Session["EpiContentType"].ToString().StartsWith("page-"))
+                                {
+                                var contentTypeList = contentTypeRepository.List().OfType<PageType>();
+                                var myProperty = new PageType();
+                                var pageTypes = contentTypeList as IList<PageType> ?? contentTypeList.ToList();
+                                foreach (var i in pageTypes)
+                                {
+                                    if (Session["EpiContentType"].ToString().Substring(5) != i.Name) continue;
+                                    myProperty = i;
+                                    break;
+                                }
+                                var ddlMetaData = new DropDownList {Height = 28, Width = 194};
+                                myProperty.PropertyDefinitions.ToList().ForEach(i =>
+                                    ddlMetaData.Items.Add(new ListItem(i.Name, i.ID.ToString())));
+                                ddlMetaData.ID = "meta-" + element.Label;
+                                tCell.Controls.Add(ddlMetaData);
+                                }
                             }
                         }
                         tRow.Cells.Add(tCell);
                     }
-                    storeIndex++;
                 }
             }
         }
 
         protected void BtnSaveMapping_OnClick(object sender, EventArgs e)
         {
-			var gcEpiContentTypeMaps = (from string key in Request.Form.Keys
-            where key.StartsWith("cType-")
-            select new GcEpiContentTypeMap()
-            {
-                ContentType = Request.Form[key],
-                Metadata = Request.Form[key.Replace("cType-", "meta-")]
-            }).ToList();
-			Session["GcEpiContentTypeMaps"] = gcEpiContentTypeMaps;
+            var epiFieldMaps = from string key in Request.Form.Keys
+                where key.StartsWith("meta-")
+                select new List<string> {Request.Form[key]};
+			Session["EpiFieldMaps"] = epiFieldMaps;
             PopulateForm();
         }
     }

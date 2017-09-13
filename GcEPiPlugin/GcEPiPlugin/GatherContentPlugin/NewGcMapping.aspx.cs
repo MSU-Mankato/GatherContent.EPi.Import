@@ -42,14 +42,11 @@ namespace GcEPiPlugin.GatherContentPlugin
             accountName.Text = _client.GetAccountById(accountId).Name;
             var projects = _client.GetProjectsByAccountId(accountId);
             projects.ToList().ForEach(i => rblGcProjects.Items.Add(new ListItem(i.Name, i.Id.ToString())));
-			if (Session["ProjectId"] == null)
-            {
-                rblGcProjects.SelectedIndex = 0;
-				Session["ProjectId"] = rblGcProjects.SelectedValue;
-            }
-            var projectId = Session["ProjectId"].ToString();
-            rblGcProjects.SelectedValue = projectId;
-			
+            rblGcProjects.SelectedIndex = 0;
+			Session["ProjectId"] = rblGcProjects.SelectedValue;
+            Session["PostType"] = null;
+            Session["Author"] = null;
+            Session["DefaultStatus"] = null;
         }
 
         protected void BtnNextStep_OnClick(object sender, EventArgs e)

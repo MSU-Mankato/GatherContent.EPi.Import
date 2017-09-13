@@ -6,6 +6,13 @@
         .auto-style1 {
             height: 42px;
         }
+        .auto-style2 {
+            height: 42px;
+            width: 329px;
+        }
+        .auto-style3 {
+            width: 329px;
+        }
     </style>
 </head>
 <body>
@@ -20,29 +27,33 @@
             <thead>
                 <tr>
                     <td class="auto-style1">GatherContent Field</td>
-                    <td class="auto-style1">Mapped EPiServer Field</td>
+                    <td class="auto-style2">Mapped EPiServer Field</td>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Post Type</td>
-                    <td>
-                        <asp:DropDownList runat="server" ID="ddlPostTypes" Height="28px" Width="194px">
+                    <td class="auto-style3">
+                        <asp:DropDownList runat="server" ID="ddlPostTypes" AutoPostBack="True" OnSelectedIndexChanged="DdlPostTypes_OnSelectedIndexChanged" Height="28px" Width="194px">
+                            <asp:ListItem Text="Select a Post Type" Value="-1"></asp:ListItem>
                             <asp:ListItem Text="Page Type" Value="PageType"></asp:ListItem>
                             <asp:ListItem Text="Block Type" Value="BlockType"></asp:ListItem>
                             <asp:ListItem Text="Media Type" Value="MediaType"></asp:ListItem>
                         </asp:DropDownList>
                     </td>
+                    <td>
+                        <asp:DropDownList runat="server" ID="ddlEpiContentTypes" Enabled="False" Height="28px" Width="194px"/>
+                    </td>
                 </tr>
                 <tr>
                     <td>Author</td>
-                    <td>
+                    <td class="auto-style3">
                         <asp:DropDownList runat="server" ID="ddlAuthors" Height="28px" Width="194px"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Default Status</td>
-                    <td>
+                    <td class="auto-style3">
                         <asp:DropDownList runat="server" ID="ddlStatuses" Height="28px" Width="194px"/>
                     </td>
                 </tr>

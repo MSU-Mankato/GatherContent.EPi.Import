@@ -120,7 +120,8 @@
     <Reference Include="EPiServer.XForms, Version=10.8.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\packages\EPiServer.CMS.Core.10.8.0\lib\net45\EPiServer.XForms.dll</HintPath>
     </Reference>
-    <Reference Include="GatherContentConnect">
+    <Reference Include="GatherContentConnect, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\GatherContentConnect\GatherContentConnect\bin\Debug\GatherContentConnect.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -135,7 +136,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Source\Repos\GatherContentConnect\GatherContentConnect\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\GatherContentConnect\GatherContentConnect\bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.7.41101.299, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Core.2.7.2\lib\net40-Client\NuGet.Core.dll</HintPath>
@@ -214,7 +215,6 @@
     <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicMappings.cs" />
     <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicSettings.cs" />
     <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiContentTypeMap.cs" />
-    <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiSessionObject.cs" />
     <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiStatusMap.cs" />
     <Compile Include="GatherContentPlugin\GcEpiUserControls\TemplateMapUserControl.ascx.cs">
       <DependentUpon>TemplateMapUserControl.ascx</DependentUpon>

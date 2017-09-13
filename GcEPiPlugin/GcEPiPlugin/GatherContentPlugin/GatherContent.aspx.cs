@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using EPiServer.PlugIn;
 using EPiServer;
 using EPiServer.Security;
@@ -6,6 +7,7 @@ using GatherContentConnect;
 using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
+using Castle.Core.Internal;
 using EPiServer.Framework.Web.Resources;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 
@@ -41,7 +43,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                 _credentials = new GcDynamicCredentials(emailAddress, apiKey);
                 GcDynamicCredentials.SaveStore(_credentials);
                 var selectedValue = Request.Form["ddlGcAccounts"];
-                _settings = new GcDynamicSettings(selectedValue);
+                _settings = new GcDynamicSettings(accountId:selectedValue);
                 GcDynamicSettings.SaveStore(_settings);
             }
             else

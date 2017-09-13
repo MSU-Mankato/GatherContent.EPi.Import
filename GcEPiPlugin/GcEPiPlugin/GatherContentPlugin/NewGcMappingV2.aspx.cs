@@ -33,7 +33,7 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             var settingsStore = GcDynamicSettings.RetrieveStore();
-            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 )
+            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 || Session["ProjectId"] == null )
             {
                 Visible = false;
                 return;
@@ -44,13 +44,11 @@ namespace GcEPiPlugin.GatherContentPlugin
             var templates = _client.GetTemplatesByProjectId(Session["ProjectId"].ToString());
             templates.ToList().ForEach(template => rblGcTemplates.Items.Add(
                 new ListItem(template.Name + "<br>" + template.Description, template.Id.ToString())));
-            if (Session["TemplateId"] == null)
-            {
-                rblGcTemplates.SelectedIndex = 0;
-				Session["TemplateId"] = rblGcTemplates.SelectedValue;
-            }
-            var templateId = Session["TemplateId"];
-            rblGcTemplates.SelectedValue = templateId.ToString();
+            rblGcTemplates.SelectedIndex = 0;
+			Session["TemplateId"] = rblGcTemplates.SelectedValue;
+            Session["PostType"] = null;
+            Session["Author"] = null;
+            Session["DefaultStatus"] = null;
         }
 
         protected void BtnNextStep_OnClick(object sender, EventArgs e)

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
+using System.Web.Providers.Entities;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 using EPiServer;
@@ -12,6 +12,8 @@ using GatherContentConnect;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
 using Castle.Core.Internal;
+using EPiServer.DataAbstraction;
+using EPiServer.ServiceLocation;
 
 namespace GcEPiPlugin.GatherContentPlugin
 {
@@ -39,7 +41,7 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             var settingsStore = GcDynamicSettings.RetrieveStore();
-            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 )
+            if (credentialsStore.Count <= 0 || settingsStore.Count <= 0 || Session["ProjectId"] == null || Session["TemplateId"] == null)
             {
                 Visible = false;
                 return;
@@ -55,25 +57,52 @@ namespace GcEPiPlugin.GatherContentPlugin
             epiUsers.ToList().ForEach(epiUser => ddlAuthors.Items.Add(new ListItem(epiUser.UserName, epiUser.UserName)));
             var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
             saveActions.ToList().ForEach(i => ddlStatuses.Items.Add(new ListItem(i.ToString(), i.ToString())));
-			if (Session["PostType"] == null || Session["Author"] == null || Session ["DefaultStatus"] == null )
+            if (Session["PostType"] == null || Session["Author"] == null || Session["DefaultStatus"] == null)
             {
                 ddlPostTypes.SelectedIndex = 0;
                 ddlAuthors.SelectedIndex = 0;
                 ddlStatuses.SelectedIndex = 0;
-				Session["PostType"] = ddlPostTypes.SelectedValue;
-				Session["Author"] = ddlAuthors.SelectedValue;
-				Session["DefaultStatus"] = ddlStatuses.SelectedValue;
-			}
-            ddlPostTypes.SelectedValue = Session["PostType"].ToString();
-            ddlAuthors.SelectedValue = Session["Author"].ToString();
-            ddlStatuses.SelectedValue = Session["DefaultStatus"].ToString();
+                Session["PostType"] = ddlPostTypes.SelectedValue;
+                Session["Author"] = ddlAuthors.SelectedValue;
+                Session["DefaultStatus"] = ddlStatuses.SelectedValue;
+            }
+            else
+            {
+                ddlPostTypes.Items.Remove(ddlPostTypes.Items.FindByValue("-1"));
+                ddlPostTypes.SelectedValue = Session["PostType"].ToString();
+                ddlAuthors.SelectedValue = Session["Author"].ToString();
+                ddlStatuses.SelectedValue = Session["DefaultStatus"].ToString();
+                var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
+                if (Session["PostType"].ToString() is "PageType")
+                {
+                    var contentTypeList = contentTypeRepository.List().OfType<PageType>();
+                    var pageTypes = contentTypeList as IList<PageType> ?? contentTypeList.ToList();
+                    pageTypes.ForEach(i => ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "page-" + i.Name)));
+                    ddlEpiContentTypes.Enabled = true;
+                }
+                else if (Session["PostType"].ToString() is "BlockType")
+                {
+                    var contentTypeList = contentTypeRepository.List().OfType<BlockType>();
+                    var pageTypes = contentTypeList as IList<BlockType> ?? contentTypeList.ToList();
+                    pageTypes.ForEach(i => ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "block-" + i.Name)));
+                    ddlEpiContentTypes.Enabled = true;
+                }
+                else if (Session["PostType"].ToString() is "MediaType")
+                {
+                    ddlEpiContentTypes.Items.Add(new ListItem("Media Data", "MediaType"));
+                    ddlEpiContentTypes.Enabled = true;
+                }
+                if (Session["EpiContentType"] != null)
+                {
+                    ddlEpiContentTypes.SelectedValue = Session["EpiContentType"].ToString();
+                }
+            }
             var gcStatuses = _client.GetStatusesByProjectId(projectId);
             var tHeadRow = new TableRow {Height = 42};
             tHeadRow.Cells.Add(new TableCell{ Text = "GatherContent Status" });
             tHeadRow.Cells.Add(new TableCell { Text = "Mapped EPiServer Status" });
             tHeadRow.Cells.Add(new TableCell { Text = "On Import, Change GatherContent Status" });
             tableGcStatusesMap.Rows.Add(tHeadRow);
-            var storeIndex = 0;
             foreach (var status in gcStatuses)
             {
                 var tRow = new TableRow();
@@ -87,11 +116,6 @@ namespace GcEPiPlugin.GatherContentPlugin
                         ddlOnImportGcStatuses.Items.Add(new ListItem("Do Not Change", "1"));
                         gcStatuses.ToList().ForEach(i => ddlOnImportGcStatuses.Items.Add(new ListItem(i.Name, i.Id)));
                         ddlOnImportGcStatuses.ID = "onImportGc-" + status.Id;
-                        var mapsInStore = (List<GcEpiStatusMap>) Session["StatusMaps"];
-                        if (!mapsInStore.IsNullOrEmpty())
-                        {
-                           ddlOnImportGcStatuses.SelectedValue = mapsInStore[storeIndex].OnImportChangeGcStatus;
-                        }
                         tCell.Controls.Add(ddlOnImportGcStatuses);
                     }
                     else if (cellIndex is 2)
@@ -100,20 +124,14 @@ namespace GcEPiPlugin.GatherContentPlugin
                         saveActions.ToList().ForEach(i => ddlEpiStatuses.Items.Add(new ListItem(i.ToString(), i.ToString())));
                         ddlEpiStatuses.Items.Add(new ListItem("Do Not Change", "noChange"));
                         ddlEpiStatuses.ID = "mappedEPi-" + status.Id;
-						var mapsInStore = (List<GcEpiStatusMap>)Session["StatusMaps"];
-						if (!mapsInStore.IsNullOrEmpty())
-						{
-							ddlEpiStatuses.SelectedValue = mapsInStore[storeIndex].MappedEpiserverStatus;
-						}
 						tCell.Controls.Add(ddlEpiStatuses);
                     }
-                    else
+                    else if (cellIndex is 1)
                     {
                         tCell.Text = status.Name;
                     }
                     tRow.Cells.Add(tCell);
                 }
-                storeIndex++;
             }
         }
 
@@ -122,9 +140,11 @@ namespace GcEPiPlugin.GatherContentPlugin
             var selectedPostType = Request.Form["ddlPostTypes"];
             var selectedAuthor = Request.Form["ddlAuthors"];
             var selectedEPiStatus = Request.Form["ddlStatuses"];
+            var selectedEpiContentType = Request.Form["ddlEpiContentTypes"];
 			Session["PostType"] = selectedPostType;
 			Session["Author"] = selectedAuthor;
 			Session["DefaultStatus"] = selectedEPiStatus;
+            Session["EpiContentType"] = selectedEpiContentType;
             var gcEpiStatusMaps = (from string key in Request.Form.Keys
                 where key.StartsWith("mappedEPi-")
                 select new GcEpiStatusMap
@@ -134,6 +154,12 @@ namespace GcEPiPlugin.GatherContentPlugin
                 }).ToList();
 			Session["StatusMaps"] = gcEpiStatusMaps;
             Response.Redirect("~/GatherContentPlugin/NewGcMappingV4.aspx");
+        }
+
+        protected void DdlPostTypes_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            Session["PostType"] = ddlPostTypes.SelectedValue;
+            PopulateForm();
         }
     }
 }
