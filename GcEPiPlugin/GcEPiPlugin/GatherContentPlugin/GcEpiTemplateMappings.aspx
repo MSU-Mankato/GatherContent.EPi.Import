@@ -15,7 +15,7 @@
         </asp:Table>
     </fieldset>
     <p>
-        <asp:Button runat="server" ID="btnApply" Text="Apply" />
+        <asp:Button runat="server" ID="btnApply" OnClick="BtnApply_OnClick" Text="Apply" />
     </p>
 </form>
 </body>
