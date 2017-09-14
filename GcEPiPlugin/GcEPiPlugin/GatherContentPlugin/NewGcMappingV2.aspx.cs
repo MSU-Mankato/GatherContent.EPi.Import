@@ -48,9 +48,8 @@ namespace GcEPiPlugin.GatherContentPlugin
             {
                 if (mappings.Any(mapping => mapping.ProjectId == Session["ProjectId"].ToString() && mapping.TemplateId == template.Id.ToString()))
                 {
-                    var radioButton = new ListItem(template.Name +" <a href='https://mnsu.gathercontent.com'> Edit Template Mapping </a> <br>" +
-                                                        template.Description, template.Id.ToString()) {Enabled = false};
-                    rblGcTemplates.Items.Add(radioButton);
+                    rblGcTemplates.Items.Add(new ListItem(template.Name + " <a href='https://mnsu.gathercontent.com'> Edit Template Mapping </a> <br>" +
+                                                          template.Description, template.Id.ToString()){ Enabled = false });
                 }
                 else
                 {
