@@ -130,12 +130,12 @@ namespace GcEPiPlugin.GatherContentPlugin
                 where key.StartsWith("meta-")
                 select Request.Form[key];
 			Session["EpiFieldMaps"] = epiFieldMaps.ToList();
-            GcDynamicTemplateMappings.ClearStore();
             var mappingsStore = new GcDynamicTemplateMappings(Session["AccountId"].ToString(), Session["ProjectId"].ToString(), 
                 Session["TemplateId"].ToString(), Session["PostType"].ToString(), Session["Author"].ToString(),
                 Session["DefaultStatus"].ToString(), Session["EpiContentType"].ToString(), (List<GcEpiStatusMap>) Session["StatusMaps"], 
-                (List<string>) Session["EpiFieldMaps"], $"{DateTime.Now:r}");
+                (List<string>) Session["EpiFieldMaps"], $"{DateTime.Now:G}");
             GcDynamicTemplateMappings.SaveStore(mappingsStore);
+            Session.Clear();
             Response.Redirect("~/GatherContentPlugin/GcEpiTemplateMappings.aspx");
         }
     }

@@ -15,7 +15,6 @@
         </asp:Table>
     </fieldset>
     <p>
-        <asp:Button ID="btnPreviousStep" runat="server" PostBackUrl="NewGcMappingV3.aspx" Text="Previous Step" />
         <asp:Button runat="server" ID="btnApply" Text="Apply" /> 
     </p>
 </form>

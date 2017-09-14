@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using Castle.Core.Internal;
@@ -45,11 +46,24 @@ namespace GcEPiPlugin.GatherContentPlugin
             var mappings = GcDynamicTemplateMappings.RetrieveStore();
             foreach (var template in templates)
             {
-                rblGcTemplates.Items.Add(
-                    new ListItem(template.Name + "<br>" + template.Description, template.Id.ToString()));
+                if (mappings.Any(mapping => mapping.ProjectId == Session["ProjectId"].ToString() && mapping.TemplateId == template.Id.ToString()))
+                {
+                    var radioButton = new ListItem(template.Name +" <a href='https://mnsu.gathercontent.com'> Edit Template Mapping </a> <br>" +
+                                                        template.Description, template.Id.ToString()) {Enabled = false};
+                    rblGcTemplates.Items.Add(radioButton);
+                }
+                else
+                {
+                    rblGcTemplates.Items.Add(new ListItem(template.Name + "<br>" + template.Description, template.Id.ToString()));
+                }
             }
-            rblGcTemplates.SelectedIndex = 0;
-			Session["TemplateId"] = rblGcTemplates.SelectedValue;
+            var buffer = new ListItem[rblGcTemplates.Items.Count];
+            rblGcTemplates.Items.CopyTo(buffer, 0);
+            if (buffer.First().Enabled)
+            {
+                rblGcTemplates.SelectedIndex = 0;
+                Session["TemplateId"] = rblGcTemplates.SelectedValue;
+            }
             Session["PostType"] = null;
             Session["Author"] = null;
             Session["DefaultStatus"] = null;
@@ -58,8 +72,13 @@ namespace GcEPiPlugin.GatherContentPlugin
         protected void BtnNextStep_OnClick(object sender, EventArgs e)
         {
 			var selectedValue = Request.Form["rblGcTemplates"];
-			Session["TemplateId"] = selectedValue;
-			Response.Redirect("~/GatherContentPlugin/NewGcMappingV3.aspx");
+            if (selectedValue == null)
+            {
+                PopulateForm();
+                return;
+            }
+            Session["TemplateId"] = selectedValue;
+            Response.Redirect("~/GatherContentPlugin/NewGcMappingV3.aspx");
         }
     }
 }
