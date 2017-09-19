@@ -109,10 +109,12 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             if (e.Item.ItemType != ListItemType.Item) return;
             var linkButtonTemplate = e.Item.FindControl("lnkButtonTemplate") as LinkButton;
-            //linkButtonTemplate.PostBackUrl = "~/GatherContentPlugin/NewGcMappingV4.aspx";
+
+            if (linkButtonTemplate != null) linkButtonTemplate.Click += delegate { Response.Write("<script>alert('hey there')</script>"); };
+            linkButtonTemplate.PostBackUrl = $"~/GatherContentPlugin/NewGcMappingV4.aspx?Id={103614}";
         }
 
-        protected void lnkButtonTemplate_OnClick(object sender, EventArgs e)
+        protected void LnkButtonTemplate_OnClick(object sender, EventArgs e)
         {
             Response.Write("<script>alert('hey there')</script>");
         }
