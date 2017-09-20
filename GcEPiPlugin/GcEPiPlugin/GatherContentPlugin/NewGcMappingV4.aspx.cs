@@ -12,6 +12,7 @@ using EPiServer.ServiceLocation;
 using GatherContentConnect;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
+using Newtonsoft.Json;
 
 namespace GcEPiPlugin.GatherContentPlugin
 {
@@ -44,10 +45,8 @@ namespace GcEPiPlugin.GatherContentPlugin
             Session["Author"] = Server.UrlDecode(Request.QueryString["Author"]);
             Session["DefaultStatus"] = Server.UrlDecode(Request.QueryString["DefaultStatus"]);
             Session["EpiContentType"] = Server.UrlDecode(Request.QueryString["EpiContentType"]);
-            var x = Server.UrlDecode(Request.QueryString["StatusMaps"]);
-            var y = x.ToList();
-            Session["StatusMaps"] = y;
-            Session["EpiFieldMaps"] = Server.UrlDecode(Request.QueryString["EpiFieldMaps"]);
+            Session["StatusMaps"] = JsonConvert.DeserializeObject<List<GcEpiStatusMap>>(Server.UrlDecode(Request.QueryString["StatusMaps"]));
+            Session["EpiFieldMaps"] = JsonConvert.DeserializeObject<List<string>>(Server.UrlDecode(Request.QueryString["EpiFieldMaps"]));
             Session["PublishedDateTime"] = Server.UrlDecode(Request.QueryString["PublishedDateTime"]);
         }
 
@@ -151,10 +150,10 @@ namespace GcEPiPlugin.GatherContentPlugin
                 Session["TemplateId"].ToString(), Session["PostType"].ToString(), Session["Author"].ToString(),
                 Session["DefaultStatus"].ToString(), Session["EpiContentType"].ToString(), (List<GcEpiStatusMap>)Session["StatusMaps"],
                 (List<string>)Session["EpiFieldMaps"], $"{DateTime.Now:G}");
-            int? existingIndex = mappingsStore.FindIndex(i => i.ProjectId == Session["ProjectId"].ToString() &&
+            var existingIndex = mappingsStore.FindIndex(i => i.ProjectId == Session["ProjectId"].ToString() &&
                                                      i.TemplateId == Session["TemplateId"].ToString());
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            if (existingIndex.HasValue)
+            if (existingIndex > 0)
             {
                 var mappingId = mappingsStore[Convert.ToInt32(existingIndex)].Id;
                 GcDynamicTemplateMappings.DeleteItem(mappingId);

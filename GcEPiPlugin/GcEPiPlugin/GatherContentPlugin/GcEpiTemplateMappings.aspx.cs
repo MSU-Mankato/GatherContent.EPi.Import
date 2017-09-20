@@ -6,6 +6,7 @@ using EPiServer.Security;
 using EPiServer;
 using GatherContentConnect;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
+using Newtonsoft.Json;
 
 namespace GcEPiPlugin.GatherContentPlugin
 {
@@ -110,12 +111,14 @@ namespace GcEPiPlugin.GatherContentPlugin
             var linkButtonTemplate = e.Item.FindControl("lnkButtonTemplate") as LinkButton;
             var map = e.Item.DataItem as GcDynamicTemplateMappings;
             if (linkButtonTemplate == null) return;
-            if (map != null)
-                linkButtonTemplate.PostBackUrl =
-                    $"~/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
-                    $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
-                    $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={map.StatusMaps}" +
-                    $"&EpiFieldMaps={map.EpiFieldMaps}&PublishedDateTime={map.PublishedDateTime}";
+            if (map == null) return;
+            var serializedStatusMaps = JsonConvert.SerializeObject(map.StatusMaps);
+            var serializedEpiFieldMaps = JsonConvert.SerializeObject(map.EpiFieldMaps);
+            linkButtonTemplate.PostBackUrl =
+                $"~/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
+                $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
+                $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={serializedStatusMaps}" +
+                $"&EpiFieldMaps={serializedEpiFieldMaps}&PublishedDateTime={map.PublishedDateTime}";
         }
     }
 }
