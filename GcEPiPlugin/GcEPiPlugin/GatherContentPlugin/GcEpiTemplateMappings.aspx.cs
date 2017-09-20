@@ -107,16 +107,15 @@ namespace GcEPiPlugin.GatherContentPlugin
 
         protected void rptTableMappings_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType != ListItemType.Item) return;
             var linkButtonTemplate = e.Item.FindControl("lnkButtonTemplate") as LinkButton;
-
-            if (linkButtonTemplate != null) linkButtonTemplate.Click += delegate { Response.Write("<script>alert('hey there')</script>"); };
-            linkButtonTemplate.PostBackUrl = $"~/GatherContentPlugin/NewGcMappingV4.aspx?Id={103614}";
-        }
-
-        protected void LnkButtonTemplate_OnClick(object sender, EventArgs e)
-        {
-            Response.Write("<script>alert('hey there')</script>");
+            var map = e.Item.DataItem as GcDynamicTemplateMappings;
+            if (linkButtonTemplate == null) return;
+            if (map != null)
+                linkButtonTemplate.PostBackUrl =
+                    $"~/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
+                    $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
+                    $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={map.StatusMaps}" +
+                    $"&EpiFieldMaps={map.EpiFieldMaps}&PublishedDateTime={map.PublishedDateTime}";
         }
     }
 }

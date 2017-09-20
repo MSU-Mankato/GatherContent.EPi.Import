@@ -69,11 +69,17 @@ namespace GcEPiPlugin.GatherContentPlugin.GcDynamicClasses
             var stores = store.Items<GcDynamicTemplateMappings>();
             return stores.ToList();
         }
-        //Deletes all the data in the data store.
+        //Deletes all the items in the data store.
         public static void ClearStore()
         {
             var store = DynamicDataStoreFactory.Instance.CreateStore(typeof(GcDynamicTemplateMappings));
             store.DeleteAll();
+        }
+        //Delete a specific item from the data store.
+        public static void DeleteItem(Identity id)
+        {
+            var store = DynamicDataStoreFactory.Instance.CreateStore(typeof(GcDynamicTemplateMappings));
+            store.Delete(id);
         }
     }
 }

@@ -29,10 +29,26 @@ namespace GcEPiPlugin.GatherContentPlugin
                 AccessDenied();
             }
 
-            if (!IsPostBack)
-            {
-                PopulateForm();
-            }
+            if (IsPostBack) return;
+            SessionSet();
+            PopulateForm();
+        }
+
+        private void SessionSet()
+        {
+            if(!Request.QueryString.HasKeys())return;
+            Session["AccountId"] = Server.UrlDecode(Request.QueryString["AccountId"]);
+            Session["ProjectId"] = Server.UrlDecode(Request.QueryString["ProjectId"]);
+            Session["TemplateId"] = Server.UrlDecode(Request.QueryString["TemplateId"]);
+            Session["PostType"] = Server.UrlDecode(Request.QueryString["PostType"]);
+            Session["Author"] = Server.UrlDecode(Request.QueryString["Author"]);
+            Session["DefaultStatus"] = Server.UrlDecode(Request.QueryString["DefaultStatus"]);
+            Session["EpiContentType"] = Server.UrlDecode(Request.QueryString["EpiContentType"]);
+            var x = Server.UrlDecode(Request.QueryString["StatusMaps"]);
+            var y = x.ToList();
+            Session["StatusMaps"] = y;
+            Session["EpiFieldMaps"] = Server.UrlDecode(Request.QueryString["EpiFieldMaps"]);
+            Session["PublishedDateTime"] = Server.UrlDecode(Request.QueryString["PublishedDateTime"]);
         }
 
         private void PopulateForm()
@@ -130,11 +146,20 @@ namespace GcEPiPlugin.GatherContentPlugin
                 where key.StartsWith("meta-")
                 select Request.Form[key];
 			Session["EpiFieldMaps"] = epiFieldMaps.ToList();
-            var mappingsStore = new GcDynamicTemplateMappings(Session["AccountId"].ToString(), Session["ProjectId"].ToString(), 
+            var mappingsStore = GcDynamicTemplateMappings.RetrieveStore();
+            var newMapping = new GcDynamicTemplateMappings(Session["AccountId"].ToString(), Session["ProjectId"].ToString(),
                 Session["TemplateId"].ToString(), Session["PostType"].ToString(), Session["Author"].ToString(),
-                Session["DefaultStatus"].ToString(), Session["EpiContentType"].ToString(), (List<GcEpiStatusMap>) Session["StatusMaps"], 
-                (List<string>) Session["EpiFieldMaps"], $"{DateTime.Now:G}");
-            GcDynamicTemplateMappings.SaveStore(mappingsStore);
+                Session["DefaultStatus"].ToString(), Session["EpiContentType"].ToString(), (List<GcEpiStatusMap>)Session["StatusMaps"],
+                (List<string>)Session["EpiFieldMaps"], $"{DateTime.Now:G}");
+            int? existingIndex = mappingsStore.FindIndex(i => i.ProjectId == Session["ProjectId"].ToString() &&
+                                                     i.TemplateId == Session["TemplateId"].ToString());
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (existingIndex.HasValue)
+            {
+                var mappingId = mappingsStore[Convert.ToInt32(existingIndex)].Id;
+                GcDynamicTemplateMappings.DeleteItem(mappingId);
+            }
+            GcDynamicTemplateMappings.SaveStore(newMapping);
             Session.Clear();
             Response.Redirect("~/GatherContentPlugin/GcEpiTemplateMappings.aspx");
         }

@@ -42,7 +42,7 @@
             </HeaderTemplate>
             <ItemTemplate>
                 <tr>
-                    <td><asp:LinkButton runat="server" ID="lnkButtonTemplate" OnClick="LnkButtonTemplate_OnClick">
+                    <td><asp:LinkButton runat="server" ID="lnkButtonTemplate"> 
                         <%#Client.GetTemplateById(Convert.ToInt32(Eval("TemplateId"))).Name %>
                     </asp:LinkButton></td>
                     <td>Published <br> <%#Eval("PublishedDateTime") %></td>
