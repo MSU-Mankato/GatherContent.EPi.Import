@@ -79,9 +79,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             if (e.Item.FindControl("lnkTemplateId") is HyperLink linkTemplateId)
                 linkTemplateId.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
             if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
-            {
                 checkBoxTemplate.ID = $"chk{map.TemplateId}";
-            }
         }
     }
 }

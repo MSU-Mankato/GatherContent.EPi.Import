@@ -154,7 +154,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                                                      i.TemplateId == Session["TemplateId"].ToString());
             if (existingIndex > 0)
             {
-                var mappingId = mappingsStore[Convert.ToInt32(existingIndex)].Id;
+                var mappingId = mappingsStore[existingIndex].Id;
                 GcDynamicTemplateMappings.DeleteItem(mappingId);
             }
             GcDynamicTemplateMappings.SaveStore(newMapping);
