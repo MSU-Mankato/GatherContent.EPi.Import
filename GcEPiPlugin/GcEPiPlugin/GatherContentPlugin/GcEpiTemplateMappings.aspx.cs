@@ -34,66 +34,9 @@ namespace GcEPiPlugin.GatherContentPlugin
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             Client = new GcConnectClient(credentialsStore.ToList().First().ApiKey,
                 credentialsStore.ToList().First().Email);
-            //var tHeadRow = new TableRow {Height = 42};
-            //tHeadRow.Cells.Add(new TableCell {Text = "Title"});
-            //tHeadRow.Cells.Add(new TableCell {Text = "Date"});
-            //tHeadRow.Cells.Add(new TableCell {Text = "Account Slug"});
-            //tHeadRow.Cells.Add(new TableCell {Text = "Project id"});
-            //tHeadRow.Cells.Add(new TableCell {Text = "Template id"});
-            //tableTemplateMappings.Rows.Add(tHeadRow);
             var mappings = GcDynamicTemplateMappings.RetrieveStore();
             rptTableMappings.DataSource = mappings;
             rptTableMappings.DataBind();
-            //foreach (var i in mappings)
-            //{
-            //    var tRow = new TableRow();
-            //    tableTemplateMappings.Rows.Add(tRow);
-            //    for (var cellIndex = 1; cellIndex <= 5; cellIndex++)
-            //    {
-            //        var tCell = new TableCell {Width = 500};
-            //        switch (cellIndex)
-            //        {
-            //            case 1:
-            //                var linkBtnTemplate = new LinkButton
-            //                {
-            //                    Text = Client.GetTemplateById(Convert.ToInt32(i.TemplateId)).Name
-            //                };
-            //                linkBtnTemplate.Click += delegate
-            //                {
-            //                    Session["AccountId"] = i.AccountId;
-            //                    Session["ProjectId"] = i.ProjectId;
-            //                };
-            //                linkBtnTemplate.PostBackUrl = "~/GatherContentPlugin/NewGcMappingV4.aspx";
-            //                tCell.Controls.Add(linkBtnTemplate);
-            //                break;
-            //            case 2:
-            //                tCell.Text = "Published <br>" + i.PublishedDateTime;
-            //                break;
-            //            case 3:
-            //                var linkBtnSlug = new LinkButton
-            //                {
-            //                    Text = Client.GetAccountById(Convert.ToInt32(i.AccountId)).Slug
-            //                };
-            //                tCell.Controls.Add(linkBtnSlug);
-            //                break;
-            //            case 4:
-            //                var linkBtnProjectId = new LinkButton
-            //                {
-            //                    Text = i.ProjectId
-            //                };
-            //                tCell.Controls.Add(linkBtnProjectId);
-            //                break;
-            //            default:
-            //                var linkBtnTemplateId = new LinkButton
-            //                {
-            //                    Text = i.TemplateId
-            //                };
-            //                tCell.Controls.Add(linkBtnTemplateId);
-            //                break;
-            //        }
-            //        tRow.Cells.Add(tCell);
-            //    }
-            //}
         }
 
         protected void BtnAddNew_OnClick(object sender, EventArgs e)
@@ -106,19 +49,31 @@ namespace GcEPiPlugin.GatherContentPlugin
             PopulateForm();
         }
 
-        protected void rptTableMappings_OnItemCreated(object sender, RepeaterItemEventArgs e)
+        protected void RptTableMappings_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
-            var linkButtonTemplate = e.Item.FindControl("lnkButtonTemplate") as LinkButton;
             var map = e.Item.DataItem as GcDynamicTemplateMappings;
-            if (linkButtonTemplate == null) return;
             if (map == null) return;
-            var serializedStatusMaps = JsonConvert.SerializeObject(map.StatusMaps);
-            var serializedEpiFieldMaps = JsonConvert.SerializeObject(map.EpiFieldMaps);
-            linkButtonTemplate.PostBackUrl =
-                $"~/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
-                $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
-                $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={serializedStatusMaps}" +
-                $"&EpiFieldMaps={serializedEpiFieldMaps}&PublishedDateTime={map.PublishedDateTime}";
+            var slug = Client.GetAccountById(Convert.ToInt32(map.AccountId)).Slug;
+            if (e.Item.FindControl("lnkButtonTemplate") is LinkButton linkButtonTemplate)
+            {
+                var serializedStatusMaps = JsonConvert.SerializeObject(map.StatusMaps);
+                var serializedEpiFieldMaps = JsonConvert.SerializeObject(map.EpiFieldMaps);
+                linkButtonTemplate.PostBackUrl =
+                    $"~/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
+                    $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
+                    $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={serializedStatusMaps}" +
+                    $"&EpiFieldMaps={serializedEpiFieldMaps}&PublishedDateTime={map.PublishedDateTime}";
+            }
+            if (e.Item.FindControl("lnkAccountSlug") is HyperLink linkAccountSlug)
+                linkAccountSlug.NavigateUrl = $"https://{slug}.gathercontent.com/";
+            if (e.Item.FindControl("lnkProjectId") is HyperLink linkProjectId)
+                linkProjectId.NavigateUrl = $"https://{slug}.gathercontent.com/projects/view/{map.ProjectId}";
+            if (e.Item.FindControl("lnkTemplateId") is HyperLink linkTemplateId)
+                linkTemplateId.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
+            if (e.Item.FindControl("btnDeleteTemplate") is LinkButton linkButtonDeleteTemplate)
+            {
+                linkButtonDeleteTemplate.PostBackUrl = $"~/GatherContentPlugin/GcEpiTemplateMappings.aspx";
+            }
         }
     }
 }

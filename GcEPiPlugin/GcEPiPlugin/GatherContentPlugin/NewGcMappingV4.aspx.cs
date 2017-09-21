@@ -152,7 +152,6 @@ namespace GcEPiPlugin.GatherContentPlugin
                 (List<string>)Session["EpiFieldMaps"], $"{DateTime.Now:G}");
             var existingIndex = mappingsStore.FindIndex(i => i.ProjectId == Session["ProjectId"].ToString() &&
                                                      i.TemplateId == Session["TemplateId"].ToString());
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (existingIndex > 0)
             {
                 var mappingId = mappingsStore[Convert.ToInt32(existingIndex)].Id;

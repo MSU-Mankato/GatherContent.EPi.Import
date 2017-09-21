@@ -3,19 +3,34 @@
 <head id="Head1" runat="server">
     <title>New GatherContent Mapping</title>
     <style type="text/css">
-        .auto-style1 {
-            width: 408px;
-            height: 42px;
-        }
-        .auto-style3 {
-            width: 319px;
-            height: 42px;
-        }
         .auto-style4 {
-            width: 1481px;
+            width: 1453px;
         }
         .auto-style5 {
+            width: 291px;
             height: 42px;
+        }
+        .auto-style6 {
+            width: 226px;
+            height: 42px;
+        }
+        .auto-style7 {
+            height: 42px;
+            width: 87px;
+        }
+        .auto-style8 {
+            width: 87px;
+        }
+        .LinkNoUnderline
+        {
+            text-decoration:none;
+        }
+        .btn 
+        {
+            padding: 2px 20px;
+            text-decoration: none;
+            border: solid 1px #000;
+            background-color: #ababab;
         }
     </style>
 </head>
@@ -28,7 +43,7 @@
     </p>
     <fieldset>
        <table class="auto-style4">
-        <asp:Repeater runat="server" ID="rptTableMappings" OnItemCreated="rptTableMappings_OnItemCreated">
+        <asp:Repeater runat="server" ID="rptTableMappings" OnItemCreated="RptTableMappings_OnItemCreated">
             <HeaderTemplate>
                 <thead>
                     <tr>
@@ -42,19 +57,21 @@
             </HeaderTemplate>
             <ItemTemplate>
                 <tr>
-                    <td><asp:LinkButton runat="server" ID="lnkButtonTemplate"> 
-                        <%#Client.GetTemplateById(Convert.ToInt32(Eval("TemplateId"))).Name %>
-                    </asp:LinkButton></td>
+                    <td><asp:LinkButton runat="server" ID="lnkButtonTemplate" CssClass="LinkNoUnderline"> 
+                        <%#Client.GetTemplateById(Convert.ToInt32(Eval("TemplateId"))).Name %> &nbsp;
+                    </asp:LinkButton >
+                        <asp:LinkButton ID="lnkButtonDeleteTemplate" runat="server" Text="Delete"
+                            CssClass="btn"/></td>
                     <td>Published <br> <%#Eval("PublishedDateTime") %></td>
-                    <td><asp:LinkButton runat="server" ID="lnkButtonAccountSlug">
+                    <td><asp:HyperLink runat="server" ID="lnkAccountSlug" Target="_blank" CssClass="LinkNoUnderline ">
                         <%#Client.GetAccountById(Convert.ToInt32(Eval("AccountId"))).Slug %>
-                    </asp:LinkButton></td>
-                    <td><asp:LinkButton runat="server" ID="lnkButtonProjectId">
+                    </asp:HyperLink></td>
+                    <td><asp:HyperLink runat="server" ID="lnkProjectId" Target="_blank" CssClass="LinkNoUnderline">
                         <%#Eval("ProjectId") %>
-                    </asp:LinkButton></td>
-                    <td><asp:LinkButton runat="server" ID="lnkButtonTemplateId">
+                    </asp:HyperLink></td>
+                    <td><asp:HyperLink runat="server" ID="lnkTemplateId" Target="_blank" CssClass="LinkNoUnderline">
                         <%#Eval("TemplateId") %>
-                    </asp:LinkButton></td>
+                    </asp:HyperLink></td>
                 </tr>
             </ItemTemplate>
             <FooterTemplate>
