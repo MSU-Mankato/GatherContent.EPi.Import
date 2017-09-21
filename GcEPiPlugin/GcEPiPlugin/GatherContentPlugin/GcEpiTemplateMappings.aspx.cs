@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using EPiServer.PlugIn;
 using EPiServer.Security;
@@ -44,8 +45,15 @@ namespace GcEPiPlugin.GatherContentPlugin
             Response.Redirect("~/GatherContentPlugin/NewGcMapping.aspx");
         }
 
-        protected void BtnApply_OnClick(object sender, EventArgs e)
+        protected void BtnDeleteTemplate_OnClick(object sender, EventArgs e)
         {
+            foreach (Control item in rptTableMappings.Items)
+            {
+                if (item.FindControl("") is CheckBox checkBox)
+                {
+                    var templateId = checkBox.ID.Substring(17,6);
+                }
+            }
             PopulateForm();
         }
 
@@ -70,9 +78,9 @@ namespace GcEPiPlugin.GatherContentPlugin
                 linkProjectId.NavigateUrl = $"https://{slug}.gathercontent.com/projects/view/{map.ProjectId}";
             if (e.Item.FindControl("lnkTemplateId") is HyperLink linkTemplateId)
                 linkTemplateId.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
-            if (e.Item.FindControl("btnDeleteTemplate") is LinkButton linkButtonDeleteTemplate)
+            if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
             {
-                linkButtonDeleteTemplate.PostBackUrl = $"~/GatherContentPlugin/GcEpiTemplateMappings.aspx";
+                checkBoxTemplate.ID = $"chk{map.TemplateId}";
             }
         }
     }

@@ -6,21 +6,6 @@
         .auto-style4 {
             width: 1453px;
         }
-        .auto-style5 {
-            width: 291px;
-            height: 42px;
-        }
-        .auto-style6 {
-            width: 226px;
-            height: 42px;
-        }
-        .auto-style7 {
-            height: 42px;
-            width: 87px;
-        }
-        .auto-style8 {
-            width: 87px;
-        }
         .LinkNoUnderline
         {
             text-decoration:none;
@@ -31,6 +16,9 @@
             text-decoration: none;
             border: solid 1px #000;
             background-color: #ababab;
+        }
+        .auto-style10 {
+            width: 28px;
         }
     </style>
 </head>
@@ -47,6 +35,7 @@
             <HeaderTemplate>
                 <thead>
                     <tr>
+                        <td></td>
                         <td>Title</td>
                         <td>Date</td>
                         <td>Account Slug</td>
@@ -57,11 +46,13 @@
             </HeaderTemplate>
             <ItemTemplate>
                 <tr>
-                    <td><asp:LinkButton runat="server" ID="lnkButtonTemplate" CssClass="LinkNoUnderline"> 
+                    <td>
+                        <asp:CheckBox ID="chkTemplate" runat="server" />
+                    </td>
+                    <td>
+                        <asp:LinkButton runat="server" ID="lnkButtonTemplate" CssClass="LinkNoUnderline"> 
                         <%#Client.GetTemplateById(Convert.ToInt32(Eval("TemplateId"))).Name %> &nbsp;
-                    </asp:LinkButton >
-                        <asp:LinkButton ID="lnkButtonDeleteTemplate" runat="server" Text="Delete"
-                            CssClass="btn"/></td>
+                    </asp:LinkButton ></td>
                     <td>Published <br> <%#Eval("PublishedDateTime") %></td>
                     <td><asp:HyperLink runat="server" ID="lnkAccountSlug" Target="_blank" CssClass="LinkNoUnderline ">
                         <%#Client.GetAccountById(Convert.ToInt32(Eval("AccountId"))).Slug %>
@@ -83,7 +74,7 @@
         </asp:Table>
     </fieldset>
     <p>
-        <asp:Button runat="server" ID="btnApply" OnClick="BtnApply_OnClick" Text="Apply" />
+        <asp:Button runat="server" ID="btnDeleteTemplate" OnClick="BtnDeleteTemplate_OnClick" Text="Delete" />
     </p>
 </form>
 </body>
