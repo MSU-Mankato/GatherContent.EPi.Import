@@ -47,12 +47,14 @@ namespace GcEPiPlugin.GatherContentPlugin
 
         protected void BtnDeleteTemplate_OnClick(object sender, EventArgs e)
         {
-            foreach (Control item in rptTableMappings.Items)
+            foreach (var key in Request.Form)
             {
-                if (item.FindControl("") is CheckBox checkBox)
-                {
-                    var templateId = checkBox.ID.Substring(17,6);
-                }
+                if (!key.ToString().StartsWith("rptTableMappings")) continue;
+                var splitString = key.ToString().Split('$');
+                var templateId = splitString[2].Substring(3);
+                var mappingsStore = GcDynamicTemplateMappings.RetrieveStore();
+                var index = mappingsStore.FindIndex(i => i.TemplateId == templateId);
+                GcDynamicTemplateMappings.DeleteItem(mappingsStore[index].Id);
             }
             PopulateForm();
         }
@@ -74,10 +76,10 @@ namespace GcEPiPlugin.GatherContentPlugin
             }
             if (e.Item.FindControl("lnkAccountSlug") is HyperLink linkAccountSlug)
                 linkAccountSlug.NavigateUrl = $"https://{slug}.gathercontent.com/";
-            if (e.Item.FindControl("lnkProjectId") is HyperLink linkProjectId)
-                linkProjectId.NavigateUrl = $"https://{slug}.gathercontent.com/projects/view/{map.ProjectId}";
-            if (e.Item.FindControl("lnkTemplateId") is HyperLink linkTemplateId)
-                linkTemplateId.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
+            if (e.Item.FindControl("lnkProject") is HyperLink linkProject)
+                linkProject.NavigateUrl = $"https://{slug}.gathercontent.com/projects/view/{map.ProjectId}";
+            if (e.Item.FindControl("lnkTemplate") is HyperLink linkTemplate)
+                linkTemplate.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
             if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
                 checkBoxTemplate.ID = $"chk{map.TemplateId}";
         }

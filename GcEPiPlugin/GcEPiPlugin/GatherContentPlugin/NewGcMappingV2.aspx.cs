@@ -45,7 +45,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             var mappings = GcDynamicTemplateMappings.RetrieveStore();
             foreach (var template in templates)
             {
-                if (mappings.Any(mapping => mapping.ProjectId == Session["ProjectId"].ToString() && mapping.TemplateId == template.Id.ToString()))
+                if (mappings.Any(mapping => mapping.TemplateId == template.Id.ToString()))
                 {
                     rblGcTemplates.Items.Add(new ListItem(template.Name + " <a href='https://mnsu.gathercontent.com'> " +
                                                           "Edit Template Mapping </a> <br>" +

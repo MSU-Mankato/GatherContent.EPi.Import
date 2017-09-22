@@ -38,16 +38,16 @@
                         <td></td>
                         <td>Title</td>
                         <td>Date</td>
-                        <td>Account Slug</td>
-                        <td>Project id</td>
-                        <td>Template id</td>
+                        <td>GatherContent Account</td>
+                        <td>GatherContent Project</td>
+                        <td>GatherContent Template</td>
                     </tr>
                 </thead>
             </HeaderTemplate>
             <ItemTemplate>
                 <tr>
                     <td>
-                        <asp:CheckBox ID="chkTemplate" runat="server" />
+                        <asp:CheckBox ID="chkTemplate" runat="server" name="testChk" />
                     </td>
                     <td>
                         <asp:LinkButton runat="server" ID="lnkButtonTemplate" CssClass="LinkNoUnderline"> 
@@ -57,11 +57,11 @@
                     <td><asp:HyperLink runat="server" ID="lnkAccountSlug" Target="_blank" CssClass="LinkNoUnderline ">
                         <%#Client.GetAccountById(Convert.ToInt32(Eval("AccountId"))).Slug %>
                     </asp:HyperLink></td>
-                    <td><asp:HyperLink runat="server" ID="lnkProjectId" Target="_blank" CssClass="LinkNoUnderline">
-                        <%#Eval("ProjectId") %>
+                    <td><asp:HyperLink runat="server" ID="lnkProject" Target="_blank" CssClass="LinkNoUnderline">
+                        <%#Client.GetProjectById(Convert.ToInt32(Eval("ProjectId"))).Name %>
                     </asp:HyperLink></td>
-                    <td><asp:HyperLink runat="server" ID="lnkTemplateId" Target="_blank" CssClass="LinkNoUnderline">
-                        <%#Eval("TemplateId") %>
+                    <td><asp:HyperLink runat="server" ID="lnkTemplate" Target="_blank" CssClass="LinkNoUnderline">
+                        <%#Client.GetTemplateById(Convert.ToInt32(Eval("TemplateId"))).Name %>
                     </asp:HyperLink></td>
                 </tr>
             </ItemTemplate>
