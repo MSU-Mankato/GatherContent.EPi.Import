@@ -249,6 +249,13 @@
     <Compile Include="GatherContentPlugin\NewGcMappingV4.aspx.designer.cs">
       <DependentUpon>NewGcMappingV4.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GatherContentPlugin\ReviewItemsForImport.aspx.cs">
+      <DependentUpon>ReviewItemsForImport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GatherContentPlugin\ReviewItemsForImport.aspx.designer.cs">
+      <DependentUpon>ReviewItemsForImport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -270,6 +277,7 @@
     <Content Include="GatherContentPlugin\NewGcMappingV2.aspx" />
     <Content Include="GatherContentPlugin\NewGcMappingV3.aspx" />
     <Content Include="GatherContentPlugin\NewGcMappingV4.aspx" />
+    <Content Include="GatherContentPlugin\ReviewItemsForImport.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="App_Data\GeoLiteCity.dat" />

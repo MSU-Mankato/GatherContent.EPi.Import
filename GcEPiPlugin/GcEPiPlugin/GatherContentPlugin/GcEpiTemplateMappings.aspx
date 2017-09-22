@@ -4,7 +4,7 @@
     <title>New GatherContent Mapping</title>
     <style type="text/css">
         .auto-style4 {
-            width: 1453px;
+            width: 1476px;
         }
         .LinkNoUnderline
         {
@@ -17,10 +17,7 @@
             border: solid 1px #000;
             background-color: #ababab;
         }
-        .auto-style10 {
-            width: 28px;
-        }
-    </style>
+        </style>
 </head>
 <body>
 <form id="form1" runat="server">
@@ -47,12 +44,16 @@
             <ItemTemplate>
                 <tr>
                     <td>
-                        <asp:CheckBox ID="chkTemplate" runat="server" name="testChk" />
+                        <asp:CheckBox ID="chkTemplate" runat="server" />
                     </td>
                     <td>
                         <asp:LinkButton runat="server" ID="lnkButtonTemplate" CssClass="LinkNoUnderline"> 
                         <%#Client.GetTemplateById(Convert.ToInt32(Eval("TemplateId"))).Name %> &nbsp;
-                    </asp:LinkButton ></td>
+                    </asp:LinkButton >
+                        <asp:LinkButton runat="server" ID="lnkButtonItemsReview" CssClass="LinkNoUnderline">
+                            Review Items For Import
+                        </asp:LinkButton>
+                    </td>
                     <td>Published <br> <%#Eval("PublishedDateTime") %></td>
                     <td><asp:HyperLink runat="server" ID="lnkAccountSlug" Target="_blank" CssClass="LinkNoUnderline ">
                         <%#Client.GetAccountById(Convert.ToInt32(Eval("AccountId"))).Slug %>

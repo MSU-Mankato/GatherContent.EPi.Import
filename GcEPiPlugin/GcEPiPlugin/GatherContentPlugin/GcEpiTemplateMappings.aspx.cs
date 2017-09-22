@@ -82,6 +82,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                 linkTemplate.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
             if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
                 checkBoxTemplate.ID = $"chk{map.TemplateId}";
+            if (e.Item.FindControl("lnkButtonItemsReview") is LinkButton linkButtonItemsReview)
+                linkButtonItemsReview.PostBackUrl = "~/GatherContentPlugin/ReviewItemsForImport.aspx";
         }
     }
 }
