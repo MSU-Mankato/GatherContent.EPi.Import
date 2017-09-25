@@ -40,9 +40,9 @@ namespace GcEPiPlugin.GatherContentPlugin
             }
             Client = new GcConnectClient(credentialsStore.ToList().First().ApiKey,
                 credentialsStore.ToList().First().Email);
-            var mappings = GcDynamicTemplateMappings.RetrieveStore();
-            var myMappings = mappings.FindAll(i => i.AccountId == credentialsStore.ToList().First().AccountId);
-            rptTableMappings.DataSource = myMappings;
+            var mappings = GcDynamicTemplateMappings.RetrieveStore().FindAll
+                (i => i.AccountId == credentialsStore.ToList().First().AccountId);
+            rptTableMappings.DataSource = mappings;
             rptTableMappings.DataBind();
         }
 
