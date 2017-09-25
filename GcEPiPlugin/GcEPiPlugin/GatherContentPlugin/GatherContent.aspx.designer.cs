@@ -67,15 +67,6 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.WebControls.TextBox txtPlatformUrl;
         
         /// <summary>
-        /// btnSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
-        
-        /// <summary>
         /// ddlGcAccounts control.
         /// </summary>
         /// <remarks>
@@ -83,5 +74,14 @@ namespace GcEPiPlugin.GatherContentPlugin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlGcAccounts;
+        
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSave;
     }
 }

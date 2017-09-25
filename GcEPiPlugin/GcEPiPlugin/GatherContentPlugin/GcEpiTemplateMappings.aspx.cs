@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using System.Web.UI;
 using System.Web.UI.WebControls;
+using Castle.Core.Internal;
 using EPiServer.PlugIn;
 using EPiServer.Security;
 using EPiServer;
@@ -33,10 +33,16 @@ namespace GcEPiPlugin.GatherContentPlugin
         private void PopulateForm()
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
+            if (credentialsStore.IsNullOrEmpty())
+            {
+                Visible = false;
+                return;
+            }
             Client = new GcConnectClient(credentialsStore.ToList().First().ApiKey,
                 credentialsStore.ToList().First().Email);
             var mappings = GcDynamicTemplateMappings.RetrieveStore();
-            rptTableMappings.DataSource = mappings;
+            var myMappings = mappings.FindAll(i => i.AccountId == credentialsStore.ToList().First().AccountId);
+            rptTableMappings.DataSource = myMappings;
             rptTableMappings.DataBind();
         }
 
@@ -83,7 +89,8 @@ namespace GcEPiPlugin.GatherContentPlugin
             if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
                 checkBoxTemplate.ID = $"chk{map.TemplateId}";
             if (e.Item.FindControl("lnkButtonItemsReview") is LinkButton linkButtonItemsReview)
-                linkButtonItemsReview.PostBackUrl = "~/GatherContentPlugin/ReviewItemsForImport.aspx";
+                linkButtonItemsReview.PostBackUrl = "~/GatherContentPlugin/ReviewItemsForImport.aspx?" +
+                                                    $"TemplateId={map.TemplateId}&ProjectId={map.ProjectId}";
         }
     }
 }

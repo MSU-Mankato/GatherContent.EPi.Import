@@ -4,7 +4,7 @@
     <title>Review Items For Import</title>
     <style type="text/css">
         .auto-style4 {
-            width: 1476px;
+            width: 1477px;
         }
         .LinkNoUnderline
         {
@@ -17,6 +17,9 @@
             border: solid 1px #000;
             background-color: #ababab;
         }
+        .auto-style7 {
+            height: 25px;
+        }
     </style>
 </head>
 <body>
@@ -27,7 +30,7 @@
     <p style="font-style: italic;">Project: <asp:Label runat="server" ID="projectName"></asp:Label></p>
     <fieldset>
         <table class="auto-style4">
-            <asp:Repeater runat="server" ID="rptGcItems" OnItemCreated="rptGcItems_OnItemCreated">
+            <asp:Repeater runat="server" ID="rptGcItems" OnItemCreated="RptGcItems_OnItemCreated">
                 <HeaderTemplate>
                     <thead>
                     <tr>
@@ -35,7 +38,7 @@
                         <td>Status</td>
                         <td>Item</td>
                         <td>Updated</td>
-                        <td>Episerver Title</td>
+                        <%--<td>Episerver Title</td>--%>
                     </tr>
                     </thead>
                 </HeaderTemplate>
@@ -45,9 +48,15 @@
                             <asp:CheckBox ID="chkItem" runat="server" />
                         </td>
                         <td>
-                            <asp:Label runat="server" ID="lblStatus"></asp:Label>
+                            <asp:Label runat="server" ID="statusName">
+                            </asp:Label>
                         </td>
-                        <td>Updated <br> <%#Eval("PublishedDateTime") %></td>
+                        <td>
+                            <asp:HyperLink runat="server" ID="lnkItemName" Target="_blank" CssClass="LinkNoUnderline">
+                            </asp:HyperLink>
+                        </td>
+                        <td><asp:Label runat="server" ID="updatedAt">
+                        </asp:Label></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
@@ -55,11 +64,9 @@
                 </FooterTemplate>
             </asp:Repeater>     
         </table>
-        <asp:Table runat="server" ID="tableTemplateMappings" Width="100%">
-        </asp:Table>
     </fieldset>
     <p>
-        <asp:Button runat="server" ID="btnDeleteTemplate" Text="Delete" />
+        <asp:Button runat="server" ID="btnDeleteTemplate" Text="Import Items" />
     </p>
 </form>
 </body>

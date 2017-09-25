@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using EPiServer.PlugIn;
 using EPiServer;
 using EPiServer.Security;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
 using Castle.Core.Internal;
-using EPiServer.Framework.Web.Resources;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 
 namespace GcEPiPlugin.GatherContentPlugin

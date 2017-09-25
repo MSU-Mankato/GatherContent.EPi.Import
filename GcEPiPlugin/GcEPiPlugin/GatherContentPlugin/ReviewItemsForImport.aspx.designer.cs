@@ -67,15 +67,6 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.WebControls.Repeater rptGcItems;
         
         /// <summary>
-        /// tableTemplateMappings control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tableTemplateMappings;
-        
-        /// <summary>
         /// btnDeleteTemplate control.
         /// </summary>
         /// <remarks>

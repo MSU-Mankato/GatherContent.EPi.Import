@@ -48,10 +48,10 @@
                     </td>
                     <td>
                         <asp:LinkButton runat="server" ID="lnkButtonTemplate" CssClass="LinkNoUnderline"> 
-                        <%#Client.GetTemplateById(Convert.ToInt32(Eval("TemplateId"))).Name %> &nbsp;
+                        <%#Client.GetTemplateById(Convert.ToInt32(Eval("TemplateId"))).Name %> &nbsp; 
                     </asp:LinkButton >
                         <asp:LinkButton runat="server" ID="lnkButtonItemsReview" CssClass="LinkNoUnderline">
-                            Review Items For Import
+                            &nbsp; Review Items
                         </asp:LinkButton>
                     </td>
                     <td>Published <br> <%#Eval("PublishedDateTime") %></td>
@@ -71,8 +71,6 @@
             </FooterTemplate>
         </asp:Repeater>     
        </table>
-        <asp:Table runat="server" ID="tableTemplateMappings" Width="100%">
-        </asp:Table>
     </fieldset>
     <p>
         <asp:Button runat="server" ID="btnDeleteTemplate" OnClick="BtnDeleteTemplate_OnClick" Text="Delete" />
