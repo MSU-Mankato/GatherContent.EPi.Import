@@ -260,7 +260,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Blocks\SampleBlock.cs" />
+    <Compile Include="Models\Blocks\Test1Block.cs" />
+    <Compile Include="Models\Blocks\Test2Block.cs" />
+    <Compile Include="Models\Blocks\Test3Block.cs" />
     <Compile Include="Models\Pages\SamplePage.cs" />
+    <Compile Include="Models\Pages\Test1Page.cs" />
+    <Compile Include="Models\Pages\Test2Page.cs" />
+    <Compile Include="Models\Pages\Test3Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
