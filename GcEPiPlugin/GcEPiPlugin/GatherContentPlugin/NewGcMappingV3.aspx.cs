@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Providers.Entities;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 using EPiServer;
@@ -12,6 +11,8 @@ using GatherContentConnect;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
 using Castle.Core.Internal;
+using EPiServer.Cms.Shell.UI.Components;
+using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 
@@ -83,8 +84,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                 else if (Session["PostType"].ToString() is "BlockType")
                 {
                     var contentTypeList = contentTypeRepository.List().OfType<BlockType>();
-                    var pageTypes = contentTypeList as IList<BlockType> ?? contentTypeList.ToList();
-                    pageTypes.ForEach(i => ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "block-" + i.Name)));
+                    var blockTypes = contentTypeList as IList<BlockType> ?? contentTypeList.ToList();
+                    blockTypes.ForEach(i => ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "block-" + i.Name)));
                     ddlEpiContentTypes.Enabled = true;
                     btnNextStep.Enabled = true;
                 }
