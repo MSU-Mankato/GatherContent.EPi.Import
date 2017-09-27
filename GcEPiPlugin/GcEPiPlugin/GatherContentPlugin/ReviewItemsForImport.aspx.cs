@@ -96,11 +96,13 @@ namespace GcEPiPlugin.GatherContentPlugin
                         foreach (var i in pageTypeList)
                         {
                             if (selectedPageType.Substring(5) != i.Name) continue;
-                            var pageId = i.ID;
-                            var contentReference = new ContentReference(pageId);
-                            var page = contentRepository.Get<PageData>(contentReference);
+                            var pageName = i.Name;
+                            var pages = AppDomain.CurrentDomain.GetAssemblies()
+                                .SelectMany(t => t.GetTypes())
+                                .Where(t => t.IsClass && t.Namespace == "GcEPiPlugin.Models.Pages");
+                            var page = pages.ToList().Find(j => j.Name == pageName);
                             var pageData = typeof(IContentRepository).GetMethod("GetDefault", new[] {typeof(ContentReference)})
-                                .MakeGenericMethod(page.GetOriginalType()).Invoke(contentRepository, new object[] { parent });
+                                .MakeGenericMethod(page).Invoke(contentRepository, new object[] { parent });
                             var myPage = (PageData)pageData;
                             myPage.PageName = item.Name;
                             foreach (var propDef in i.PropertyDefinitions)
