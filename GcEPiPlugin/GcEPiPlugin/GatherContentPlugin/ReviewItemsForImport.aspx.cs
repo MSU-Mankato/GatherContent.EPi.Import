@@ -97,8 +97,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                         {
                             if (selectedPageType.Substring(5) != i.Name) continue;
                             var pageId = i.ID;
-                            var pageReference = new PageReference(pageId);
-                            var page = contentRepository.Get<PageData>(pageReference);
+                            var contentReference = new ContentReference(pageId);
+                            var page = contentRepository.Get<PageData>(contentReference);
                             var pageData = typeof(IContentRepository).GetMethod("GetDefault", new[] {typeof(ContentReference)})
                                 .MakeGenericMethod(page.GetOriginalType()).Invoke(contentRepository, new object[] { parent });
                             var myPage = (PageData)pageData;
