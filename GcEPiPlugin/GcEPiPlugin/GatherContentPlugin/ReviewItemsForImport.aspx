@@ -35,8 +35,8 @@
                     <thead>
                     <tr>
                         <td></td>
-                        <td>Status</td>
                         <td>Item</td>
+                        <td>Status</td>
                         <td>Updated</td>
                         <%--<td>Episerver Title</td>--%>
                     </tr>
@@ -48,12 +48,12 @@
                             <asp:CheckBox ID="chkItem" runat="server" />
                         </td>
                         <td>
-                            <asp:Label runat="server" ID="statusName">
-                            </asp:Label>
-                        </td>
-                        <td>
                             <asp:HyperLink runat="server" ID="lnkItemName" Target="_blank" CssClass="LinkNoUnderline">
                             </asp:HyperLink>
+                        </td>
+                        <td>
+                            <asp:Label runat="server" ID="statusName">
+                            </asp:Label>
                         </td>
                         <td><asp:Label runat="server" ID="updatedAt">
                         </asp:Label></td>

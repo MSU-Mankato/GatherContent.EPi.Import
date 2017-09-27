@@ -85,7 +85,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                 var item = Client.GetItemById(itemId);
                 var currentMapping = GcDynamicTemplateMappings
                     .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
-                var parent = ContentReference.RootPage;
+                var destinationUrl = ContentReference.RootPage;
                 var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
                 var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
                 switch (currentMapping.PostType)
@@ -93,19 +93,18 @@ namespace GcEPiPlugin.GatherContentPlugin
                     case "PageType":
                         var selectedPageType = currentMapping.EpiContentType;
                         var pageTypeList = contentTypeRepository.List().OfType<PageType>();
-                        foreach (var i in pageTypeList)
+                        foreach (var pageType in pageTypeList)
                         {
-                            if (selectedPageType.Substring(5) != i.Name) continue;
-                            var pageName = i.Name;
-                            var pages = AppDomain.CurrentDomain.GetAssemblies()
+                            if (selectedPageType.Substring(5) != pageType.Name) continue;
+                            var page = AppDomain.CurrentDomain.GetAssemblies()
                                 .SelectMany(t => t.GetTypes())
-                                .Where(t => t.IsClass && t.Namespace == "GcEPiPlugin.Models.Pages");
-                            var page = pages.ToList().Find(j => j.Name == pageName);
+                                .Where(t => t.IsClass && t.Namespace == "GcEPiPlugin.Models.Pages")
+                                .ToList().Find(j => j.Name == pageType.Name);
                             var pageData = typeof(IContentRepository).GetMethod("GetDefault", new[] {typeof(ContentReference)})
-                                .MakeGenericMethod(page).Invoke(contentRepository, new object[] { parent });
+                                .MakeGenericMethod(page).Invoke(contentRepository, new object[] { destinationUrl });
                             var myPage = (PageData)pageData;
                             myPage.PageName = item.Name;
-                            foreach (var propDef in i.PropertyDefinitions)
+                            foreach (var propDef in pageType.PropertyDefinitions)
                             {
                                 foreach (var map in currentMapping.EpiFieldMaps)
                                 {
