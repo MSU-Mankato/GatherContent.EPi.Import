@@ -66,7 +66,7 @@
         </table>
     </fieldset>
     <p>
-        <asp:Button runat="server" ID="btnDeleteTemplate" Text="Import Items" />
+        <asp:Button runat="server" ID="btnImportItem" Text="Import Items" OnClick="BtnImportItem_OnClick" />
     </p>
 </form>
 </body>

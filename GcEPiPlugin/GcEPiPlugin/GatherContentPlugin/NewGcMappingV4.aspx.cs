@@ -143,7 +143,7 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             var epiFieldMaps = from string key in Request.Form.Keys
                 where key.StartsWith("meta-")
-                select Request.Form[key];
+                select Request.Form[key] + "~" + key.Substring(5);
 			Session["EpiFieldMaps"] = epiFieldMaps.ToList();
             var mappingsStore = GcDynamicTemplateMappings.RetrieveStore();
             var newMapping = new GcDynamicTemplateMappings(Session["AccountId"].ToString(), Session["ProjectId"].ToString(),

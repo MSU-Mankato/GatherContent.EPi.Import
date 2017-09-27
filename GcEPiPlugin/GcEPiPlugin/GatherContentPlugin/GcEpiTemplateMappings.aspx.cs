@@ -56,8 +56,8 @@ namespace GcEPiPlugin.GatherContentPlugin
             foreach (var key in Request.Form)
             {
                 if (!key.ToString().StartsWith("rptTableMappings")) continue;
-                var splitString = key.ToString().Split('$');
-                var templateId = splitString[2].Substring(3);
+                var splitStrings = key.ToString().Split('$');
+                var templateId = splitStrings[2];
                 var mappingsStore = GcDynamicTemplateMappings.RetrieveStore();
                 var index = mappingsStore.FindIndex(i => i.TemplateId == templateId);
                 GcDynamicTemplateMappings.DeleteItem(mappingsStore[index].Id);
@@ -87,7 +87,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             if (e.Item.FindControl("lnkTemplate") is HyperLink linkTemplate)
                 linkTemplate.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
             if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
-                checkBoxTemplate.ID = $"chk{map.TemplateId}";
+                checkBoxTemplate.ID = $"{map.TemplateId}";
             if (e.Item.FindControl("lnkButtonItemsReview") is LinkButton linkButtonItemsReview)
                 linkButtonItemsReview.PostBackUrl = "~/GatherContentPlugin/ReviewItemsForImport.aspx?" +
                                                     $"TemplateId={map.TemplateId}&ProjectId={map.ProjectId}";

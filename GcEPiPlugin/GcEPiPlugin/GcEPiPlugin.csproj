@@ -264,9 +264,9 @@
     <Compile Include="Models\Blocks\Test2Block.cs" />
     <Compile Include="Models\Blocks\Test3Block.cs" />
     <Compile Include="Models\Pages\SamplePage.cs" />
-    <Compile Include="Models\Pages\Test1Page.cs" />
-    <Compile Include="Models\Pages\Test2Page.cs" />
-    <Compile Include="Models\Pages\Test3Page.cs" />
+    <Compile Include="Models\Pages\ArticlePage.cs" />
+    <Compile Include="Models\Pages\ProductPage.cs" />
+    <Compile Include="Models\Pages\SubProductPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

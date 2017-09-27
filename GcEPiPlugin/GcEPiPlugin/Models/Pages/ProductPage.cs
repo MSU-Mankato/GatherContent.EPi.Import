@@ -7,8 +7,8 @@ using EPiServer.SpecializedProperties;
 
 namespace GcEPiPlugin.Models.Pages
 {
-    [ContentType(DisplayName = "Test3Page", GUID = "e6f26092-1409-44f3-af6a-3dff52a67ca8", Description = "")]
-    public class Test3Page : PageData
+    [ContentType(DisplayName = "ProductPage", GUID = "38802069-bd5e-4e35-ac6e-35bfe38c74e4", Description = "")]
+    public class ProductPage : PageData
     {
 
         [CultureSpecific]
@@ -29,26 +29,11 @@ namespace GcEPiPlugin.Models.Pages
 
         [CultureSpecific]
         [Display(
-            Name = "Article Name",
-            Description = "Article Name field's description",
+            Name = "Description",
+            Description = "Description field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string ArticleName { get; set; }
+        public virtual string Description { get; set; }
 
-        [CultureSpecific]
-        [Display(
-            Name = "Subtitle",
-            Description = "Subtitle field's description",
-            GroupName = SystemTabNames.Content,
-            Order = 1)]
-        public virtual string Subtitle { get; set; }
-
-        [CultureSpecific]
-        [Display(
-            Name = "Options",
-            Description = "Options field's description",
-            GroupName = SystemTabNames.Content,
-            Order = 1)]
-        public virtual string Options { get; set; }
     }
 }

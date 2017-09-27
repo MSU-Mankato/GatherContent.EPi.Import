@@ -1,14 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
-using EPiServer.SpecializedProperties;
 
 namespace GcEPiPlugin.Models.Pages
 {
-    [ContentType(DisplayName = "Test1Page", GUID = "bdf65642-fa9e-499d-ac01-818441fc8bbd", Description = "")]
-    public class Test1Page : PageData
+    [ContentType(DisplayName = "ArticlePage", GUID = "bdf65642-fa9e-499d-ac01-818441fc8bbd", Description = "")]
+    public class ArticlePage : PageData
     {
 
         [CultureSpecific]
