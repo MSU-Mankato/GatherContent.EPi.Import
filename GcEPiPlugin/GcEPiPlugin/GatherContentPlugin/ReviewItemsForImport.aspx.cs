@@ -5,6 +5,7 @@ using Castle.Core.Internal;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
+using EPiServer.DataAccess;
 using EPiServer.PlugIn;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
@@ -110,17 +111,19 @@ namespace GcEPiPlugin.GatherContentPlugin
                                     var label = splitStrings[0];
                                     if (label != propDef.Name) continue;
                                     var configs = item.Config.ToList();
-                                    foreach (var config in configs)
+                                    configs.ForEach(j => j.Elements.ForEach(x =>
                                     {
-                                        foreach (var element in config.Elements)
-                                        {
-                                            if (element.Label == splitStrings[1])
-                                                myPage.Property[label].Value = element.Value;
-                                        }
-                                    }
+                                        if (x.Label == splitStrings[1])
+                                            myPage.Property[label].Value = x.Value;
+                                    }));
                                 }
                             }
-                            contentRepository.Save(myPage, EPiServer.DataAccess.SaveAction.Default, AccessLevel.Administer);
+                            var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
+                            saveActions.ForEach(x => {if (x.ToString() == currentMapping.DefaultStatus)
+                                {
+                                    contentRepository.Save(myPage, x, AccessLevel.Administer);
+                                }
+                            } );
                         }
                                  
                         break;

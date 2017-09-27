@@ -11,8 +11,6 @@ using GatherContentConnect;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
 using Castle.Core.Internal;
-using EPiServer.Cms.Shell.UI.Components;
-using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 
