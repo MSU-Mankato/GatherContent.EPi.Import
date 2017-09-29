@@ -159,7 +159,11 @@ namespace GcEPiPlugin.GatherContentPlugin
 
         protected void DdlPostTypes_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            Session["PostType"] = ddlPostTypes.SelectedValue;
+	        if (ddlPostTypes.SelectedValue != "") 
+		        ddlEpiContentTypes.Enabled = true;
+	        else
+		        ddlEpiContentTypes.Enabled = false;
+			Session["PostType"] = ddlPostTypes.SelectedValue;
             PopulateForm();
         }
     }

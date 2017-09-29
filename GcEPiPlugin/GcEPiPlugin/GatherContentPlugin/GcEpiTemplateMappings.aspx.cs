@@ -67,14 +67,13 @@ namespace GcEPiPlugin.GatherContentPlugin
 
         protected void RptTableMappings_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
-            var map = e.Item.DataItem as GcDynamicTemplateMappings;
-            if (map == null) return;
+	        if (!(e.Item.DataItem is GcDynamicTemplateMappings map)) return;
             var slug = Client.GetAccountById(Convert.ToInt32(map.AccountId)).Slug;
-            if (e.Item.FindControl("lnkButtonTemplate") is LinkButton linkButtonTemplate)
+            if (e.Item.FindControl("btnTemplate") is Button buttonTemplate)
             {
                 var serializedStatusMaps = JsonConvert.SerializeObject(map.StatusMaps);
                 var serializedEpiFieldMaps = JsonConvert.SerializeObject(map.EpiFieldMaps);
-                linkButtonTemplate.PostBackUrl =
+                buttonTemplate.PostBackUrl =
                     $"~/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
                     $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
                     $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={serializedStatusMaps}" +
@@ -88,8 +87,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                 linkTemplate.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
             if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
                 checkBoxTemplate.ID = $"{map.TemplateId}";
-            if (e.Item.FindControl("lnkButtonItemsReview") is LinkButton linkButtonItemsReview)
-                linkButtonItemsReview.PostBackUrl = "~/GatherContentPlugin/ReviewItemsForImport.aspx?" +
+            if (e.Item.FindControl("btnItemsReview") is Button buttonItemsReview)
+                buttonItemsReview.PostBackUrl = "~/GatherContentPlugin/ReviewItemsForImport.aspx?" +
                                                     $"TemplateId={map.TemplateId}&ProjectId={map.ProjectId}";
         }
     }

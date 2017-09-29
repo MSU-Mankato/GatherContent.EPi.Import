@@ -28,6 +28,7 @@
                 <tr>
                     <td class="auto-style1">GatherContent Field</td>
                     <td class="auto-style2">Mapped EPiServer Field</td>
+					<td class="auto-style1">Page/Block Type</td>
                 </tr>
             </thead>
             <tbody>
