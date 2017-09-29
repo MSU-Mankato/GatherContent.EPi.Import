@@ -93,16 +93,15 @@ namespace GcEPiPlugin.GatherContentPlugin
                     case "PageType":
                         var selectedPageType = currentMapping.EpiContentType;
                         var pageTypeList = contentTypeRepository.List().OfType<PageType>();
-                        foreach (var pageType in pageTypeList)
+                        foreach (var pageType in pageTypeList)                                                                                                                                              
                         {
                             if (selectedPageType.Substring(5) != pageType.Name) continue;
                             var page = AppDomain.CurrentDomain.GetAssemblies()
                                 .SelectMany(t => t.GetTypes())
                                 .Where(t => t.IsClass && t.Namespace == "GcEPiPlugin.Models.Pages")
                                 .ToList().Find(j => j.Name == pageType.Name);
-                            var pageData = typeof(IContentRepository).GetMethod("GetDefault", new[] {typeof(ContentReference)})
+                            var myPage = (PageData)typeof(IContentRepository).GetMethod("GetDefault", new[] { typeof(ContentReference) })
                                 .MakeGenericMethod(page).Invoke(contentRepository, new object[] { destinationUrl });
-                            var myPage = (PageData)pageData;
                             myPage.PageName = item.Name;
                             foreach (var propDef in pageType.PropertyDefinitions)
                             {
