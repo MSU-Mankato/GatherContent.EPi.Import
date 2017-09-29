@@ -11,7 +11,7 @@
         <h4>
             <asp:Label runat="server" ID="projectName" AssociatedControlID="rblGcTemplates"></asp:Label> 
         </h4>
-        <asp:RadioButtonList ID="rblGcTemplates" runat="server"/>
+        <asp:RadioButtonList ID="rblGcTemplates" runat="server" cellpadding="3" CellSpacing="3"/>
         <p>
             <asp:Button ID="btnPreviousStep" runat="server" PostBackUrl="NewGcMapping.aspx" Text="Previous Step" />
             <asp:Button runat="server" ID="btnNextStep" Text="Next Step" OnClick="BtnNextStep_OnClick"/> 

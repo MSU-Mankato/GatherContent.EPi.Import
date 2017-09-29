@@ -11,7 +11,7 @@
         <h4>
             <asp:Label runat="server" ID="accountName" AssociatedControlID="rblGcProjects" ></asp:Label> 
         </h4>
-        <asp:RadioButtonList runat="server" ID="rblGcProjects" />
+        <asp:RadioButtonList runat="server" ID="rblGcProjects" CellPadding="3" CellSpacing="3" />
         <p>
             <asp:Button ID="btnApiStep" runat="server" PostBackUrl="GatherContent.aspx" Text="Back to API step" />
             <asp:Button runat="server" ID="btnNextStep" Text="Next Step" OnClick="BtnNextStep_OnClick"/> 

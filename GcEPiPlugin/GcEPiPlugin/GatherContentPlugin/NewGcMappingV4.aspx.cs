@@ -111,7 +111,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                                     var ddlMetaData = new DropDownList {Height = 28, Width = 194};
                                     myProperty.PropertyDefinitions.ToList().ForEach(i =>
                                         ddlMetaData.Items.Add(new ListItem(i.Name, i.Name)));
-                                    ddlMetaData.ID = "meta-" + element.Label;
+	                                ddlMetaData.Items.Insert(0, new ListItem("Do Not Import", ""));
+									ddlMetaData.ID = "meta-" + element.Label;
                                     tCell.Controls.Add(ddlMetaData);
                                 }
                                 else if (Session["EpiContentType"].ToString().StartsWith("page-"))
@@ -127,9 +128,10 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 }
                                 var ddlMetaData = new DropDownList {Height = 28, Width = 194};
                                 myProperty.PropertyDefinitions.ToList().ForEach(i =>
-                                    ddlMetaData.Items.Add(new ListItem(i.Name, i.Name)));
-                                ddlMetaData.ID = "meta-" + element.Label;
-                                tCell.Controls.Add(ddlMetaData);
+									ddlMetaData.Items.Add(new ListItem(i.Name, i.Name)));
+								   ddlMetaData.Items.Insert(0, new ListItem("Do Not Import", ""));
+								   ddlMetaData.ID = "meta-" + element.Label;
+                                   tCell.Controls.Add(ddlMetaData);
                                 }
                             }
                         }
