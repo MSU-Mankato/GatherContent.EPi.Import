@@ -10,6 +10,7 @@ using EPiServer.DataAccess;
 using EPiServer.PlugIn;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 using GatherContentConnect;
 using GatherContentConnect.Objects;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
@@ -87,6 +88,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                 var currentMapping = GcDynamicTemplateMappings
                     .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
                 var destinationUrl = ContentReference.RootPage;
+                //var urlResolver = ServiceLocator.Current.GetInstance<UrlResolver>();
+                //var contentData = urlResolver.Route(new UrlBuilder(destinationUrl));
                 var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
                 var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
                 switch (currentMapping.PostType)
