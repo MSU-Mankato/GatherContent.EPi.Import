@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.UI.WebControls;
 using Castle.Core.Internal;
@@ -103,27 +104,25 @@ namespace GcEPiPlugin.GatherContentPlugin
                             var myPage = (PageData)typeof(IContentRepository).GetMethod("GetDefault", new[] { typeof(ContentReference) })
                                 .MakeGenericMethod(page).Invoke(contentRepository, new object[] { destinationUrl });
                             myPage.PageName = item.Name;
-                            foreach (var propDef in pageType.PropertyDefinitions)
+                            foreach (var map in currentMapping.EpiFieldMaps)
                             {
-                                foreach (var map in currentMapping.EpiFieldMaps)
+                                var splitStrings = map.Split('~');
+                                var fieldName = splitStrings[0];
+                                var propDef = pageType.PropertyDefinitions.ToList().Find(p => p.Name == fieldName);
+                                if (propDef == null) continue;
+                                var configs = item.Config.ToList();
+                                configs.ForEach(j => j.Elements.ForEach(x =>
                                 {
-                                    var splitStrings = map.Split('~');
-                                    var label = splitStrings[0];
-                                    if (label != propDef.Name) continue;
-                                    var configs = item.Config.ToList();
-                                    configs.ForEach(j => j.Elements.ForEach(x =>
-                                    {
-                                        if (x.Label == splitStrings[1])
-                                            myPage.Property[label].Value = x.Value;
-                                    }));
-                                }
+                                    if (x.Name == splitStrings[1])
+                                        myPage.Property[propDef.Name].Value = x.Value;
+                                }));
                             }
                             var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
-                            saveActions.ForEach(x => {if (x.ToString() == currentMapping.DefaultStatus)
+                            saveActions.ForEach(x => { if (x.ToString() == currentMapping.DefaultStatus)
                                 {
                                     contentRepository.Save(myPage, x, AccessLevel.Administer);
                                 }
-                            } );
+                            });
                         }
                                  
                         break;

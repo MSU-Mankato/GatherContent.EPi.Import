@@ -16,7 +16,7 @@ namespace GcEPiPlugin.Models.Blocks
             Description = "Name field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Name { get; set; }
+        public virtual XhtmlString Name { get; set; }
 
         [CultureSpecific]
         [Display(
@@ -24,7 +24,7 @@ namespace GcEPiPlugin.Models.Blocks
             Description = "Overview field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Overview { get; set; }
+        public virtual XhtmlString Overview { get; set; }
 
     }
 }

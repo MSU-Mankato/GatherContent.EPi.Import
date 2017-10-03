@@ -87,12 +87,12 @@ namespace GcEPiPlugin.GatherContentPlugin
                     ddlEpiContentTypes.Enabled = true;
                     btnNextStep.Enabled = true;
                 }
-                else if (Session["PostType"].ToString() is "MediaType")
-                {
-                    ddlEpiContentTypes.Items.Add(new ListItem("Media Data", "MediaType"));
-                    ddlEpiContentTypes.Enabled = true;
-                    btnNextStep.Enabled = true;
-                }
+                //else if (Session["PostType"].ToString() is "MediaType")
+                //{
+                //    ddlEpiContentTypes.Items.Add(new ListItem("Media Data", "MediaType"));
+                //    ddlEpiContentTypes.Enabled = true;
+                //    btnNextStep.Enabled = true;
+                //}
                 if (Session["EpiContentType"] != null)
                 {
                     ddlEpiContentTypes.SelectedValue = Session["EpiContentType"].ToString();
@@ -159,10 +159,8 @@ namespace GcEPiPlugin.GatherContentPlugin
 
         protected void DdlPostTypes_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-	        if (ddlPostTypes.SelectedValue != "") 
-		        ddlEpiContentTypes.Enabled = true;
-	        else
-		        ddlEpiContentTypes.Enabled = false;
+            ddlEpiContentTypes.Visible = true;
+            ddlEpiContentTypes.Enabled = true;
 			Session["PostType"] = ddlPostTypes.SelectedValue;
             PopulateForm();
         }

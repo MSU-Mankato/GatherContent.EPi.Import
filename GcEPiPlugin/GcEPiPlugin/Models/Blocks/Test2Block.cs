@@ -16,7 +16,7 @@ namespace GcEPiPlugin.Models.Blocks
             Description = "Title field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Title { get; set; }
+        public virtual XhtmlString Title { get; set; }
 
         [CultureSpecific]
         [Display(
@@ -24,7 +24,7 @@ namespace GcEPiPlugin.Models.Blocks
             Description = "Heading field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Heading { get; set; }
+        public virtual XhtmlString Heading { get; set; }
 
         [CultureSpecific]
         [Display(
@@ -32,6 +32,6 @@ namespace GcEPiPlugin.Models.Blocks
             Description = "SubTitle field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string SubTitle { get; set; }
+        public virtual XhtmlString SubTitle { get; set; }
     }
 }

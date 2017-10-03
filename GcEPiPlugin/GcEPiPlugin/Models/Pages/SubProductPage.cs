@@ -25,7 +25,7 @@ namespace GcEPiPlugin.Models.Pages
             Description = "Heading field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Heading { get; set; }
+        public virtual XhtmlString Heading { get; set; }
 
         [CultureSpecific]
         [Display(
@@ -33,7 +33,7 @@ namespace GcEPiPlugin.Models.Pages
             Description = "Article Name field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string ArticleName { get; set; }
+        public virtual XhtmlString ArticleName { get; set; }
 
         [CultureSpecific]
         [Display(
@@ -41,7 +41,7 @@ namespace GcEPiPlugin.Models.Pages
             Description = "Subtitle field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Subtitle { get; set; }
+        public virtual XhtmlString Subtitle { get; set; }
 
         [CultureSpecific]
         [Display(
@@ -49,6 +49,6 @@ namespace GcEPiPlugin.Models.Pages
             Description = "Options field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Options { get; set; }
+        public virtual XhtmlString Options { get; set; }
     }
 }

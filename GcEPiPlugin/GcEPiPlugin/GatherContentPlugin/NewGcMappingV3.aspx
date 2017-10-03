@@ -27,7 +27,7 @@
             <thead>
                 <tr>
                     <td class="auto-style1">GatherContent Field</td>
-                    <td class="auto-style2">Mapped EPiServer Field</td>
+                    <td class="auto-style2">Mapped EPiServer Type</td>
 					<td class="auto-style1">Page/Block Type</td>
                 </tr>
             </thead>
@@ -39,11 +39,11 @@
                             <asp:ListItem Text="Select a Post Type" Value="-1"></asp:ListItem>
                             <asp:ListItem Text="Page Type" Value="PageType"></asp:ListItem>
                             <asp:ListItem Text="Block Type" Value="BlockType"></asp:ListItem>
-                            <asp:ListItem Text="Media Type" Value="MediaType"></asp:ListItem>
+                            <%--<asp:ListItem Text="Media Type" Value="MediaType"></asp:ListItem>--%>
                         </asp:DropDownList>
                     </td>
                     <td>
-                        <asp:DropDownList runat="server" ID="ddlEpiContentTypes" Enabled="False" Height="28px" Width="194px"/>
+                        <asp:DropDownList runat="server" ID="ddlEpiContentTypes" Enabled="False" Visible="False" Height="28px" Width="194px"/>
                     </td>
                 </tr>
                 <tr>

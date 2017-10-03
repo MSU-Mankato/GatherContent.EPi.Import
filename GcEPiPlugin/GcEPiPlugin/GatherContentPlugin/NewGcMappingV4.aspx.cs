@@ -84,19 +84,19 @@ namespace GcEPiPlugin.GatherContentPlugin
                         {
                             tCell.Text =
                                 $"<span style='font-weight: Bold;'>{element.Label}</span><br>Type: {element.Type}<br>Limit: " +
-                                $"{element.Limit}<br>Description: {element.MicroCopy}";
+                                $"{element.Limit}<br>Description: {element.MicroCopy}<br>";
                         }
                         else
                         {
                             var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
-                            if (Session["EpiContentType"].ToString() is "MediaType")
-                            {
-                                var ddlMetaData = new DropDownList {Height = 28, Width = 194};
-                                ddlMetaData.Items.Add(new ListItem("Media Content", "MediaContent"));
-                                tCell.Controls.Add(ddlMetaData);
-                            }
-                            else
-                            {
+                            //if (Session["EpiContentType"].ToString() is "MediaType")
+                            //{
+                            //    var ddlMetaData = new DropDownList {Height = 28, Width = 194};
+                            //    ddlMetaData.Items.Add(new ListItem("Media Content", "MediaContent"));
+                            //    tCell.Controls.Add(ddlMetaData);
+                            //}
+                            //else
+                            //{
                                 if (Session["EpiContentType"].ToString().StartsWith("block-"))
                                 {
                                     var contentTypeList = contentTypeRepository.List().OfType<BlockType>();
@@ -109,31 +109,31 @@ namespace GcEPiPlugin.GatherContentPlugin
                                         break;
                                     }
                                     var ddlMetaData = new DropDownList {Height = 28, Width = 194};
+	                                ddlMetaData.Items.Add(new ListItem("Do Not Import", "-1"));
                                     myProperty.PropertyDefinitions.ToList().ForEach(i =>
                                         ddlMetaData.Items.Add(new ListItem(i.Name, i.Name)));
-	                                ddlMetaData.Items.Insert(0, new ListItem("Do Not Import", ""));
-									ddlMetaData.ID = "meta-" + element.Label;
+									ddlMetaData.ID = "meta-" + element.Name;
                                     tCell.Controls.Add(ddlMetaData);
                                 }
                                 else if (Session["EpiContentType"].ToString().StartsWith("page-"))
                                 {
-                                var contentTypeList = contentTypeRepository.List().OfType<PageType>();
-                                var myProperty = new PageType();
-                                var pageTypes = contentTypeList as IList<PageType> ?? contentTypeList.ToList();
-                                foreach (var i in pageTypes)
-                                {
-                                    if (Session["EpiContentType"].ToString().Substring(5) != i.Name) continue;
-                                    myProperty = i;
-                                    break;
+                                    var contentTypeList = contentTypeRepository.List().OfType<PageType>();
+                                    var myProperty = new PageType();
+                                    var pageTypes = contentTypeList as IList<PageType> ?? contentTypeList.ToList();
+                                    foreach (var i in pageTypes)
+                                    {
+                                        if (Session["EpiContentType"].ToString().Substring(5) != i.Name) continue;
+                                        myProperty = i;
+                                        break;
+                                    }
+                                    var ddlMetaData = new DropDownList {Height = 28, Width = 194};
+                                    ddlMetaData.Items.Add(new ListItem("Do Not Import", "-1"));
+                                    myProperty.PropertyDefinitions.ToList().ForEach(i =>
+									    ddlMetaData.Items.Add(new ListItem(i.Name, i.Name)));
+								    ddlMetaData.ID = "meta-" + element.Name;
+                                    tCell.Controls.Add(ddlMetaData);
                                 }
-                                var ddlMetaData = new DropDownList {Height = 28, Width = 194};
-                                myProperty.PropertyDefinitions.ToList().ForEach(i =>
-									ddlMetaData.Items.Add(new ListItem(i.Name, i.Name)));
-								   ddlMetaData.Items.Insert(0, new ListItem("Do Not Import", ""));
-								   ddlMetaData.ID = "meta-" + element.Label;
-                                   tCell.Controls.Add(ddlMetaData);
-                                }
-                            }
+                            //}
                         }
                         tRow.Cells.Add(tCell);
                     }

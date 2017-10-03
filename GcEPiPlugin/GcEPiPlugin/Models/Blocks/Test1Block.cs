@@ -15,7 +15,7 @@ namespace GcEPiPlugin.Models.Blocks
             Description = "Heading field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Heading { get; set; }
+        public virtual XhtmlString Heading { get; set; }
 
         [CultureSpecific]
         [Display(
@@ -23,7 +23,7 @@ namespace GcEPiPlugin.Models.Blocks
             Description = "Main Body field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string MainBody { get; set; }
+        public virtual XhtmlString MainBody { get; set; }
 
         [CultureSpecific]
         [Display(
@@ -31,7 +31,7 @@ namespace GcEPiPlugin.Models.Blocks
             Description = "Description field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Description { get; set; }
+        public virtual XhtmlString Description { get; set; }
 
     }
 }

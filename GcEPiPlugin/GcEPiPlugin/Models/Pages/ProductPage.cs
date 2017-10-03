@@ -25,7 +25,7 @@ namespace GcEPiPlugin.Models.Pages
             Description = "Heading field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Heading { get; set; }
+        public virtual XhtmlString Heading { get; set; }
 
         [CultureSpecific]
         [Display(
@@ -33,7 +33,7 @@ namespace GcEPiPlugin.Models.Pages
             Description = "Description field's description",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Description { get; set; }
+        public virtual XhtmlString Description { get; set; }
 
     }
 }
