@@ -43,11 +43,12 @@ namespace GcEPiPlugin.GatherContentPlugin
             projectName.Text = _client.GetProjectById(projectId).Name;
             var templates = _client.GetTemplatesByProjectId(Session["ProjectId"].ToString());
             var mappings = GcDynamicTemplateMappings.RetrieveStore();
+            var rblTemp = new RadioButtonList();
             foreach (var template in templates)
             {
                 if (mappings.Any(mapping => mapping.TemplateId == template.Id.ToString()))
                 {
-                    rblGcTemplates.Items.Add(new ListItem(template.Name + " <a href='https://mnsu.gathercontent.com'> " +
+                    rblTemp.Items.Add(new ListItem(template.Name + " <a href='https://mnsu.gathercontent.com'> " +
                                                           "Edit Template Mapping </a> <br>" +
                                                           template.Description, template.Id.ToString()){ Enabled = false });
                 }
@@ -56,13 +57,17 @@ namespace GcEPiPlugin.GatherContentPlugin
                     rblGcTemplates.Items.Add(new ListItem(template.Name + "<br>" + template.Description, template.Id.ToString()));
                 }
             }
-            var buffer = new ListItem[rblGcTemplates.Items.Count];
-            rblGcTemplates.Items.CopyTo(buffer, 0);
-            if (buffer.First().Enabled)
+            foreach (ListItem item in rblTemp.Items)
             {
-                rblGcTemplates.SelectedIndex = 0;
-                Session["TemplateId"] = rblGcTemplates.SelectedValue;
+                rblGcTemplates.Items.Add(item);
             }
+            //var buffer = new ListItem[rblGcTemplates.Items.Count];
+            //rblGcTemplates.Items.CopyTo(buffer, 0);
+            //if (buffer.First().Enabled)
+            //{
+            //    rblGcTemplates.SelectedIndex = 0;
+            //    Session["TemplateId"] = rblGcTemplates.SelectedValue;
+            //}
             Session["PostType"] = null;
             Session["Author"] = null;
             Session["DefaultStatus"] = null;

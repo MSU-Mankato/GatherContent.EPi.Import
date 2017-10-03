@@ -11,7 +11,7 @@
     <p style="font-style: italic;">Project: <asp:Label runat="server" ID="projectName"></asp:Label></p>
     <fieldset>
     <legend>Content</legend>        
-        <asp:Table runat="server" ID="tableMappings" Width="100%">
+        <asp:Table runat="server" ID="tableMappings" cellpadding="7" CellSpacing="7" Width="100%">
         </asp:Table>
     </fieldset>
     <p>

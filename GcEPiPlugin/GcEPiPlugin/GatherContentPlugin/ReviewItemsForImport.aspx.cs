@@ -123,8 +123,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                                     contentRepository.Save(myPage, x, AccessLevel.Administer);
                                 }
                             });
-                        }
-                                 
+                        }       
                         break;
                     case "BlockType":
                         break;
