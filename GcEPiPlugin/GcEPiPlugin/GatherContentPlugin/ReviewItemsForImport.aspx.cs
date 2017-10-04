@@ -89,7 +89,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                 var currentMapping = GcDynamicTemplateMappings
                     .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
                 var pageId = Request.Form[key.ToString().Replace("chk", "txt")];
-                var parent = pageId.IsNullOrEmpty() ? PageReference.Parse(pageId) : ContentReference.RootPage;
+                var parent = pageId.IsNullOrEmpty() ? ContentReference.RootPage : PageReference.Parse(pageId);
                 var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
                 var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
                 switch (currentMapping.PostType)
