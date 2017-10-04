@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Web.UI.WebControls;
 using Castle.Core.Internal;
@@ -68,7 +67,9 @@ namespace GcEPiPlugin.GatherContentPlugin
             if (e.Item.FindControl("updatedAt") is Label updatedAtLabel)
                 updatedAtLabel.Text = gcItem.UpdatedAt.Date.ToString();
             if (e.Item.FindControl("chkItem") is CheckBox checkBoxItem)
-                checkBoxItem.ID = $"{gcItem.Id}";
+                checkBoxItem.ID = $"chk{gcItem.Id}";
+            if (e.Item.FindControl("txtParentId") is TextBox textBoxParentId)
+                textBoxParentId.ID = $"txt{gcItem.Id}";
             if (!(e.Item.FindControl("lnkItemName") is HyperLink linkItemName)) return;
             linkItemName.Text = gcItem.Name;
             linkItemName.NavigateUrl = $"https://{Client.GetAccountById(Convert.ToInt32(credentialsStore.AccountId)).Slug}" +
@@ -79,17 +80,16 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
             foreach (var key in Request.Form)
             {
-                if (!key.ToString().StartsWith("rptGcItems")) continue;
+                if (!key.ToString().Contains("chk")) continue;
                 var splitString = key.ToString().Split('$');
                 var credentialsStore = GcDynamicCredentials.RetrieveStore().ToList().First();
                 Client = new GcConnectClient(credentialsStore.ApiKey, credentialsStore.Email);
-                var itemId = splitString[2];
+                var itemId = splitString[2].Substring(3);
                 var item = Client.GetItemById(itemId);
                 var currentMapping = GcDynamicTemplateMappings
                     .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
-                var destinationUrl = ContentReference.RootPage;
-                //var urlResolver = ServiceLocator.Current.GetInstance<UrlResolver>();
-                //var contentData = urlResolver.Route(new UrlBuilder(destinationUrl));
+                var pageId = Request.Form[key.ToString().Replace("chk", "txt")];
+                var parent = pageId.IsNullOrEmpty() ? PageReference.Parse(pageId) : ContentReference.RootPage;
                 var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
                 var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
                 switch (currentMapping.PostType)
@@ -104,8 +104,8 @@ namespace GcEPiPlugin.GatherContentPlugin
                                 .SelectMany(t => t.GetTypes())
                                 .Where(t => t.IsClass && t.Namespace == "GcEPiPlugin.Models.Pages")
                                 .ToList().Find(j => j.Name == pageType.Name);
-                            var myPage = (PageData)typeof(IContentRepository).GetMethod("GetDefault", new[] { typeof(ContentReference) })
-                                .MakeGenericMethod(page).Invoke(contentRepository, new object[] { destinationUrl });
+                            var myPage = (PageData)typeof(IContentRepository).GetMethod("GetDefault", new[] { typeof(PageReference) })
+                                .MakeGenericMethod(page).Invoke(contentRepository, new object[] { parent });
                             myPage.PageName = item.Name;
                             foreach (var map in currentMapping.EpiFieldMaps)
                             {

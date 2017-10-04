@@ -38,7 +38,7 @@
                         <td>Item</td>
                         <td>Status</td>
                         <td>Updated</td>
-                        <%--<td>Episerver Title</td>--%>
+                        <td>Parent ID</td>
                     </tr>
                     </thead>
                 </HeaderTemplate>
@@ -57,6 +57,9 @@
                         </td>
                         <td><asp:Label runat="server" ID="updatedAt">
                         </asp:Label></td>
+                        <td>
+                            <asp:TextBox runat="server" ID="txtParentId"></asp:TextBox>
+                        </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
