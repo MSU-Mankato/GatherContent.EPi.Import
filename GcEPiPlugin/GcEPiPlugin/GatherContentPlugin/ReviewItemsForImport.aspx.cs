@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using Castle.Core.Internal;
@@ -9,7 +10,6 @@ using EPiServer.DataAccess;
 using EPiServer.PlugIn;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
-using EPiServer.Web.Routing;
 using GatherContentConnect;
 using GatherContentConnect.Objects;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
@@ -88,24 +88,22 @@ namespace GcEPiPlugin.GatherContentPlugin
                 var item = Client.GetItemById(itemId);
                 var currentMapping = GcDynamicTemplateMappings
                     .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
-                var pageId = Request.Form[key.ToString().Replace("chk", "txt")];
-                var parent = pageId.IsNullOrEmpty() ? ContentReference.RootPage : PageReference.Parse(pageId);
+                var parentId = Request.Form[key.ToString().Replace("chk", "txt")];
                 var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
                 var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
                 switch (currentMapping.PostType)
                 {
                     case "PageType":
+                        var pageParent = ContentReference.Parse(parentId);
                         var selectedPageType = currentMapping.EpiContentType;
                         var pageTypeList = contentTypeRepository.List().OfType<PageType>();
-                        foreach (var pageType in pageTypeList)                                                                                                                                              
+                        var pageTypes = pageTypeList as IList<PageType> ?? pageTypeList.ToList();
+                        if (parentId.IsNullOrEmpty() || pageTypes.All(a => a.ID != Convert.ToInt32(parentId)))
+                            pageParent = ContentReference.RootPage;
+                        foreach (var pageType in pageTypes)                                                                                                                                              
                         {
                             if (selectedPageType.Substring(5) != pageType.Name) continue;
-                            var page = AppDomain.CurrentDomain.GetAssemblies()
-                                .SelectMany(t => t.GetTypes())
-                                .Where(t => t.IsClass && t.Namespace == "GcEPiPlugin.Models.Pages")
-                                .ToList().Find(j => j.Name == pageType.Name);
-                            var myPage = (PageData)typeof(IContentRepository).GetMethod("GetDefault", new[] { typeof(PageReference) })
-                                .MakeGenericMethod(page).Invoke(contentRepository, new object[] { parent });
+                            var myPage = contentRepository.GetDefault<PageData>(pageParent, pageType.ID);
                             myPage.PageName = item.Name;
                             foreach (var map in currentMapping.EpiFieldMaps)
                             {
@@ -129,6 +127,41 @@ namespace GcEPiPlugin.GatherContentPlugin
                         }       
                         break;
                     case "BlockType":
+                        var blockParent = ContentReference.Parse(parentId);
+                        var selectedBlockType = currentMapping.EpiContentType;
+                        var blockTypeList = contentTypeRepository.List().OfType<BlockType>();
+                        var blockTypes = blockTypeList as IList<BlockType> ?? blockTypeList.ToList();
+                        if (parentId.IsNullOrEmpty() || blockTypes.All(a => a.ID != Convert.ToInt32(parentId)))
+                            blockParent = ContentReference.Parse("3");
+                        foreach (var blockType in blockTypes)
+                        {
+                            if (selectedBlockType.Substring(6) != blockType.Name) continue;
+                            var myBlock = contentRepository.GetDefault<BlockData>(blockParent, blockType.ID);
+                            // ReSharper disable once SuspiciousTypeConversion.Global
+                            var content = myBlock as IContent;
+                            // ReSharper disable once PossibleNullReferenceException
+                            content.Name = item.Name;
+                            foreach (var map in currentMapping.EpiFieldMaps)
+                            {
+                                var splitStrings = map.Split('~');
+                                var fieldName = splitStrings[0];
+                                var propDef = blockType.PropertyDefinitions.ToList().Find(p => p.Name == fieldName);
+                                if (propDef == null) continue;
+                                var configs = item.Config.ToList();
+                                configs.ForEach(j => j.Elements.ForEach(x =>
+                                {
+                                    if (x.Name == splitStrings[1])
+                                        myBlock.Property[propDef.Name].Value = x.Value;
+                                }));
+                            }
+                            var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
+                            saveActions.ForEach(x => {
+                                if (x.ToString() == currentMapping.DefaultStatus)
+                                {
+                                    contentRepository.Save(content, x, AccessLevel.Administer);
+                                }
+                            });
+                        }
                         break;
                 }
             }
