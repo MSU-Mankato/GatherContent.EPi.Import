@@ -37,15 +37,16 @@
                         <td></td>
                         <td>Item</td>
                         <td>Status</td>
-                        <td>Updated</td>
-                        <td>Parent ID</td>
+                        <td>Updated At</td>
+                        <td>Parent Page/Block ID</td>
+                        <td>Import Status</td>
                     </tr>
                     </thead>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
                         <td>
-                            <asp:CheckBox ID="chkItem" runat="server" />
+                            <asp:CheckBox ID="chkItem" runat="server" Enabled="False"/>
                         </td>
                         <td>
                             <asp:HyperLink runat="server" ID="lnkItemName" Target="_blank" CssClass="LinkNoUnderline">
@@ -58,7 +59,10 @@
                         <td><asp:Label runat="server" ID="updatedAt">
                         </asp:Label></td>
                         <td>
-                            <asp:TextBox runat="server" ID="txtParentId"></asp:TextBox>
+                            <asp:TextBox runat="server" ID="txtParentId" Enabled="False"></asp:TextBox>
+                        </td>
+                        <td>
+                            <asp:Label runat="server" ID="isImported"></asp:Label>
                         </td>
                     </tr>
                 </ItemTemplate>

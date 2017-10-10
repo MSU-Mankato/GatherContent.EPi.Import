@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
+using System.Web.WebPages;
 using Castle.Core.Internal;
 using EPiServer;
 using EPiServer.Core;
@@ -59,17 +60,50 @@ namespace GcEPiPlugin.GatherContentPlugin
         protected void RptGcItems_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
             var gcItem = e.Item.DataItem as GcItem;
+            var enableItemFlag = true;
             var credentialsStore = GcDynamicCredentials.RetrieveStore().ToList().First();
+            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             Client = new GcConnectClient(credentialsStore.ApiKey, credentialsStore.Email);
             if (gcItem == null) return;
             if (e.Item.FindControl("statusName") is Label statusNameLabel)
                 statusNameLabel.Text = gcItem.CurrentStatus.Data.Name;
             if (e.Item.FindControl("updatedAt") is Label updatedAtLabel)
                 updatedAtLabel.Text = gcItem.UpdatedAt.Date.ToString();
-            if (e.Item.FindControl("chkItem") is CheckBox checkBoxItem)
-                checkBoxItem.ID = $"chk{gcItem.Id}";
+            if (e.Item.FindControl("isImported") is Label isImportedLabel)
+            {
+                isImportedLabel.Text = "Not imported yet";
+                foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
+                {
+                    try
+                    {
+                        var pageData = contentRepository.Get<PageData>(cr);
+                        if (pageData.PageName != gcItem.Name) continue;
+                        isImportedLabel.Text = "Imported";
+                        enableItemFlag = false;
+                        break;
+                    }
+                    catch (TypeMismatchException ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
+            }
             if (e.Item.FindControl("txtParentId") is TextBox textBoxParentId)
+            {
                 textBoxParentId.ID = $"txt{gcItem.Id}";
+                if (enableItemFlag)
+                {
+                    textBoxParentId.Enabled = true;
+                }
+            }
+            if (e.Item.FindControl("chkItem") is CheckBox checkBoxItem)
+            {
+                checkBoxItem.ID = $"chk{gcItem.Id}";
+                if (enableItemFlag)
+                {
+                    checkBoxItem.Enabled = true;
+                }
+            }  
             if (!(e.Item.FindControl("lnkItemName") is HyperLink linkItemName)) return;
             linkItemName.Text = gcItem.Name;
             linkItemName.NavigateUrl = $"https://{Client.GetAccountById(Convert.ToInt32(credentialsStore.AccountId)).Slug}" +
@@ -94,12 +128,15 @@ namespace GcEPiPlugin.GatherContentPlugin
                 switch (currentMapping.PostType)
                 {
                     case "PageType":
+                        if (parentId.IsEmpty())
+                        {
+                            Response.Write("<script> alert('Invalid Parent Page ID! Try again!') </script>");
+                            break;
+                        }
                         var pageParent = ContentReference.Parse(parentId);
                         var selectedPageType = currentMapping.EpiContentType;
                         var pageTypeList = contentTypeRepository.List().OfType<PageType>();
-                        var pageTypes = pageTypeList as IList<PageType> ?? pageTypeList.ToList();
-                        if (parentId.IsNullOrEmpty() || pageTypes.All(a => a.ID != Convert.ToInt32(parentId)))
-                            pageParent = ContentReference.RootPage;
+                        var pageTypes = pageTypeList as List<PageType> ?? pageTypeList.ToList();
                         foreach (var pageType in pageTypes)                                                                                                                                              
                         {
                             if (selectedPageType.Substring(5) != pageType.Name) continue;
@@ -124,15 +161,19 @@ namespace GcEPiPlugin.GatherContentPlugin
                                     contentRepository.Save(myPage, x, AccessLevel.Administer);
                                 }
                             });
+                            Response.Write("<script>alert('Item Successfully imported!')</script>");
                         }       
                         break;
                     case "BlockType":
+                        if (parentId.IsEmpty())
+                        {
+                            Response.Write("<script> alert('Invalid Parent Block ID! Try again!') </script>");
+                            break;
+                        }
                         var blockParent = ContentReference.Parse(parentId);
                         var selectedBlockType = currentMapping.EpiContentType;
                         var blockTypeList = contentTypeRepository.List().OfType<BlockType>();
                         var blockTypes = blockTypeList as IList<BlockType> ?? blockTypeList.ToList();
-                        if (parentId.IsNullOrEmpty() || blockTypes.All(a => a.ID != Convert.ToInt32(parentId)))
-                            blockParent = ContentReference.Parse("3");
                         foreach (var blockType in blockTypes)
                         {
                             if (selectedBlockType.Substring(6) != blockType.Name) continue;
