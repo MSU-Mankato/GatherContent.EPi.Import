@@ -63,22 +63,25 @@ namespace GcEPiPlugin.GatherContentPlugin
             var enableItemFlag = true;
             var credentialsStore = GcDynamicCredentials.RetrieveStore().ToList().First();
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var parentId = "";
             Client = new GcConnectClient(credentialsStore.ApiKey, credentialsStore.Email);
             if (gcItem == null) return;
             if (e.Item.FindControl("statusName") is Label statusNameLabel)
                 statusNameLabel.Text = gcItem.CurrentStatus.Data.Name;
             if (e.Item.FindControl("updatedAt") is Label updatedAtLabel)
                 updatedAtLabel.Text = gcItem.UpdatedAt.Date.ToString();
-            if (e.Item.FindControl("isImported") is Label isImportedLabel)
+            if (e.Item.FindControl("lnkIsImported") is HyperLink linkIsImported)
             {
-                isImportedLabel.Text = "Not imported yet";
+                linkIsImported.Text = "-------";
                 foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
                 {
                     try
                     {
                         var pageData = contentRepository.Get<PageData>(cr);
                         if (pageData.PageName != gcItem.Name) continue;
-                        isImportedLabel.Text = "Imported";
+                        linkIsImported.Text = "Imported";
+                        linkIsImported.NavigateUrl = pageData.LinkURL;
+                        parentId = pageData.ParentLink.ID.ToString();
                         enableItemFlag = false;
                         break;
                     }
@@ -94,6 +97,10 @@ namespace GcEPiPlugin.GatherContentPlugin
                 if (enableItemFlag)
                 {
                     textBoxParentId.Enabled = true;
+                }
+                else
+                {
+                    textBoxParentId.Text = parentId;
                 }
             }
             if (e.Item.FindControl("chkItem") is CheckBox checkBoxItem)

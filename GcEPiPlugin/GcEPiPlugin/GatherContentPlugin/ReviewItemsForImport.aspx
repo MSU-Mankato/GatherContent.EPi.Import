@@ -62,7 +62,7 @@
                             <asp:TextBox runat="server" ID="txtParentId" Enabled="False"></asp:TextBox>
                         </td>
                         <td>
-                            <asp:Label runat="server" ID="isImported"></asp:Label>
+                            <asp:HyperLink runat="server" ID="lnkIsImported"></asp:HyperLink>
                         </td>
                     </tr>
                 </ItemTemplate>
