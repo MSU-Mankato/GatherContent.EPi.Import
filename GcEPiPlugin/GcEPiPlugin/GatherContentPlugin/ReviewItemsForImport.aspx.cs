@@ -65,6 +65,8 @@ namespace GcEPiPlugin.GatherContentPlugin
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var parentId = "";
             Client = new GcConnectClient(credentialsStore.ApiKey, credentialsStore.Email);
+            var currentMapping = GcDynamicTemplateMappings
+                .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
             if (gcItem == null) return;
             if (e.Item.FindControl("statusName") is Label statusNameLabel)
                 statusNameLabel.Text = gcItem.CurrentStatus.Data.Name;
@@ -72,24 +74,49 @@ namespace GcEPiPlugin.GatherContentPlugin
                 updatedAtLabel.Text = gcItem.UpdatedAt.Date.ToString();
             if (e.Item.FindControl("lnkIsImported") is HyperLink linkIsImported)
             {
-                linkIsImported.Text = "-------";
-                foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
+                linkIsImported.Text = "---------";
+                if (currentMapping.PostType == "PageType")
                 {
-                    try
+                    foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
                     {
-                        var pageData = contentRepository.Get<PageData>(cr);
-                        if (pageData.PageName != gcItem.Name) continue;
-                        linkIsImported.Text = "Imported";
-                        linkIsImported.NavigateUrl = pageData.LinkURL;
-                        parentId = pageData.ParentLink.ID.ToString();
-                        enableItemFlag = false;
-                        break;
-                    }
-                    catch (TypeMismatchException ex)
-                    {
-                        Console.WriteLine(ex);
+                        try
+                        {
+                            var pageData = contentRepository.Get<PageData>(cr);
+                            if (pageData.PageName != gcItem.Name || pageData.ParentLink.ID == 2) continue;
+                            linkIsImported.Text = "Page Imported";
+                            linkIsImported.NavigateUrl = pageData.LinkURL;
+                            parentId = pageData.ParentLink.ID.ToString();
+                            enableItemFlag = false;
+                            break;
+                        }
+                        catch (TypeMismatchException ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                     }
                 }
+                else
+                {
+                    foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse("3")))
+                    {
+                        try
+                        {
+                            var blockData = contentRepository.Get<BlockData>(cr);
+                            // ReSharper disable once SuspiciousTypeConversion.Global
+                            var content = blockData as IContent;
+                            // ReSharper disable once PossibleNullReferenceException
+                            if (content.Name != gcItem.Name || content.ParentLink.ID == 2) continue;
+                            linkIsImported.Text = "Block Imported";
+                            parentId = content.ParentLink.ID.ToString();
+                            enableItemFlag = false;
+                            break;
+                        }
+                        catch (TypeMismatchException ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    }
+                } 
             }
             if (e.Item.FindControl("txtParentId") is TextBox textBoxParentId)
             {
@@ -119,9 +146,11 @@ namespace GcEPiPlugin.GatherContentPlugin
 
         protected void BtnImportItem_OnClick(object sender, EventArgs e)
         {
+            var importCount = 0;
             foreach (var key in Request.Form)
             {
                 if (!key.ToString().Contains("chk")) continue;
+                var importItem = true;
                 var splitString = key.ToString().Split('$');
                 var credentialsStore = GcDynamicCredentials.RetrieveStore().ToList().First();
                 Client = new GcConnectClient(credentialsStore.ApiKey, credentialsStore.Email);
@@ -135,19 +164,39 @@ namespace GcEPiPlugin.GatherContentPlugin
                 switch (currentMapping.PostType)
                 {
                     case "PageType":
-                        if (parentId.IsEmpty())
-                        {
-                            Response.Write("<script> alert('Invalid Parent Page ID! Try again!') </script>");
-                            break;
-                        }
-                        var pageParent = ContentReference.Parse(parentId);
+                        var pageParent = parentId.IsEmpty() ? ContentReference.RootPage:ContentReference.Parse(parentId);
                         var selectedPageType = currentMapping.EpiContentType;
                         var pageTypeList = contentTypeRepository.List().OfType<PageType>();
                         var pageTypes = pageTypeList as List<PageType> ?? pageTypeList.ToList();
                         foreach (var pageType in pageTypes)                                                                                                                                              
                         {
                             if (selectedPageType.Substring(5) != pageType.Name) continue;
-                            var myPage = contentRepository.GetDefault<PageData>(pageParent, pageType.ID);
+                            PageData myPage;
+                            try
+                            {
+                                myPage = contentRepository.GetDefault<PageData>(pageParent, pageType.ID);
+                            }
+                            catch (EPiServerException exception)
+                            {
+                                Console.WriteLine(exception);
+                                Response.Write("<script> alert('Invalid Parent Page ID! Try again!') </script>");
+                                break;
+                            }
+                            foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
+                            {
+                                try
+                                {
+                                    var pageData = contentRepository.Get<PageData>(cr);
+                                    if (pageData.PageName != item.Name || pageData.ParentLink.ID == 2) continue;
+                                    Response.Write("<script> alert('Page Already Exists!') </script>");
+                                    importItem = false;
+                                    break;
+                                }
+                                catch (TypeMismatchException ex)
+                                {
+                                    Console.WriteLine(ex);
+                                }
+                            }
                             myPage.PageName = item.Name;
                             foreach (var map in currentMapping.EpiFieldMaps)
                             {
@@ -168,23 +217,47 @@ namespace GcEPiPlugin.GatherContentPlugin
                                     contentRepository.Save(myPage, x, AccessLevel.Administer);
                                 }
                             });
-                            Response.Write("<script>alert('Item Successfully imported!')</script>");
+                            if (importItem)
+                                importCount++;
                         }       
                         break;
                     case "BlockType":
-                        if (parentId.IsEmpty())
-                        {
-                            Response.Write("<script> alert('Invalid Parent Block ID! Try again!') </script>");
-                            break;
-                        }
-                        var blockParent = ContentReference.Parse(parentId);
+                        var blockParent = parentId.IsEmpty() ? ContentReference.Parse("3") : ContentReference.Parse(parentId);
                         var selectedBlockType = currentMapping.EpiContentType;
                         var blockTypeList = contentTypeRepository.List().OfType<BlockType>();
                         var blockTypes = blockTypeList as IList<BlockType> ?? blockTypeList.ToList();
                         foreach (var blockType in blockTypes)
                         {
                             if (selectedBlockType.Substring(6) != blockType.Name) continue;
-                            var myBlock = contentRepository.GetDefault<BlockData>(blockParent, blockType.ID);
+                            BlockData myBlock;
+                            try
+                            {
+                                myBlock = contentRepository.GetDefault<BlockData>(blockParent, blockType.ID);
+                            }
+                            catch (EPiServerException exception)
+                            {
+                                Console.WriteLine(exception);
+                                Response.Write("<script> alert('Invalid Parent Block ID! Try again!') </script>");
+                                break;
+                            }
+                            foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse("3")))
+                            {
+                                try
+                                {
+                                    var blockData = contentRepository.Get<BlockData>(cr);
+                                    // ReSharper disable once SuspiciousTypeConversion.Global
+                                    var contentBlock = blockData as IContent;
+                                    // ReSharper disable once PossibleNullReferenceException
+                                    if (contentBlock.Name != item.Name || contentBlock.ParentLink.ID == 2) continue;
+                                    Response.Write("<script> alert('Block Already Exists!') </script>");
+                                    importItem = false;
+                                    break;
+                                }
+                                catch (TypeMismatchException ex)
+                                {
+                                    Console.WriteLine(ex);
+                                }
+                            }
                             // ReSharper disable once SuspiciousTypeConversion.Global
                             var content = myBlock as IContent;
                             // ReSharper disable once PossibleNullReferenceException
@@ -209,9 +282,19 @@ namespace GcEPiPlugin.GatherContentPlugin
                                     contentRepository.Save(content, x, AccessLevel.Administer);
                                 }
                             });
+                            if (importItem)
+                                importCount++;
                         }
                         break;
                 }
+            }
+            if (importCount == 1)
+            {
+                Response.Write("<script> alert('Item successfully imported!') </script>");
+            }
+            else if (importCount > 1)
+            {
+                Response.Write($"<script> alert('{importCount} Items successfully imported!') </script>");
             }
             PopulateForm();
         }
