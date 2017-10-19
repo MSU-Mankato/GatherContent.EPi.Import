@@ -10,7 +10,7 @@ using EPiServer.Security;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "New Mapping", Description = "This is where the new gather content mapping starts from.", Area = PlugInArea.AdminMenu, Url = "~/modulesGatherContentPlugin/NewGcMapping.aspx")]
+    [GuiPlugIn(DisplayName = "New Mapping", Description = "This is where the new gather content mapping starts from.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMapping.aspx")]
     public partial class NewGcMapping : SimplePage
     {
         private GcConnectClient _client;
