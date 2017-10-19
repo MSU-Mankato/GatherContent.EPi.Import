@@ -67,11 +67,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             Client = new GcConnectClient(credentialsStore.ApiKey, credentialsStore.Email);
             var currentMapping = GcDynamicTemplateMappings
                 .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
-            if (gcItem == null)
-            {
-                btnImportItem.Enabled = false;
-                return;
-            }
+            if (gcItem == null) return;
             if (e.Item.FindControl("statusName") is Label statusNameLabel)
                 statusNameLabel.Text = gcItem.CurrentStatus.Data.Name;
             if (e.Item.FindControl("updatedAt") is Label updatedAtLabel)
@@ -141,6 +137,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                 {
                     checkBoxItem.Enabled = true;
                     checkBoxItem.Visible = true;
+                    btnImportItem.Enabled = true;
                 }
             }  
             if (!(e.Item.FindControl("lnkItemName") is HyperLink linkItemName)) return;

@@ -73,7 +73,7 @@
         </table>
     </fieldset>
     <p>
-        <asp:Button runat="server" ID="btnImportItem" Text="Import Items" OnClick="BtnImportItem_OnClick" />
+        <asp:Button runat="server" ID="btnImportItem" Text="Import Items" Enabled="False" OnClick="BtnImportItem_OnClick" />
     </p>
 </form>
 </body>

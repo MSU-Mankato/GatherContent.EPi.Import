@@ -49,8 +49,8 @@ namespace GcEPiPlugin.GatherContentPlugin
             {
                 if (mappings.Any(mapping => mapping.TemplateId == template.Id.ToString()))
                 {
-                    rblTemp.Items.Add(new ListItem(template.Name + " <a href='https://mnsu.gathercontent.com'> " +
-                                                          "Edit Template Mapping </a> <br>" +
+                    rblTemp.Items.Add(new ListItem(template.Name + " <a href='/EPiServer/CMS'> " +
+                                                          "Edit Imported Items </a> <br>" +
                                                           template.Description, template.Id.ToString()){ Enabled = false });
                 }
                 else
