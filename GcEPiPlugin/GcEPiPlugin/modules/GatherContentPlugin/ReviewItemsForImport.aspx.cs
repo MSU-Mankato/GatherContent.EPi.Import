@@ -15,9 +15,9 @@ using GatherContentConnect;
 using GatherContentConnect.Objects;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 
-namespace GcEPiPlugin.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "Review Items For Import", Description = "", Area = PlugInArea.AdminMenu, Url = "~/GatherContentPlugin/ReviewItemsForImport.aspx")]
+    [GuiPlugIn(DisplayName = "Review Items For Import", Description = "", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/ReviewItemsForImport.aspx")]
     public partial class ReviewItemsForImport : SimplePage
     {
         protected GcConnectClient Client;

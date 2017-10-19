@@ -14,9 +14,9 @@ using Castle.Core.Internal;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 
-namespace GcEPiPlugin.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "New Mapping Part 3", Description = "part 3 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/GatherContentPlugin/NewGcMappingV3.aspx")]
+    [GuiPlugIn(DisplayName = "New Mapping Part 3", Description = "part 3 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingV3.aspx")]
     public partial class NewGcMappingV3 : SimplePage
     {
 
@@ -154,7 +154,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                     OnImportChangeGcStatus = Request.Form[key.Replace("mappedEPi-", "onImportGc-")]
                 }).ToList();
 			Session["StatusMaps"] = gcEpiStatusMaps;
-            Response.Redirect("~/GatherContentPlugin/NewGcMappingV4.aspx");
+            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingV4.aspx");
         }
 
         protected void DdlPostTypes_OnSelectedIndexChanged(object sender, EventArgs e)

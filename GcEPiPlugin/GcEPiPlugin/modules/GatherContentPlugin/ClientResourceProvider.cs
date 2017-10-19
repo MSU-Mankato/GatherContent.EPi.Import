@@ -2,7 +2,7 @@
 using EPiServer.Framework.Web.Resources;
 using EPiServer.Shell;
 
-namespace GcEPiPlugin.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentPlugin
 {
     [ClientResourceProvider]
     public class ClientResourceProvider : IClientResourceProvider

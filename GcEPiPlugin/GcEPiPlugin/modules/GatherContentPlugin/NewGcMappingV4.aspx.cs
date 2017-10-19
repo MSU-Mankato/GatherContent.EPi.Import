@@ -14,10 +14,10 @@ using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
 using Newtonsoft.Json;
 
-namespace GcEPiPlugin.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentPlugin
 {
     [GuiPlugIn(DisplayName = "New Mapping Part 4", Description = "part 4 of gc mapping", Area = PlugInArea.AdminMenu,
-        Url = "~/GatherContentPlugin/NewGcMappingV4.aspx")]
+        Url = "~/modules/GatherContentPlugin/NewGcMappingV4.aspx")]
     public partial class NewGcMappingV4 : SimplePage
     {
         private GcConnectClient _client;
@@ -157,7 +157,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             GcDynamicTemplateMappings.DeleteItem(mappingsStore[existingIndex].Id);
             GcDynamicTemplateMappings.SaveStore(newMapping);
             Session.Clear();
-            Response.Redirect("~/GatherContentPlugin/GcEpiTemplateMappings.aspx");
+            Response.Redirect("~/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx");
         }
     }
 }

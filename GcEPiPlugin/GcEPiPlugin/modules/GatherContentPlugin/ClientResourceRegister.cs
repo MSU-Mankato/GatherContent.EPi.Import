@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using EPiServer.Framework.Web.Resources;
 
-namespace GcEPiPlugin.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentPlugin
 {
     [ClientResourceRegister]
     public class ClientResourceRegister : IClientResourceRegister

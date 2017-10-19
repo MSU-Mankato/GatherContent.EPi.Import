@@ -202,88 +202,82 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ItemGroup>
-    <Compile Include="GatherContentPlugin\ClientResourceProvider.cs" />
-    <Compile Include="GatherContentPlugin\ClientResourceRegister.cs" />
-    <Compile Include="GatherContentPlugin\GatherContent.aspx.cs">
+    <Compile Include="modules\GatherContentPlugin\ClientResourceProvider.cs" />
+    <Compile Include="modules\GatherContentPlugin\ClientResourceRegister.cs" />
+    <Compile Include="modules\GatherContentPlugin\GatherContent.aspx.cs">
       <DependentUpon>GatherContent.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="GatherContentPlugin\GatherContent.aspx.designer.cs">
+    <Compile Include="modules\GatherContentPlugin\GatherContent.aspx.designer.cs">
       <DependentUpon>GatherContent.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicCredentials.cs" />
-    <Compile Include="GatherContentPlugin\GcDynamicClasses\GcDynamicTemplateMappings.cs" />
-    <Compile Include="GatherContentPlugin\GcEpiObjects\GcEpiStatusMap.cs" />
-    <Compile Include="GatherContentPlugin\GcEpiTemplateMappings.aspx.cs">
+    <Compile Include="modules\GatherContentPlugin\GcDynamicClasses\GcDynamicCredentials.cs" />
+    <Compile Include="modules\GatherContentPlugin\GcDynamicClasses\GcDynamicTemplateMappings.cs" />
+    <Compile Include="modules\GatherContentPlugin\GcEpiObjects\GcEpiStatusMap.cs" />
+    <Compile Include="modules\GatherContentPlugin\GcEpiTemplateMappings.aspx.cs">
       <DependentUpon>GcEpiTemplateMappings.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="GatherContentPlugin\GcEpiTemplateMappings.aspx.designer.cs">
+    <Compile Include="modules\GatherContentPlugin\GcEpiTemplateMappings.aspx.designer.cs">
       <DependentUpon>GcEpiTemplateMappings.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GatherContentPlugin\NewGcMapping.aspx.cs">
+    <Compile Include="modules\GatherContentPlugin\NewGcMapping.aspx.cs">
       <DependentUpon>NewGcMapping.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="GatherContentPlugin\NewGcMapping.aspx.designer.cs">
+    <Compile Include="modules\GatherContentPlugin\NewGcMapping.aspx.designer.cs">
       <DependentUpon>NewGcMapping.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GatherContentPlugin\NewGcMappingV2.aspx.cs">
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingV2.aspx.cs">
       <DependentUpon>NewGcMappingV2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="GatherContentPlugin\NewGcMappingV2.aspx.designer.cs">
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingV2.aspx.designer.cs">
       <DependentUpon>NewGcMappingV2.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GatherContentPlugin\NewGcMappingV3.aspx.cs">
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingV3.aspx.cs">
       <DependentUpon>NewGcMappingV3.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="GatherContentPlugin\NewGcMappingV3.aspx.designer.cs">
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingV3.aspx.designer.cs">
       <DependentUpon>NewGcMappingV3.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GatherContentPlugin\NewGcMappingV4.aspx.cs">
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingV4.aspx.cs">
       <DependentUpon>NewGcMappingV4.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="GatherContentPlugin\NewGcMappingV4.aspx.designer.cs">
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingV4.aspx.designer.cs">
       <DependentUpon>NewGcMappingV4.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GatherContentPlugin\ReviewItemsForImport.aspx.cs">
+    <Compile Include="modules\GatherContentPlugin\ReviewItemsForImport.aspx.cs">
       <DependentUpon>ReviewItemsForImport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="GatherContentPlugin\ReviewItemsForImport.aspx.designer.cs">
+    <Compile Include="modules\GatherContentPlugin\ReviewItemsForImport.aspx.designer.cs">
       <DependentUpon>ReviewItemsForImport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Blocks\SampleBlock.cs" />
-    <Compile Include="Models\Blocks\Test1Block.cs" />
-    <Compile Include="Models\Blocks\Test2Block.cs" />
-    <Compile Include="Models\Blocks\Test3Block.cs" />
-    <Compile Include="Models\Pages\SamplePage.cs" />
-    <Compile Include="Models\Pages\ArticlePage.cs" />
-    <Compile Include="Models\Pages\ProductPage.cs" />
-    <Compile Include="Models\Pages\SubProductPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Business\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Models\Blocks\" />
+    <Folder Include="Models\Pages\" />
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Static\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GatherContentPlugin\GatherContent.aspx" />
-    <Content Include="GatherContentPlugin\GcEpiTemplateMappings.aspx" />
-    <Content Include="GatherContentPlugin\NewGcMapping.aspx" />
-    <Content Include="GatherContentPlugin\NewGcMappingV2.aspx" />
-    <Content Include="GatherContentPlugin\NewGcMappingV3.aspx" />
-    <Content Include="GatherContentPlugin\NewGcMappingV4.aspx" />
-    <Content Include="GatherContentPlugin\ReviewItemsForImport.aspx" />
+    <Content Include="modules\GatherContentPlugin\GatherContent.aspx" />
+    <Content Include="modules\GatherContentPlugin\GcEpiTemplateMappings.aspx" />
+    <Content Include="modules\GatherContentPlugin\NewGcMapping.aspx" />
+    <Content Include="modules\GatherContentPlugin\NewGcMappingV2.aspx" />
+    <Content Include="modules\GatherContentPlugin\NewGcMappingV3.aspx" />
+    <Content Include="modules\GatherContentPlugin\NewGcMappingV4.aspx" />
+    <Content Include="modules\GatherContentPlugin\ReviewItemsForImport.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="App_Data\GeoLiteCity.dat" />

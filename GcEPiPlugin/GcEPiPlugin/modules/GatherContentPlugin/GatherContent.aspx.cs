@@ -9,9 +9,9 @@ using System.Web.UI.WebControls;
 using Castle.Core.Internal;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 
-namespace GcEPiPlugin.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "GatherContent", Description = "GatherContent Accounts and Settings", Area = PlugInArea.AdminMenu, Url = "~/GatherContentPlugin/GatherContent.aspx")]
+    [GuiPlugIn(DisplayName = "GatherContent", Description = "GatherContent Accounts and Settings", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/GatherContent.aspx")]
     public partial class GatherContent : SimplePage
     {
         private GcConnectClient _client;

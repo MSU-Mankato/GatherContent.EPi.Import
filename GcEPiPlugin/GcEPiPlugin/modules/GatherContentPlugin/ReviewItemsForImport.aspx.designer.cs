@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GcEPiPlugin.GatherContentPlugin {
+namespace GcEPiPlugin.modules.GatherContentPlugin {
     
     
-    public partial class NewGcMapping {
+    public partial class ReviewItemsForImport {
         
         /// <summary>
         /// Head1 control.
@@ -31,39 +31,48 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// accountName control.
+        /// templateName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label accountName;
+        protected global::System.Web.UI.WebControls.Label templateName;
         
         /// <summary>
-        /// rblGcProjects control.
+        /// templateDescription control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rblGcProjects;
+        protected global::System.Web.UI.WebControls.Label templateDescription;
         
         /// <summary>
-        /// btnApiStep control.
+        /// projectName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnApiStep;
+        protected global::System.Web.UI.WebControls.Label projectName;
         
         /// <summary>
-        /// btnNextStep control.
+        /// rptGcItems control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnNextStep;
+        protected global::System.Web.UI.WebControls.Repeater rptGcItems;
+        
+        /// <summary>
+        /// btnImportItem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnImportItem;
     }
 }

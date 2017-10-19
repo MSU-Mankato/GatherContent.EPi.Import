@@ -9,9 +9,9 @@ using GatherContentConnect;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 using Newtonsoft.Json;
 
-namespace GcEPiPlugin.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "Template Mappings", Description = "Shows all the template mappings for a particular account.", Area = PlugInArea.AdminMenu, Url = "~/GatherContentPlugin/GcEpiTemplateMappings.aspx")]
+    [GuiPlugIn(DisplayName = "Template Mappings", Description = "Shows all the template mappings for a particular account.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx")]
     public partial class GcEpiTemplateMappings : SimplePage
     {
         protected GcConnectClient Client;
@@ -48,7 +48,7 @@ namespace GcEPiPlugin.GatherContentPlugin
 
         protected void BtnAddNew_OnClick(object sender, EventArgs e)
         {
-            Response.Redirect("~/GatherContentPlugin/NewGcMapping.aspx");
+            Response.Redirect("~/modules/GatherContentPlugin/NewGcMapping.aspx");
         }
 
         protected void BtnDeleteTemplate_OnClick(object sender, EventArgs e)
@@ -74,7 +74,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                 var serializedStatusMaps = JsonConvert.SerializeObject(map.StatusMaps);
                 var serializedEpiFieldMaps = JsonConvert.SerializeObject(map.EpiFieldMaps);
                 buttonEditTemplateMap.PostBackUrl =
-                    $"~/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
+                    $"~/modules/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
                     $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
                     $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={serializedStatusMaps}" +
                     $"&EpiFieldMaps={serializedEpiFieldMaps}&PublishedDateTime={map.PublishedDateTime}";
@@ -88,7 +88,7 @@ namespace GcEPiPlugin.GatherContentPlugin
             if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
                 checkBoxTemplate.ID = $"{map.TemplateId}";
             if (e.Item.FindControl("btnItemsReview") is Button buttonItemsReview)
-                buttonItemsReview.PostBackUrl = "~/GatherContentPlugin/ReviewItemsForImport.aspx?" +
+                buttonItemsReview.PostBackUrl = "~/modules/GatherContentPlugin/ReviewItemsForImport.aspx?" +
                                                     $"TemplateId={map.TemplateId}&ProjectId={map.ProjectId}";
         }
     }

@@ -1,4 +1,4 @@
-<%@ Page Language="c#" Codebehind="NewGcMappingV3.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.GatherContentPlugin.NewGcMappingV3" Title="NewGcMappingV3" %>
+<%@ Page Language="c#" Codebehind="NewGcMappingV3.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentPlugin.NewGcMappingV3" Title="NewGcMappingV3" %>
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head id="Head1" runat="server">
     <title>New GatherContent Mapping</title>

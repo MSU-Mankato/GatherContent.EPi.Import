@@ -9,9 +9,9 @@ using GatherContentConnect;
 using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
 using Newtonsoft.Json;
 
-namespace GcEPiPlugin.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "New Mapping Part 2", Description = "part 2 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/GatherContentPlugin/NewGcMappingV2.aspx")]
+    [GuiPlugIn(DisplayName = "New Mapping Part 2", Description = "part 2 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingV2.aspx")]
     public partial class NewGcMappingV2 : SimplePage
     {
 
@@ -83,7 +83,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                 return;
             }
             Session["TemplateId"] = selectedValue;
-            Response.Redirect("~/GatherContentPlugin/NewGcMappingV3.aspx");
+            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingV3.aspx");
         }
     }
 }

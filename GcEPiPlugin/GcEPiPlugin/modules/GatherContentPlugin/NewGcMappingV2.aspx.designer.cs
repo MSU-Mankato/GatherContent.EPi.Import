@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GcEPiPlugin.GatherContentPlugin {
+namespace GcEPiPlugin.modules.GatherContentPlugin {
     
     
-    public partial class GatherContent {
+    public partial class NewGcMappingV2 {
         
         /// <summary>
         /// Head1 control.
@@ -22,15 +22,6 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlHead Head1;
         
         /// <summary>
-        /// RequiredResourcesHeader control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::EPiServer.Framework.Web.WebControls.RequiredClientResources RequiredResourcesHeader;
-        
-        /// <summary>
         /// form1 control.
         /// </summary>
         /// <remarks>
@@ -40,48 +31,39 @@ namespace GcEPiPlugin.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// txtEmailAddress control.
+        /// projectName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmailAddress;
+        protected global::System.Web.UI.WebControls.Label projectName;
         
         /// <summary>
-        /// txtApiKey control.
+        /// rblGcTemplates control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtApiKey;
+        protected global::System.Web.UI.WebControls.RadioButtonList rblGcTemplates;
         
         /// <summary>
-        /// txtPlatformUrl control.
+        /// btnPreviousStep control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPlatformUrl;
+        protected global::System.Web.UI.WebControls.Button btnPreviousStep;
         
         /// <summary>
-        /// ddlGcAccounts control.
+        /// btnNextStep control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlGcAccounts;
-        
-        /// <summary>
-        /// btnSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
+        protected global::System.Web.UI.WebControls.Button btnNextStep;
     }
 }
