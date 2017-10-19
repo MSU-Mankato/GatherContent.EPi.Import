@@ -69,11 +69,11 @@ namespace GcEPiPlugin.GatherContentPlugin
         {
 	        if (!(e.Item.DataItem is GcDynamicTemplateMappings map)) return;
             var slug = Client.GetAccountById(Convert.ToInt32(map.AccountId)).Slug;
-            if (e.Item.FindControl("btnTemplate") is Button buttonTemplate)
+            if (e.Item.FindControl("btnEditTemplateMap") is Button buttonEditTemplateMap)
             {
                 var serializedStatusMaps = JsonConvert.SerializeObject(map.StatusMaps);
                 var serializedEpiFieldMaps = JsonConvert.SerializeObject(map.EpiFieldMaps);
-                buttonTemplate.PostBackUrl =
+                buttonEditTemplateMap.PostBackUrl =
                     $"~/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
                     $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
                     $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={serializedStatusMaps}" +

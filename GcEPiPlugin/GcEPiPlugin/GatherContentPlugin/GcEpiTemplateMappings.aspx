@@ -51,7 +51,7 @@
                         <asp:CheckBox ID="chkTemplate" runat="server" />
                     </td>
                     <td>
-                        <asp:Button runat="server" ID="btnTemplate"  Text="Edit Mapping">
+                        <asp:Button runat="server" ID="btnEditTemplateMap"  Text="Edit Mapping">
                     </asp:Button>
                         <asp:Button runat="server" ID="btnItemsReview" Text="Review Items" >   
                         </asp:Button>

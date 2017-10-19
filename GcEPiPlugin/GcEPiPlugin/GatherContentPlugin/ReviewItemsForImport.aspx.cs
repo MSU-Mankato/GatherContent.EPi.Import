@@ -67,7 +67,11 @@ namespace GcEPiPlugin.GatherContentPlugin
             Client = new GcConnectClient(credentialsStore.ApiKey, credentialsStore.Email);
             var currentMapping = GcDynamicTemplateMappings
                 .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
-            if (gcItem == null) return;
+            if (gcItem == null)
+            {
+                btnImportItem.Enabled = false;
+                return;
+            }
             if (e.Item.FindControl("statusName") is Label statusNameLabel)
                 statusNameLabel.Text = gcItem.CurrentStatus.Data.Name;
             if (e.Item.FindControl("updatedAt") is Label updatedAtLabel)
@@ -136,6 +140,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                 if (enableItemFlag)
                 {
                     checkBoxItem.Enabled = true;
+                    checkBoxItem.Visible = true;
                 }
             }  
             if (!(e.Item.FindControl("lnkItemName") is HyperLink linkItemName)) return;
@@ -190,6 +195,7 @@ namespace GcEPiPlugin.GatherContentPlugin
                                     if (pageData.PageName != item.Name || pageData.ParentLink.ID == 2) continue;
                                     Response.Write("<script> alert('Page Already Exists!') </script>");
                                     importItem = false;
+                                    importCount = 0;
                                     break;
                                 }
                                 catch (TypeMismatchException ex)
@@ -211,14 +217,17 @@ namespace GcEPiPlugin.GatherContentPlugin
                                         myPage.Property[propDef.Name].Value = x.Value;
                                 }));
                             }
-                            var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
-                            saveActions.ForEach(x => { if (x.ToString() == currentMapping.DefaultStatus)
-                                {
-                                    contentRepository.Save(myPage, x, AccessLevel.Administer);
-                                }
-                            });
-                            if (importItem)
+                            if (!importItem) continue;
+                            {
+                                var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
+                                saveActions.ForEach(x => {
+                                    if (x.ToString() == currentMapping.DefaultStatus)
+                                    {
+                                        contentRepository.Save(myPage, x, AccessLevel.Administer);
+                                    }
+                                });
                                 importCount++;
+                            }
                         }       
                         break;
                     case "BlockType":
@@ -275,15 +284,17 @@ namespace GcEPiPlugin.GatherContentPlugin
                                         myBlock.Property[propDef.Name].Value = x.Value;
                                 }));
                             }
-                            var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
-                            saveActions.ForEach(x => {
-                                if (x.ToString() == currentMapping.DefaultStatus)
-                                {
-                                    contentRepository.Save(content, x, AccessLevel.Administer);
-                                }
-                            });
-                            if (importItem)
+                            if (!importItem) continue;
+                            {
+                                var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
+                                saveActions.ForEach(x => {
+                                    if (x.ToString() == currentMapping.DefaultStatus)
+                                    {
+                                        contentRepository.Save(content, x, AccessLevel.Administer);
+                                    }
+                                });
                                 importCount++;
+                            }
                         }
                         break;
                 }

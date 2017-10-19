@@ -46,7 +46,7 @@
                 <ItemTemplate>
                     <tr>
                         <td>
-                            <asp:CheckBox ID="chkItem" runat="server" Enabled="False"/>
+                            <asp:CheckBox ID="chkItem" runat="server" Enabled="False" Visible="False"/>
                         </td>
                         <td>
                             <asp:HyperLink runat="server" ID="lnkItemName" Target="_blank" CssClass="LinkNoUnderline">
@@ -69,7 +69,7 @@
                 <FooterTemplate>
                 
                 </FooterTemplate>
-            </asp:Repeater>     
+            </asp:Repeater>
         </table>
     </fieldset>
     <p>
