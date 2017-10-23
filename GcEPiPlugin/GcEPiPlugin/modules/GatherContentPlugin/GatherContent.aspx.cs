@@ -44,6 +44,8 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 }
                 _credentials = new GcDynamicCredentials(emailAddress, apiKey, selectedAccount);
                 GcDynamicCredentials.SaveStore(_credentials);
+                Response.Write($"<script>alert('Hello {_client.GetMe().FirstName}! You have successfully connected to" +
+                               " the GatherContent API')</script>");
             }
             else
             {

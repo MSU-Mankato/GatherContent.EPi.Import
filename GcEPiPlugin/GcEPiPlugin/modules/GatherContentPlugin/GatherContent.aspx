@@ -3,7 +3,7 @@
 <head id="Head1" runat="server">
     <EPiServer:RequiredClientResources RenderingArea="Header" ID="RequiredResourcesHeader" runat="server" />
     <title>GatherContent</title>
-</head>
+    </head>
 <body>
 <form id="form1" runat="server">
     <h1>GatherContent</h1>
@@ -18,8 +18,11 @@
             <asp:Label runat="server" AssociatedControlID="txtPlatformUrl">Platform URL</asp:Label> <asp:TextBox runat="server" ID="txtPlatformUrl" autocomplete="off" Width="300px" />
         </p>
         <p>
-        <asp:Label runat="server" AssociatedControlID="ddlGcAccounts">Accounts</asp:Label> <asp:DropDownList runat="server" ID="ddlGcAccounts"/>
-            <asp:Button  runat="server" ID="btnSave" Text="Save" OnClick="BtnSave_OnClick"/> 
+        <asp:Label runat="server" AssociatedControlID="ddlGcAccounts">Accounts</asp:Label> 
+            <asp:DropDownList runat="server" ID="ddlGcAccounts"/>
+        </p>
+        <p> 
+            <asp:Button  runat="server" ID="btnSave" Text="Save Changes" OnClick="BtnSave_OnClick"/> 
         </p>
     </fieldset>
      <p>&nbsp;</p>
