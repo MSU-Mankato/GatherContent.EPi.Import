@@ -37,7 +37,7 @@
                         <td></td>
                         <td>Item</td>
                         <td>Status</td>
-                        <td>Imported At</td>
+                        <td>Updated At</td>
                         <td>Parent Page/Block ID</td>
                         <td>Import Status</td>
                     </tr>

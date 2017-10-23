@@ -102,13 +102,13 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             var tHeadRow = new TableRow {Height = 42};
             tHeadRow.Cells.Add(new TableCell{ Text = "GatherContent Status" });
             tHeadRow.Cells.Add(new TableCell { Text = "Mapped EPiServer Status" });
-            tHeadRow.Cells.Add(new TableCell { Text = "On Import, Change GatherContent Status" });
+            //tHeadRow.Cells.Add(new TableCell { Text = "On Import, Change GatherContent Status" });
             tableGcStatusesMap.Rows.Add(tHeadRow);
             foreach (var status in gcStatuses)
             {
                 var tRow = new TableRow();
                 tableGcStatusesMap.Rows.Add(tRow);
-                for (var cellIndex = 1; cellIndex <= 3; cellIndex++)
+                for (var cellIndex = 1; cellIndex <= 2; cellIndex++)//Need it to make the highest index 3 in the next version.
                 {
                     var tCell = new TableCell();
                     if (cellIndex is 3)
