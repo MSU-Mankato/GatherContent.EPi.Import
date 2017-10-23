@@ -10,8 +10,8 @@ using EPiServer;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 using GatherContentConnect;
-using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
-using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
+using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentPlugin.GcEpiObjects;
 using Newtonsoft.Json;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
@@ -153,7 +153,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 Session["DefaultStatus"].ToString(), Session["EpiContentType"].ToString(), (List<GcEpiStatusMap>)Session["StatusMaps"],
                 (List<string>)Session["EpiFieldMaps"], $"{DateTime.Now:G}");
             var existingIndex = mappingsStore.FindIndex(i => i.TemplateId == Session["TemplateId"].ToString());
-            if (existingIndex > 0)
+            if (existingIndex >= 0)
             GcDynamicTemplateMappings.DeleteItem(mappingsStore[existingIndex].Id);
             GcDynamicTemplateMappings.SaveStore(newMapping);
             Session.Clear();

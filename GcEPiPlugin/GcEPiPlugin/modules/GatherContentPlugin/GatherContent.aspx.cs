@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
 using Castle.Core.Internal;
-using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {

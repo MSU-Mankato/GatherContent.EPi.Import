@@ -13,7 +13,7 @@ using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using GatherContentConnect;
 using GatherContentConnect.Objects;
-using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {
@@ -217,11 +217,21 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                             if (!importItem) continue;
                             {
                                 var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
+                                var gcStatusIdForThisItem = item.CurrentStatus.Data.Id;
                                 saveActions.ForEach(x => {
-                                    if (x.ToString() == currentMapping.DefaultStatus)
+                                    if (x.ToString() == currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] == 
+                                        gcStatusIdForThisItem).MappedEpiserverStatus.Split('~')[0])
                                     {
                                         contentRepository.Save(myPage, x, AccessLevel.Administer);
                                     }
+                                    else if (currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] == gcStatusIdForThisItem)
+                                    .MappedEpiserverStatus.Split('~')[0] == "Use Default Status")
+                                         {
+                                            if (x.ToString() == currentMapping.DefaultStatus)
+                                            {
+                                                    contentRepository.Save(myPage, x, AccessLevel.Administer);
+                                            }
+                                         }
                                 });
                                 importCount++;
                             }
@@ -284,11 +294,21 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                             if (!importItem) continue;
                             {
                                 var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
+                                var gcStatusIdForThisItem = item.CurrentStatus.Data.Id;
                                 saveActions.ForEach(x => {
-                                    if (x.ToString() == currentMapping.DefaultStatus)
+                                    if (x.ToString() == currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] ==
+                                                                                            gcStatusIdForThisItem).MappedEpiserverStatus.Split('~')[0])
                                     {
                                         contentRepository.Save(content, x, AccessLevel.Administer);
                                     }
+                                    else if (currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] == gcStatusIdForThisItem)
+                                                 .MappedEpiserverStatus.Split('~')[0] == "Use Default Status")
+                                         {
+                                            if (x.ToString() == currentMapping.DefaultStatus)
+                                            {
+                                                    contentRepository.Save(content, x, AccessLevel.Administer);
+                                            }
+                                         }
                                 });
                                 importCount++;
                             }

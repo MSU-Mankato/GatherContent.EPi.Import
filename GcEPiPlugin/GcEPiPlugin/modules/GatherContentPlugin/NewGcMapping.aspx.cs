@@ -4,7 +4,7 @@ using System.Web.UI.WebControls;
 using Castle.Core.Internal;
 using EPiServer.PlugIn;
 using GatherContentConnect;
-using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
 using EPiServer;
 using EPiServer.Security;
 

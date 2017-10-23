@@ -6,7 +6,7 @@ using EPiServer.PlugIn;
 using EPiServer.Security;
 using EPiServer;
 using GatherContentConnect;
-using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
 using Newtonsoft.Json;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin

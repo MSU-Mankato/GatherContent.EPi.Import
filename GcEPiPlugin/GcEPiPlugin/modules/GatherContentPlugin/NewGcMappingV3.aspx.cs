@@ -8,8 +8,8 @@ using EPiServer.DataAccess;
 using EPiServer.PlugIn;
 using EPiServer.Security;
 using GatherContentConnect;
-using GcEPiPlugin.GatherContentPlugin.GcDynamicClasses;
-using GcEPiPlugin.GatherContentPlugin.GcEpiObjects;
+using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentPlugin.GcEpiObjects;
 using Castle.Core.Internal;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
@@ -122,8 +122,8 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                     else if (cellIndex is 2)
                     {
                         var ddlEpiStatuses = new DropDownList {Height = 28, Width = 194};
+                        ddlEpiStatuses.Items.Add(new ListItem("Use Default Status", "Use Default Status"));
                         saveActions.ToList().ForEach(i => ddlEpiStatuses.Items.Add(new ListItem(i.ToString(), i.ToString())));
-                        ddlEpiStatuses.Items.Add(new ListItem("Do Not Change", "noChange"));
                         ddlEpiStatuses.ID = "mappedEPi-" + status.Id;
 						tCell.Controls.Add(ddlEpiStatuses);
                     }
@@ -150,8 +150,8 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 where key.StartsWith("mappedEPi-")
                 select new GcEpiStatusMap
                 {
-                    MappedEpiserverStatus = Request.Form[key],
-                    OnImportChangeGcStatus = Request.Form[key.Replace("mappedEPi-", "onImportGc-")]
+                    MappedEpiserverStatus = Request.Form[key] + "~" + key.Substring(10),
+                    OnImportChangeGcStatus = Request.Form[key.Replace("mappedEPi-", "onImportGc-")] + "~" + key.Substring(10)
                 }).ToList();
 			Session["StatusMaps"] = gcEpiStatusMaps;
             Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingV4.aspx");
