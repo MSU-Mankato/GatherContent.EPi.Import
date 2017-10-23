@@ -22,8 +22,7 @@
             <asp:Button  runat="server" ID="btnSave" Text="Save" OnClick="BtnSave_OnClick"/> 
         </p>
     </fieldset>
-     <p>
-         &nbsp;</p>
+     <p>&nbsp;</p>
 
 </form>
 </body>

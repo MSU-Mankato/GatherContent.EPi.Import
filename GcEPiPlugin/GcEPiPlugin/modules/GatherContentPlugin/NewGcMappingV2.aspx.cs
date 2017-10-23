@@ -49,9 +49,9 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             {
                 if (mappings.Any(mapping => mapping.TemplateId == template.Id.ToString()))
                 {
-                    rblTemp.Items.Add(new ListItem(template.Name + " <a href='/EPiServer/CMS'> " +
-                                                          "Edit Imported Items </a> <br>" +
-                                                          template.Description, template.Id.ToString()){ Enabled = false });
+                    rblTemp.Items.Add(new ListItem( $"{template.Name} &nbsp; <a href='/modules/GatherContentPlugin/ReviewItemsForImport.aspx?" +
+                                                   $"TemplateId={template.Id}&ProjectId={projectId}'> " +
+                                                   $"Review Items for Import </a> <br>{template.Description}", template.Id.ToString()){ Enabled = false });
                 }
                 else
                 {
@@ -62,13 +62,6 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             {
                 rblGcTemplates.Items.Add(item);
             }
-            //var buffer = new ListItem[rblGcTemplates.Items.Count];
-            //rblGcTemplates.Items.CopyTo(buffer, 0);
-            //if (buffer.First().Enabled)
-            //{
-            //    rblGcTemplates.SelectedIndex = 0;
-            //    Session["TemplateId"] = rblGcTemplates.SelectedValue;
-            //}
             Session["PostType"] = null;
             Session["Author"] = null;
             Session["DefaultStatus"] = null;
