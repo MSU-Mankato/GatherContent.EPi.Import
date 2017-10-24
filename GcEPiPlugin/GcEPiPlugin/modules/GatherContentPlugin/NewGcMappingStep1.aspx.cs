@@ -10,8 +10,8 @@ using EPiServer.Security;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "New Mapping", Description = "This is where the new gather content mapping starts from.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMapping.aspx")]
-    public partial class NewGcMapping : SimplePage
+    [GuiPlugIn(DisplayName = "New GC Mapping Step 1", Description = "This is where the new gather content mapping starts from.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingStep1.aspx")]
+    public partial class NewGcMappingStep1 : SimplePage
     {
         private GcConnectClient _client;
         protected override void OnLoad(EventArgs e)
@@ -54,7 +54,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
         {
 			var selectedValue = Request.Form["rblGcProjects"];
 			Session["ProjectId"] = selectedValue;
-            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingV2.aspx");
+            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingStep2.aspx");
         }
     }
 }

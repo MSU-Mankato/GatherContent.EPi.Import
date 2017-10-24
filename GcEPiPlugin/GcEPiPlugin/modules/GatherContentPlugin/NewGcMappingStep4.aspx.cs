@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Providers.Entities;
 using System.Web.UI.WebControls;
 using Castle.Core.Internal;
 using EPiServer.PlugIn;
@@ -16,9 +15,9 @@ using Newtonsoft.Json;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "New Mapping Part 4", Description = "part 4 of gc mapping", Area = PlugInArea.AdminMenu,
-        Url = "~/modules/GatherContentPlugin/NewGcMappingV4.aspx")]
-    public partial class NewGcMappingV4 : SimplePage
+    [GuiPlugIn(DisplayName = "New GC Mapping Part 4", Description = "part 4 of gc mapping", Area = PlugInArea.AdminMenu,
+        Url = "~/modules/GatherContentPlugin/NewGcMappingStep4.aspx")]
+    public partial class NewGcMappingStep4 : SimplePage
     {
         private GcConnectClient _client;
         protected override void OnLoad(EventArgs e)

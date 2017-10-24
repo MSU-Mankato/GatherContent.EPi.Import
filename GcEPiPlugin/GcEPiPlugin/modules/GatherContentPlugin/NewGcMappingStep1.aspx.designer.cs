@@ -10,7 +10,7 @@
 namespace GcEPiPlugin.modules.GatherContentPlugin {
     
     
-    public partial class NewGcMappingV2 {
+    public partial class NewGcMappingStep1 {
         
         /// <summary>
         /// Head1 control.
@@ -31,31 +31,31 @@ namespace GcEPiPlugin.modules.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// projectName control.
+        /// accountName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label projectName;
+        protected global::System.Web.UI.WebControls.Label accountName;
         
         /// <summary>
-        /// rblGcTemplates control.
+        /// rblGcProjects control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rblGcTemplates;
+        protected global::System.Web.UI.WebControls.RadioButtonList rblGcProjects;
         
         /// <summary>
-        /// btnPreviousStep control.
+        /// btnApiStep control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnPreviousStep;
+        protected global::System.Web.UI.WebControls.Button btnApiStep;
         
         /// <summary>
         /// btnNextStep control.

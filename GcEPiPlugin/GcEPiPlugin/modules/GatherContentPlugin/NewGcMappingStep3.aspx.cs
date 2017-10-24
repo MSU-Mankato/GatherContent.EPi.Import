@@ -16,8 +16,8 @@ using EPiServer.ServiceLocation;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "New Mapping Part 3", Description = "part 3 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingV3.aspx")]
-    public partial class NewGcMappingV3 : SimplePage
+    [GuiPlugIn(DisplayName = "New GC Mapping Step 3", Description = "part 3 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingStep3.aspx")]
+    public partial class NewGcMappingStep3 : SimplePage
     {
 
         private GcConnectClient _client;
@@ -154,7 +154,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                     OnImportChangeGcStatus = Request.Form[key.Replace("mappedEPi-", "onImportGc-")] + "~" + key.Substring(10)
                 }).ToList();
 			Session["StatusMaps"] = gcEpiStatusMaps;
-            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingV4.aspx");
+            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingStep4.aspx");
         }
 
         protected void DdlPostTypes_OnSelectedIndexChanged(object sender, EventArgs e)

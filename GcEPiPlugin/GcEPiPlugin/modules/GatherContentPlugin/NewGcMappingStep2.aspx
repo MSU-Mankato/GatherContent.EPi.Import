@@ -1,4 +1,4 @@
-<%@ Page Language="c#" Codebehind="NewGcMappingV2.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentPlugin.NewGcMappingV2" Title="New Mapping Part-2" %>
+<%@ Page Language="c#" Codebehind="NewGcMappingStep2.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentPlugin.NewGcMappingStep2" Title="New Mapping Part-2" %>
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head id="Head1" runat="server">
     <title>New GatherContent Mapping</title>
@@ -13,7 +13,7 @@
         </h4>
         <asp:RadioButtonList ID="rblGcTemplates" runat="server" cellpadding="3" CellSpacing="3"/>
         <p>
-            <asp:Button ID="btnPreviousStep" runat="server" PostBackUrl="NewGcMapping.aspx" Text="Previous Step" />
+            <asp:Button ID="btnPreviousStep" runat="server" PostBackUrl="NewGcMappingStep1.aspx" Text="Previous Step" />
             <asp:Button runat="server" ID="btnNextStep" Text="Next Step" OnClick="BtnNextStep_OnClick"/> 
         </p>
     </fieldset>

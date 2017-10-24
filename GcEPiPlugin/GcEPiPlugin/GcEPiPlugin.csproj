@@ -120,9 +120,8 @@
     <Reference Include="EPiServer.XForms, Version=10.8.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\packages\EPiServer.CMS.Core.10.8.0\lib\net45\EPiServer.XForms.dll</HintPath>
     </Reference>
-    <Reference Include="GatherContentConnect, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\GatherContentConnect\GatherContentConnect\bin\Debug\GatherContentConnect.dll</HintPath>
+    <Reference Include="GatherContentConnect">
+      <HintPath>..\..\..\..\..\..\Source\Repos\GatherContentConnect\GatherContentConnect\bin\Debug\GatherContentConnect.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
@@ -136,7 +135,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\GatherContentConnect\GatherContentConnect\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\.nuget\packages\Newtonsoft.Json\9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.7.41101.299, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Core.2.7.2\lib\net40-Client\NuGet.Core.dll</HintPath>
@@ -221,33 +220,33 @@
     <Compile Include="modules\GatherContentPlugin\GcEpiTemplateMappings.aspx.designer.cs">
       <DependentUpon>GcEpiTemplateMappings.aspx</DependentUpon>
     </Compile>
-    <Compile Include="modules\GatherContentPlugin\NewGcMapping.aspx.cs">
-      <DependentUpon>NewGcMapping.aspx</DependentUpon>
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingStep1.aspx.cs">
+      <DependentUpon>NewGcMappingStep1.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="modules\GatherContentPlugin\NewGcMapping.aspx.designer.cs">
-      <DependentUpon>NewGcMapping.aspx</DependentUpon>
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingStep1.aspx.designer.cs">
+      <DependentUpon>NewGcMappingStep1.aspx</DependentUpon>
     </Compile>
-    <Compile Include="modules\GatherContentPlugin\NewGcMappingV2.aspx.cs">
-      <DependentUpon>NewGcMappingV2.aspx</DependentUpon>
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingStep2.aspx.cs">
+      <DependentUpon>NewGcMappingStep2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="modules\GatherContentPlugin\NewGcMappingV2.aspx.designer.cs">
-      <DependentUpon>NewGcMappingV2.aspx</DependentUpon>
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingStep2.aspx.designer.cs">
+      <DependentUpon>NewGcMappingStep2.aspx</DependentUpon>
     </Compile>
-    <Compile Include="modules\GatherContentPlugin\NewGcMappingV3.aspx.cs">
-      <DependentUpon>NewGcMappingV3.aspx</DependentUpon>
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingStep3.aspx.cs">
+      <DependentUpon>NewGcMappingStep3.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="modules\GatherContentPlugin\NewGcMappingV3.aspx.designer.cs">
-      <DependentUpon>NewGcMappingV3.aspx</DependentUpon>
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingStep3.aspx.designer.cs">
+      <DependentUpon>NewGcMappingStep3.aspx</DependentUpon>
     </Compile>
-    <Compile Include="modules\GatherContentPlugin\NewGcMappingV4.aspx.cs">
-      <DependentUpon>NewGcMappingV4.aspx</DependentUpon>
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingStep4.aspx.cs">
+      <DependentUpon>NewGcMappingStep4.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="modules\GatherContentPlugin\NewGcMappingV4.aspx.designer.cs">
-      <DependentUpon>NewGcMappingV4.aspx</DependentUpon>
+    <Compile Include="modules\GatherContentPlugin\NewGcMappingStep4.aspx.designer.cs">
+      <DependentUpon>NewGcMappingStep4.aspx</DependentUpon>
     </Compile>
     <Compile Include="modules\GatherContentPlugin\ReviewItemsForImport.aspx.cs">
       <DependentUpon>ReviewItemsForImport.aspx</DependentUpon>
@@ -273,10 +272,10 @@
   <ItemGroup>
     <Content Include="modules\GatherContentPlugin\GatherContent.aspx" />
     <Content Include="modules\GatherContentPlugin\GcEpiTemplateMappings.aspx" />
-    <Content Include="modules\GatherContentPlugin\NewGcMapping.aspx" />
-    <Content Include="modules\GatherContentPlugin\NewGcMappingV2.aspx" />
-    <Content Include="modules\GatherContentPlugin\NewGcMappingV3.aspx" />
-    <Content Include="modules\GatherContentPlugin\NewGcMappingV4.aspx" />
+    <Content Include="modules\GatherContentPlugin\NewGcMappingStep1.aspx" />
+    <Content Include="modules\GatherContentPlugin\NewGcMappingStep2.aspx" />
+    <Content Include="modules\GatherContentPlugin\NewGcMappingStep3.aspx" />
+    <Content Include="modules\GatherContentPlugin\NewGcMappingStep4.aspx" />
     <Content Include="modules\GatherContentPlugin\ReviewItemsForImport.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />

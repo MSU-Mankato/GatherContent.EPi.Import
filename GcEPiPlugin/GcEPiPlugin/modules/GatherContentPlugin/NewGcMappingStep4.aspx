@@ -1,4 +1,4 @@
-<%@ Page Language="c#" Codebehind="NewGcMappingV4.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentPlugin.NewGcMappingV4" Title="NewGcMappingV4" %>
+<%@ Page Language="c#" Codebehind="NewGcMappingStep4.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentPlugin.NewGcMappingStep4" Title="NewGcMappingV4" %>
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head id="Head1" runat="server">
     <title>New GatherContent Mapping</title>
@@ -15,7 +15,7 @@
         </asp:Table>
     </fieldset>
     <p>
-        <asp:Button ID="btnPreviousStep" runat="server" PostBackUrl="NewGcMappingV3.aspx" Text="Previous Step" />
+        <asp:Button ID="btnPreviousStep" runat="server" PostBackUrl="NewGcMappingStep3.aspx" Text="Previous Step" />
         <asp:Button runat="server" ID="btnSaveMapping" Text="Save Mapping" OnClick="BtnSaveMapping_OnClick"/> 
     </p>
 </form>

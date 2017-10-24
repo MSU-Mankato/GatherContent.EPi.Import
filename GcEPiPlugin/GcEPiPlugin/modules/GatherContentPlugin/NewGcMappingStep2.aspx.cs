@@ -7,12 +7,12 @@ using EPiServer;
 using EPiServer.Security;
 using GatherContentConnect;
 using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
-using Newtonsoft.Json;
+
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "New Mapping Part 2", Description = "part 2 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingV2.aspx")]
-    public partial class NewGcMappingV2 : SimplePage
+    [GuiPlugIn(DisplayName = "New GC Mapping Step 2", Description = "part 2 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingStep2.aspx")]
+    public partial class NewGcMappingStep2 : SimplePage
     {
 
         private GcConnectClient _client;
@@ -76,7 +76,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 return;
             }
             Session["TemplateId"] = selectedValue;
-            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingV3.aspx");
+            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingStep3.aspx");
         }
     }
 }
