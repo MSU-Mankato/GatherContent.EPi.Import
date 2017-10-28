@@ -34,6 +34,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty())
             {
+                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
                 Visible = false;
                 return;
             }

@@ -11,7 +11,7 @@ using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "GatherContent", Description = "GatherContent Accounts and Settings", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/GatherContent.aspx")]
+    [GuiPlugIn(DisplayName = "GatherContent Config Setup", Description = "GatherContent Accounts and Settings", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/GatherContent.aspx")]
     public partial class GatherContent : SimplePage
     {
         private GcConnectClient _client;

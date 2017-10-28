@@ -17,7 +17,7 @@ using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "Review Items For Import", Description = "", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/ReviewItemsForImport.aspx")]
+    [GuiPlugIn(DisplayName = "Review GC Items For Import", Description = "", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/ReviewItemsForImport.aspx")]
     public partial class ReviewItemsForImport : SimplePage
     {
         protected GcConnectClient Client;
@@ -43,6 +43,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             Session["ProjectId"] = Server.UrlDecode(Request.QueryString["ProjectId"]);
             if (credentialsStore.IsNullOrEmpty() || Session["TemplateId"] == null || Session["ProjectId"] == null)
             {
+                Response.Write("<script>alert('This page is not directly accessible! Review your GatherContent items from Template Mappings page!');window.location='/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx'</script>");
                 Visible = false;
                 return;
             }

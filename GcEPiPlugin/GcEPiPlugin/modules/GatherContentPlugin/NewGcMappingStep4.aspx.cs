@@ -55,6 +55,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             if (credentialsStore.IsNullOrEmpty() || Session["ProjectId"] == null || Session["TemplateId"] == null 
                     || Session["PostType"] == null || (string) Session["PostType"] == "-1")
             {
+                Response.Write("<script>alert('Please set the Mapping Defaults!');window.location='/modules/GatherContentPlugin/NewGcMappingStep3.aspx'</script>");
                 Visible = false;
                 return;
             }

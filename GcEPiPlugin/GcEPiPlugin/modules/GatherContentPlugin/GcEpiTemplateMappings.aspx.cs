@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace GcEPiPlugin.modules.GatherContentPlugin
 {
-    [GuiPlugIn(DisplayName = "Template Mappings", Description = "Shows all the template mappings for a particular account.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx")]
+    [GuiPlugIn(DisplayName = "GC-EPi Template Mappings", Description = "Shows all the template mappings for a particular account.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx")]
     public partial class GcEpiTemplateMappings : SimplePage
     {
         protected GcConnectClient Client;
@@ -35,6 +35,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty())
             {
+                Response.Write("<script>alert('Please setup the GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
                 Visible = false;
                 return;
             }
@@ -48,7 +49,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
 
         protected void BtnAddNew_OnClick(object sender, EventArgs e)
         {
-            Response.Redirect("~/modules/GatherContentPlugin/NewGcMapping.aspx");
+            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingStep1.aspx");
         }
 
         protected void BtnDeleteTemplate_OnClick(object sender, EventArgs e)

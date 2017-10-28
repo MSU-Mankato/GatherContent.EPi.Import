@@ -36,6 +36,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty() || Session["ProjectId"] == null )
             {
+                Response.Write("<script>alert('Please select the GatherContent Project!');window.location='/modules/GatherContentPlugin/NewGcMappingStep1.aspx'</script>");
                 Visible = false;
                 return;
             }

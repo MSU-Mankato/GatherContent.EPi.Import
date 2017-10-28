@@ -41,6 +41,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty() || Session["ProjectId"] == null || Session["TemplateId"] == null)
             {
+                Response.Write("<script>alert('Please select the GatherContent Template!');window.location='/modules/GatherContentPlugin/NewGcMappingStep2.aspx'</script>");
                 Visible = false;
                 return;
             }
