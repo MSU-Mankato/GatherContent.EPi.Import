@@ -41,7 +41,14 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             Session["TemplateId"] = Server.UrlDecode(Request.QueryString["TemplateId"]);
             Session["ProjectId"] = Server.UrlDecode(Request.QueryString["ProjectId"]);
-            if (credentialsStore.IsNullOrEmpty() || Session["TemplateId"] == null || Session["ProjectId"] == null)
+            if (credentialsStore.IsNullOrEmpty())
+            {
+                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
+                Visible = false;
+                return;
+            }
+
+            if (Session["TemplateId"] == null || Session["ProjectId"] == null)
             {
                 Response.Write("<script>alert('This page is not directly accessible! Review your GatherContent items from Template Mappings page!');window.location='/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx'</script>");
                 Visible = false;
@@ -72,7 +79,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             if (e.Item.FindControl("statusName") is Label statusNameLabel)
                 statusNameLabel.Text = gcItem.CurrentStatus.Data.Name;
             if (e.Item.FindControl("updatedAt") is Label updatedAtLabel)
-                updatedAtLabel.Text = gcItem.UpdatedAt.Date.ToString();
+                updatedAtLabel.Text = gcItem.UpdatedAt.Date?.ToShortDateString();
             if (e.Item.FindControl("lnkIsImported") is HyperLink linkIsImported)
             {
                 linkIsImported.Text = "---------";

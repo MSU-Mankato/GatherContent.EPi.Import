@@ -34,7 +34,14 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
         private void PopulateForm()
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
-            if (credentialsStore.IsNullOrEmpty() || Session["ProjectId"] == null )
+            if (credentialsStore.IsNullOrEmpty())
+            {
+                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
+                Visible = false;
+                return;
+            }
+
+            if (Session["ProjectId"] == null )
             {
                 Response.Write("<script>alert('Please select the GatherContent Project!');window.location='/modules/GatherContentPlugin/NewGcMappingStep1.aspx'</script>");
                 Visible = false;
