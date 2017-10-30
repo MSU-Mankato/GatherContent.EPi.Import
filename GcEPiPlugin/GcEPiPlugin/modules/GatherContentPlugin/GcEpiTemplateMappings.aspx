@@ -62,7 +62,7 @@
                     <td><asp:HyperLink runat="server" ID="lnkProject" Target="_blank" CssClass="LinkNoUnderline">
                         <%#Client.GetProjectById(Convert.ToInt32(Eval("ProjectId"))).Name %>
                     </asp:HyperLink></td>
-					<td>Published <br> <%#Eval("PublishedDateTime") %></td>
+					<td>Published<br> <%#Eval("PublishedDateTime") %></td>
                 </tr>
             </ItemTemplate>
             <FooterTemplate>

@@ -158,7 +158,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             var newMapping = new GcDynamicTemplateMappings(Session["AccountId"].ToString(), Session["ProjectId"].ToString(),
                 Session["TemplateId"].ToString(), Session["PostType"].ToString(), Session["Author"].ToString(),
                 Session["DefaultStatus"].ToString(), Session["EpiContentType"].ToString(), (List<GcEpiStatusMap>)Session["StatusMaps"],
-                (List<string>)Session["EpiFieldMaps"], $"{DateTime.Now:G}");
+                (List<string>)Session["EpiFieldMaps"], $"{DateTime.Now:g}");
             var existingIndex = mappingsStore.FindIndex(i => i.TemplateId == Session["TemplateId"].ToString());
             if (existingIndex >= 0)
             GcDynamicTemplateMappings.DeleteItem(mappingsStore[existingIndex].Id);
