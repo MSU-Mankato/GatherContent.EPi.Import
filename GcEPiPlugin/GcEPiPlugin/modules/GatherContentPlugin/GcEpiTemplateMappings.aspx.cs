@@ -75,7 +75,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 var serializedStatusMaps = JsonConvert.SerializeObject(map.StatusMaps);
                 var serializedEpiFieldMaps = JsonConvert.SerializeObject(map.EpiFieldMaps);
                 buttonEditTemplateMap.PostBackUrl =
-                    $"~/modules/GatherContentPlugin/NewGcMappingV4.aspx?AccountId={map.AccountId}" +
+                    $"~/modules/GatherContentPlugin/NewGcMappingStep4.aspx?AccountId={map.AccountId}" +
                     $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
                     $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={serializedStatusMaps}" +
                     $"&EpiFieldMaps={serializedEpiFieldMaps}&PublishedDateTime={map.PublishedDateTime}";
