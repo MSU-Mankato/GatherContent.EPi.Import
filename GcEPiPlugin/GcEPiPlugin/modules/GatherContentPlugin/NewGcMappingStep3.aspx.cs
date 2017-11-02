@@ -36,6 +36,14 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             }
         }
 
+        private void EnableDdl()
+        {
+            if (!Request.QueryString.HasKeys()) return;
+            if (Server.UrlDecode(Request.QueryString["ddlEpiContentType"]) != "enable") return;
+            ddlEpiContentTypes.Enabled = true;
+            ddlEpiContentTypes.Visible = true;
+        }
+
         private void PopulateForm()
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
@@ -52,6 +60,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 Visible = false;
                 return;
             }
+            EnableDdl();
             _client = new GcConnectClient(credentialsStore.ToList().First().ApiKey,
                 credentialsStore.ToList().First().Email);
             var projectId = Convert.ToInt32(Session["ProjectId"]);
@@ -150,6 +159,13 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             var selectedAuthor = Request.Form["ddlAuthors"];
             var selectedEPiStatus = Request.Form["ddlStatuses"];
             var selectedEpiContentType = Request.Form["ddlEpiContentTypes"];
+            if (selectedEpiContentType == null)
+            {
+                Response.Write(selectedPostType == "PageType"
+                    ? "<script>alert('Invalid Page type! Please try again!')</script>"
+                    : "<script>alert('Invalid Block type! Please try again!')</script>");
+                return;
+            }
 			Session["PostType"] = selectedPostType;
 			Session["Author"] = selectedAuthor;
 			Session["DefaultStatus"] = selectedEPiStatus;

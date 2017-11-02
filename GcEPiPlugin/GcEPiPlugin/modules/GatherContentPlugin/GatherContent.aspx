@@ -14,9 +14,9 @@
         <p>
             <asp:Label runat="server" AssociatedControlID="txtApiKey">API Key</asp:Label> <asp:TextBox runat="server" ID="txtApiKey" autocomplete="off" Width="400px" />
         </p>
-        <p>
+        <%--<p>
             <asp:Label runat="server" AssociatedControlID="txtPlatformUrl">Platform URL</asp:Label> <asp:TextBox runat="server" ID="txtPlatformUrl" autocomplete="off" Width="300px" />
-        </p>
+        </p>--%>
         <p>
         <asp:Label runat="server" AssociatedControlID="ddlGcAccounts">Accounts</asp:Label> 
             <asp:DropDownList runat="server" ID="ddlGcAccounts"/>
