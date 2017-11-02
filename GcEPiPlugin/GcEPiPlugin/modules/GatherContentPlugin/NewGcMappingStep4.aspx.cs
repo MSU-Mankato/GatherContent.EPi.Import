@@ -48,7 +48,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             Session["EpiFieldMaps"] = JsonConvert.DeserializeObject<List<string>>(Server.UrlDecode(Request.QueryString["EpiFieldMaps"]));
             Session["PublishedDateTime"] = Server.UrlDecode(Request.QueryString["PublishedDateTime"]);
         }
-
+        
         private void PopulateForm()
         {
             var credentialsStore = GcDynamicCredentials.RetrieveStore();

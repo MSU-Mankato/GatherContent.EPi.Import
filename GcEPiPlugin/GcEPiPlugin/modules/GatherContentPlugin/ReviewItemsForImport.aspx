@@ -38,7 +38,7 @@
                         <td>Item</td>
                         <td>Status</td>
                         <td>Updated</td>
-                        <td>Parent Page/Block ID</td>
+                        <td>Parent Page/Block</td>
                         <td>Import Status</td>
                     </tr>
                     </thead>
@@ -59,7 +59,8 @@
                         <td><asp:Label runat="server" ID="updatedAt">
                         </asp:Label></td>
                         <td>
-                            <asp:TextBox runat="server" ID="txtParentId" Enabled="False"></asp:TextBox>
+                            <asp:DropDownList runat="server" ID="ddlParentId" Enabled="False">
+                            </asp:DropDownList>
                         </td>
                         <td>
                             <asp:HyperLink runat="server" Target="_blank" ID="lnkIsImported" CssClass="LinkNoUnderline"></asp:HyperLink>

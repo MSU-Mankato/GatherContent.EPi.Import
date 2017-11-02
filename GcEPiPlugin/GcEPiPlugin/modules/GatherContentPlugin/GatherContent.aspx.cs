@@ -50,7 +50,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             else
             {
                 Response.Write("<script>alert('Invalid Email Address or ApiKey! Try again!')</script>");
-                txtPlatformUrl.Text = "";
+                //txtPlatformUrl.Text = "";
                 GcDynamicCredentials.ClearStore();
             }
             PopulateForm();
@@ -67,14 +67,12 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             if (!credentialsStore.ToList().First().AccountId.IsNullOrEmpty())
             {
                 ddlGcAccounts.SelectedValue = credentialsStore.ToList().First().AccountId;
-                txtPlatformUrl.Text =
-                    $"https://{_client.GetAccountById(Convert.ToInt32(credentialsStore.ToList().First().AccountId)).Slug}.gathercontent.com";
+                //txtPlatformUrl.Text = $"https://{_client.GetAccountById(Convert.ToInt32(credentialsStore.ToList().First().AccountId)).Slug}.gathercontent.com";
             }   
             else
             {
                 ddlGcAccounts.SelectedIndex = 0;
-                txtPlatformUrl.Text =
-                    $"https://{_client.GetAccountById(Convert.ToInt32(ddlGcAccounts.SelectedValue)).Slug}.gathercontent.com";
+                //txtPlatformUrl.Text = $"https://{_client.GetAccountById(Convert.ToInt32(ddlGcAccounts.SelectedValue)).Slug}.gathercontent.com";
             }
             
         }

@@ -126,16 +126,53 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                     }
                 } 
             }
-            if (e.Item.FindControl("txtParentId") is TextBox textBoxParentId)
+            if (e.Item.FindControl("ddlParentId") is DropDownList dropDownListParentId)
             {
-                textBoxParentId.ID = $"txt{gcItem.Id}";
-                if (enableItemFlag)
+                dropDownListParentId.ID = $"txt{gcItem.Id}";
+                if (currentMapping.PostType == "PageType")
                 {
-                    textBoxParentId.Enabled = true;
+                    dropDownListParentId.Items.Add(new ListItem("Root Page", "1"));
+                    foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
+                    {
+                        try
+                        {
+                            var pageData = contentRepository.Get<PageData>(cr);
+                            if(pageData.ContentLink.ID == 2 || pageData.ParentLink.ID == 2) continue;
+                            dropDownListParentId.Items.Add(new ListItem(pageData.PageName, pageData.ContentLink.ID.ToString()));
+                        }
+                        catch (TypeMismatchException ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    }
                 }
                 else
                 {
-                    textBoxParentId.Text = parentId;
+                    dropDownListParentId.Items.Add(new ListItem("Root Folder", "3"));
+                    foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse("3")))
+                    {
+                        try
+                        {
+                            var blockData = contentRepository.Get<BlockData>(cr);
+                            // ReSharper disable once SuspiciousTypeConversion.Global
+                            var content = blockData as IContent;
+                            // ReSharper disable once PossibleNullReferenceException
+                            if(content.ContentLink.ID == 2 || content.ContentLink.ID == 2) continue;
+                            dropDownListParentId.Items.Add(new ListItem(content.Name, content.ContentLink.ID.ToString()));
+                        }
+                        catch (TypeMismatchException ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    }
+                }
+                if (enableItemFlag)
+                {
+                    dropDownListParentId.Enabled = true;
+                }
+                else
+                {
+                    dropDownListParentId.SelectedValue = parentId;
                 }
             }
             if (e.Item.FindControl("chkItem") is CheckBox checkBoxItem)
