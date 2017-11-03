@@ -92,7 +92,11 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 {
                     var contentTypeList = contentTypeRepository.List().OfType<PageType>();
                     var pageTypes = contentTypeList as IList<PageType> ?? contentTypeList.ToList();
-                    pageTypes.ForEach(i => ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "page-" + i.Name)));
+                    pageTypes.ForEach(i =>
+                    {
+                        if (i.ID != 1 && i.ID != 2)
+                        ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "page-" + i.Name));
+                    });
                     ddlEpiContentTypes.Enabled = true;
                     btnNextStep.Enabled = true;
                 }

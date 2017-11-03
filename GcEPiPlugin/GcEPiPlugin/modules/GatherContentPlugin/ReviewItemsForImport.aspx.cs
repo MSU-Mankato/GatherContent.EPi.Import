@@ -369,6 +369,11 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             {
                 Response.Write($"<script> alert('{importCount} Items successfully imported!') </script>");
             }
+            else if (importCount == 0)
+            {
+                Response.Write("<script> alert('No items selected! Please select the checkbox next to the item you would" +
+                               "like to import!') </script>");
+            }
             PopulateForm();
         }
     }

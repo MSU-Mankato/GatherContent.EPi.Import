@@ -54,6 +54,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
 
         protected void BtnDeleteTemplate_OnClick(object sender, EventArgs e)
         {
+            var mappingCount = 0;
             foreach (var key in Request.Form)
             {
                 if (!key.ToString().StartsWith("rptTableMappings")) continue;
@@ -62,7 +63,11 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 var mappingsStore = GcDynamicTemplateMappings.RetrieveStore();
                 var index = mappingsStore.FindIndex(i => i.TemplateId == templateId);
                 GcDynamicTemplateMappings.DeleteItem(mappingsStore[index].Id);
+                mappingCount++;
             }
+                Response.Write(mappingCount > 0 ? $"<script>alert('{mappingCount} template mappings successfully deleted!');</script>":
+                    "<script>alert('No mappings selected! Please select the checkbox next to the " +
+                               "mapping you would like to delete!');</script>");
             PopulateForm();
         }
 
