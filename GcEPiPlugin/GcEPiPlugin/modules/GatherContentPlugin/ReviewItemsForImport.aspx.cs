@@ -371,7 +371,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             }
             else if (importCount == 0)
             {
-                Response.Write("<script> alert('No items selected! Please select the checkbox next to the item you would" +
+                Response.Write("<script> alert('No items selected! Please select the checkbox next to the item you would " +
                                "like to import!') </script>");
             }
             PopulateForm();
