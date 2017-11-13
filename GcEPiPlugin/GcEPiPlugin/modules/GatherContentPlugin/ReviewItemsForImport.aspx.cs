@@ -70,6 +70,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             var gcItem = e.Item.DataItem as GcItem;
             var enableItemFlag = true;
             var credentialsStore = GcDynamicCredentials.RetrieveStore().ToList().First();
+            var contentStore = GcDynamicImports.RetrieveStore();
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var parentId = "";
             Client = new GcConnectClient(credentialsStore.ApiKey, credentialsStore.Email);
@@ -85,17 +86,24 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 linkIsImported.Text = "---------";
                 if (currentMapping.PostType == "PageType")
                 {
-                    foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
+                    foreach (var cs in contentStore)
                     {
                         try
                         {
-                            var pageData = contentRepository.Get<PageData>(cr);
-                            if (pageData.PageName != gcItem.Name || pageData.ParentLink.ID == 2) continue;
-                            linkIsImported.Text = "Page Imported";
-                            linkIsImported.NavigateUrl = pageData.LinkURL;
-                            parentId = pageData.ParentLink.ID.ToString();
-                            enableItemFlag = false;
-                            break;
+                            if (cs.ItemId != gcItem.Id) continue;
+                            var pageData = contentRepository.Get<PageData>(cs.ContentGuid);
+                            if (pageData.ParentLink.ID == 2)
+                            {
+                                GcDynamicImports.DeleteItem(cs.Id);
+                            }
+                            else
+                            {
+                                linkIsImported.Text = "Page Imported";
+                                linkIsImported.NavigateUrl = pageData.LinkURL;
+                                parentId = pageData.ParentLink.ID.ToString();
+                                enableItemFlag = false;
+                                break;
+                            }
                         }
                         catch (TypeMismatchException ex)
                         {
@@ -105,26 +113,32 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 }
                 else
                 {
-                    foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse("3")))
+                    foreach (var cs in contentStore)
                     {
                         try
                         {
-                            var blockData = contentRepository.Get<BlockData>(cr);
+                            if (cs.ItemId != gcItem.Id) continue;
                             // ReSharper disable once SuspiciousTypeConversion.Global
-                            var content = blockData as IContent;
+                            var blockData = contentRepository.Get<BlockData>(cs.ContentGuid) as IContent;
                             // ReSharper disable once PossibleNullReferenceException
-                            if (content.Name != gcItem.Name || content.ParentLink.ID == 2) continue;
-                            linkIsImported.Text = "Block Imported";
-                            parentId = content.ParentLink.ID.ToString();
-                            enableItemFlag = false;
-                            break;
+                            if (blockData.ParentLink.ID == 2)
+                            {
+                                GcDynamicImports.DeleteItem(cs.Id);
+                            }
+                            else
+                            {
+                                linkIsImported.Text = "Block Imported";
+                                parentId = blockData.ParentLink.ID.ToString();
+                                enableItemFlag = false;
+                                break;
+                            }
                         }
                         catch (TypeMismatchException ex)
                         {
                             Console.WriteLine(ex);
                         }
                     }
-                } 
+                }
             }
             if (e.Item.FindControl("ddlParentId") is DropDownList dropDownListParentId)
             {
@@ -137,7 +151,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                         try
                         {
                             var pageData = contentRepository.Get<PageData>(cr);
-                            if(pageData.ContentLink.ID == 2 || pageData.ParentLink.ID == 2) continue;
+                            if (pageData.ContentLink.ID == 2 || pageData.ParentLink.ID == 2) continue;
                             dropDownListParentId.Items.Add(new ListItem(pageData.PageName, pageData.ContentLink.ID.ToString()));
                         }
                         catch (TypeMismatchException ex)
@@ -157,7 +171,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                             // ReSharper disable once SuspiciousTypeConversion.Global
                             var content = blockData as IContent;
                             // ReSharper disable once PossibleNullReferenceException
-                            if(content.ContentLink.ID == 2 || content.ContentLink.ID == 2) continue;
+                            if (content.ContentLink.ID == 2 || content.ContentLink.ID == 2) continue;
                             dropDownListParentId.Items.Add(new ListItem(content.Name, content.ContentLink.ID.ToString()));
                         }
                         catch (TypeMismatchException ex)
@@ -184,7 +198,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                     checkBoxItem.Visible = true;
                     btnImportItem.Enabled = true;
                 }
-            }  
+            }
             if (!(e.Item.FindControl("lnkItemName") is HyperLink linkItemName)) return;
             linkItemName.Text = gcItem.Name;
             linkItemName.NavigateUrl = $"https://{Client.GetAccountById(Convert.ToInt32(credentialsStore.AccountId)).Slug}" +
@@ -211,11 +225,11 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                 switch (currentMapping.PostType)
                 {
                     case "PageType":
-                        var pageParent = parentId.IsEmpty() ? ContentReference.RootPage:ContentReference.Parse(parentId);
+                        var pageParent = parentId.IsEmpty() ? ContentReference.RootPage : ContentReference.Parse(parentId);
                         var selectedPageType = currentMapping.EpiContentType;
                         var pageTypeList = contentTypeRepository.List().OfType<PageType>();
                         var pageTypes = pageTypeList as List<PageType> ?? pageTypeList.ToList();
-                        foreach (var pageType in pageTypes)                                                                                                                                              
+                        foreach (var pageType in pageTypes)
                         {
                             if (selectedPageType.Substring(5) != pageType.Name) continue;
                             PageData myPage;
@@ -264,23 +278,25 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                                 var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
                                 var gcStatusIdForThisItem = item.CurrentStatus.Data.Id;
                                 saveActions.ForEach(x => {
-                                    if (x.ToString() == currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] == 
-                                        gcStatusIdForThisItem).MappedEpiserverStatus.Split('~')[0])
+                                    if (x.ToString() == currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] ==
+                                                                                            gcStatusIdForThisItem).MappedEpiserverStatus.Split('~')[0])
                                     {
                                         contentRepository.Save(myPage, x, AccessLevel.Administer);
+                                        var dds = new GcDynamicImports(myPage.ContentGuid, item.Id, DateTime.Now);
+                                        GcDynamicImports.SaveStore(dds);
                                     }
                                     else if (currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] == gcStatusIdForThisItem)
-                                    .MappedEpiserverStatus.Split('~')[0] == "Use Default Status")
-                                         {
-                                            if (x.ToString() == currentMapping.DefaultStatus)
-                                            {
-                                                    contentRepository.Save(myPage, x, AccessLevel.Administer);
-                                            }
-                                         }
+                                                 .MappedEpiserverStatus.Split('~')[0] == "Use Default Status")
+                                    {
+                                        if (x.ToString() != currentMapping.DefaultStatus) return;
+                                        contentRepository.Save(myPage, x, AccessLevel.Administer);
+                                        var dds = new GcDynamicImports(myPage.ContentGuid, item.Id, DateTime.Now);
+                                        GcDynamicImports.SaveStore(dds);
+                                    }
                                 });
                                 importCount++;
                             }
-                        }       
+                        }
                         break;
                     case "BlockType":
                         var blockParent = parentId.IsEmpty() ? ContentReference.Parse("3") : ContentReference.Parse(parentId);
@@ -345,15 +361,17 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                                                                                             gcStatusIdForThisItem).MappedEpiserverStatus.Split('~')[0])
                                     {
                                         contentRepository.Save(content, x, AccessLevel.Administer);
+                                        var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now);
+                                        GcDynamicImports.SaveStore(dds);
                                     }
                                     else if (currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] == gcStatusIdForThisItem)
                                                  .MappedEpiserverStatus.Split('~')[0] == "Use Default Status")
-                                         {
-                                            if (x.ToString() == currentMapping.DefaultStatus)
-                                            {
-                                                    contentRepository.Save(content, x, AccessLevel.Administer);
-                                            }
-                                         }
+                                    {
+                                        if (x.ToString() != currentMapping.DefaultStatus) return;
+                                        contentRepository.Save(content, x, AccessLevel.Administer);
+                                        var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now);
+                                        GcDynamicImports.SaveStore(dds);
+                                    }
                                 });
                                 importCount++;
                             }
