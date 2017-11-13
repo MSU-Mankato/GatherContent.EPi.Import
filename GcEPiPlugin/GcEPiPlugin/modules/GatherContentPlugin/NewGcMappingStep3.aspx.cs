@@ -70,7 +70,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
             templateName.Text = _client.GetTemplateById(templateId).Name;
             templateDescription.Text = _client.GetTemplateById(templateId).Description;
             var userProvider = ServiceLocator.Current.GetInstance<UIUserProvider>();
-            var epiUsers = userProvider.GetAllUsers(0, 200, out int totalRecords);
+            var epiUsers = userProvider.GetAllUsers(0, 200, out int _);
             epiUsers.ToList().ForEach(epiUser => ddlAuthors.Items.Add(new ListItem(epiUser.Username, epiUser.Username)));
             var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
             saveActions.ToList().ForEach(i => ddlStatuses.Items.Add(new ListItem(i.ToString(), i.ToString())));
