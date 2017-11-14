@@ -207,6 +207,7 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
 
         protected void BtnImportItem_OnClick(object sender, EventArgs e)
         {
+            var contentStore = GcDynamicImports.RetrieveStore();
             var importCount = 0;
             foreach (var key in Request.Form)
             {
@@ -243,16 +244,23 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                                 Response.Write("<script> alert('Invalid Parent Page ID! Try again!') </script>");
                                 break;
                             }
-                            foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
+                            foreach (var cs in contentStore)
                             {
                                 try
                                 {
-                                    var pageData = contentRepository.Get<PageData>(cr);
-                                    if (pageData.PageName != item.Name || pageData.ParentLink.ID == 2) continue;
-                                    Response.Write("<script> alert('Page Already Exists!') </script>");
-                                    importItem = false;
-                                    importCount = 0;
-                                    break;
+                                    if (cs.ItemId != item.Id) continue;
+                                    var pageData = contentRepository.Get<PageData>(cs.ContentGuid);
+                                    if (pageData.ParentLink.ID == 2)
+                                    {
+                                        GcDynamicImports.DeleteItem(cs.Id);
+                                    }
+                                    else
+                                    {
+                                        Response.Write("<script> alert('Page Already Exists!') </script>");
+                                        importItem = false;
+                                        importCount = 0;
+                                        break;
+                                    }
                                 }
                                 catch (TypeMismatchException ex)
                                 {
@@ -317,18 +325,24 @@ namespace GcEPiPlugin.modules.GatherContentPlugin
                                 Response.Write("<script> alert('Invalid Parent Block ID! Try again!') </script>");
                                 break;
                             }
-                            foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse("3")))
+                            foreach (var cs in contentStore)
                             {
                                 try
                                 {
-                                    var blockData = contentRepository.Get<BlockData>(cr);
+                                    if (cs.ItemId != item.Id) continue;
                                     // ReSharper disable once SuspiciousTypeConversion.Global
-                                    var contentBlock = blockData as IContent;
+                                    var blockData = contentRepository.Get<BlockData>(cs.ContentGuid) as IContent;
                                     // ReSharper disable once PossibleNullReferenceException
-                                    if (contentBlock.Name != item.Name || contentBlock.ParentLink.ID == 2) continue;
-                                    Response.Write("<script> alert('Block Already Exists!') </script>");
-                                    importItem = false;
-                                    break;
+                                    if (blockData.ParentLink.ID == 2)
+                                    {
+                                        GcDynamicImports.DeleteItem(cs.Id);
+                                    }
+                                    else
+                                    {
+                                        Response.Write("<script> alert('Block Already Exists!') </script>");
+                                        importItem = false;
+                                        break;
+                                    }
                                 }
                                 catch (TypeMismatchException ex)
                                 {
