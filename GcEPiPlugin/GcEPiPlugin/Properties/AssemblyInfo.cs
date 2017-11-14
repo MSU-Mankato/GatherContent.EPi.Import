@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GcEPiPlugin")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("GatherContent EPiServer Connector")]
+[assembly: AssemblyDescription("EPiServer Admin add-on for importing items from GatherContent")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GcEPiPlugin")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCompany("Minnesota State University, Mankato")]
+[assembly: AssemblyProduct("GatherContentEPiServerConnector")]
+[assembly: AssemblyCopyright("Copyright © Minnesota State University, Mankato  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.7.1.1")]
+[assembly: AssemblyFileVersion("0.7.1.1")]

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>GatherContent.EpiServer.GcEPiPlugin</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <!--<licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
+    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>-->
+    <iconUrl>http://www.mnsu.edu/images/icons/mnsu-flame.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>GatherContent EPiServer Connector</description>
+    <releaseNotes>Pre-Release</releaseNotes>
+    <copyright>Copyright © 2017 Minnesota State University,Mankato</copyright>
+    <language>en-US</language>
+    <tags>Episerver, GatherContent, CMS</tags>
+    <dependencies>
+      <dependency id="EPiServer.CMS" version="7.0.0" />
+      <dependency id="GatherContentConnect" version="0.7.1-ci-20171113-223827" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="lib\GcEPiPlugin.dll" target="lib\GcEPiPlugin.dll" />
+    <file src="modules\GatherContentPlugin\GatherContent.aspx" target="modules\GatherContentPlugin\GatherContent.aspx" />
+    <file src="modules\GatherContentPlugin\GcEpiTemplateMappings.aspx" target="modules\GatherContentPlugin\GcEpiTemplateMappings.aspx" />
+    <file src="modules\GatherContentPlugin\NewGcMappingStep1.aspx" target="modules\GatherContentPlugin\NewGcMappingStep1.aspx" />
+    <file src="modules\GatherContentPlugin\NewGcMappingStep2.aspx" target="modules\GatherContentPlugin\NewGcMappingStep2.aspx" />
+    <file src="modules\GatherContentPlugin\NewGcMappingStep3.aspx" target="modules\GatherContentPlugin\NewGcMappingStep3.aspx" />
+    <file src="modules\GatherContentPlugin\NewGcMappingStep4.aspx" target="modules\GatherContentPlugin\NewGcMappingStep4.aspx" />
+    <file src="modules\GatherContentPlugin\ReviewItemsForImport.aspx" target="modules\GatherContentPlugin\ReviewItemsForImport.aspx" />
+  </files>
+</package>

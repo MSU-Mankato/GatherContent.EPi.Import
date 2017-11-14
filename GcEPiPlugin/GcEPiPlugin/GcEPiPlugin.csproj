@@ -275,6 +275,7 @@
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GcEPiPlugin.nuspec" />
     <Content Include="modules\GatherContentPlugin\GatherContent.aspx" />
     <Content Include="modules\GatherContentPlugin\GcEpiTemplateMappings.aspx" />
     <Content Include="modules\GatherContentPlugin\NewGcMappingStep1.aspx" />
