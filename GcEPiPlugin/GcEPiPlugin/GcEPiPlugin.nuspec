@@ -17,7 +17,7 @@
     <tags>Episerver, GatherContent, CMS</tags>
     <dependencies>
       <dependency id="EPiServer.CMS" version="7.0.0" />
-      <dependency id="GatherContentConnect" version="0.7.1-ci-20171113-223827" />
+      <dependency id="GatherContentConnect" version="0.7.1-ci-20171115-163745" />
     </dependencies>
   </metadata>
   <files>
