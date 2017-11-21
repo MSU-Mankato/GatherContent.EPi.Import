@@ -1,4 +1,4 @@
-<%@ Page Language="c#" Codebehind="ReviewItemsForImport.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentPlugin.ReviewItemsForImport" Title="ReviewItemsForImport" %>
+<%@ Page Language="c#" Codebehind="ReviewItemsForImport.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentImport.ReviewItemsForImport" Title="ReviewItemsForImport" %>
 <html>
 <head id="Head1" runat="server">
     <title>Review Items For Import</title>

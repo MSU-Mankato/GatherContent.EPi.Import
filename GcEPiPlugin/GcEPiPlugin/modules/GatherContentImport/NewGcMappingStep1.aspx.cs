@@ -4,11 +4,11 @@ using System.Web.UI.WebControls;
 using Castle.Core.Internal;
 using EPiServer.PlugIn;
 using GatherContentConnect;
-using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses;
 using EPiServer;
 using EPiServer.Security;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentImport
 {
     [GuiPlugIn(DisplayName = "New GC Mapping Step 1", Description = "This is where the new gather content mapping starts from.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingStep1.aspx")]
     public partial class NewGcMappingStep1 : SimplePage

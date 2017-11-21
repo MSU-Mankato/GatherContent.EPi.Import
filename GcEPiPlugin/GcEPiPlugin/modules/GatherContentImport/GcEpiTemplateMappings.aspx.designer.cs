@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GcEPiPlugin.modules.GatherContentPlugin {
+namespace GcEPiPlugin.modules.GatherContentImport {
     
     
-    public partial class ReviewItemsForImport {
+    public partial class GcEpiTemplateMappings {
         
         /// <summary>
         /// Head1 control.
@@ -31,57 +31,30 @@ namespace GcEPiPlugin.modules.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// templateName control.
+        /// btnAddnew control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label templateName;
+        protected global::System.Web.UI.WebControls.Button btnAddnew;
         
         /// <summary>
-        /// templateDescription control.
+        /// rptTableMappings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label templateDescription;
+        protected global::System.Web.UI.WebControls.Repeater rptTableMappings;
         
         /// <summary>
-        /// projectName control.
+        /// btnDeleteTemplate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label projectName;
-        
-        /// <summary>
-        /// rptGcItems control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptGcItems;
-        
-        /// <summary>
-        /// btnPrevious control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnPrevious;
-        
-        /// <summary>
-        /// btnImportItem control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnImportItem;
+        protected global::System.Web.UI.WebControls.Button btnDeleteTemplate;
     }
 }

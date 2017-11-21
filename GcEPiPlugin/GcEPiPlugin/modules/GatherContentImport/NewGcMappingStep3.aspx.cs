@@ -7,14 +7,14 @@ using EPiServer.DataAccess;
 using EPiServer.PlugIn;
 using EPiServer.Security;
 using GatherContentConnect;
-using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
-using GcEPiPlugin.modules.GatherContentPlugin.GcEpiObjects;
+using GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentImport.GcEpiObjects;
 using Castle.Core.Internal;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Security;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentImport
 {
     [GuiPlugIn(DisplayName = "New GC Mapping Step 3", Description = "part 3 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingStep3.aspx")]
     public partial class NewGcMappingStep3 : SimplePage

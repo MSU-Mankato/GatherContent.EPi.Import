@@ -13,9 +13,9 @@ using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using GatherContentConnect;
 using GatherContentConnect.Objects;
-using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentImport
 {
     [GuiPlugIn(DisplayName = "Review GC Items For Import", Description = "", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/ReviewItemsForImport.aspx")]
     public partial class ReviewItemsForImport : SimplePage

@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GcEPiPlugin.modules.GatherContentPlugin {
+namespace GcEPiPlugin.modules.GatherContentImport {
     
     
-    public partial class GcEpiTemplateMappings {
+    public partial class GatherContent {
         
         /// <summary>
         /// Head1 control.
@@ -22,6 +22,15 @@ namespace GcEPiPlugin.modules.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlHead Head1;
         
         /// <summary>
+        /// RequiredResourcesHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::EPiServer.Framework.Web.WebControls.RequiredClientResources RequiredResourcesHeader;
+        
+        /// <summary>
         /// form1 control.
         /// </summary>
         /// <remarks>
@@ -31,30 +40,39 @@ namespace GcEPiPlugin.modules.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// btnAddnew control.
+        /// txtEmailAddress control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAddnew;
+        protected global::System.Web.UI.WebControls.TextBox txtEmailAddress;
         
         /// <summary>
-        /// rptTableMappings control.
+        /// txtApiKey control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptTableMappings;
+        protected global::System.Web.UI.WebControls.TextBox txtApiKey;
         
         /// <summary>
-        /// btnDeleteTemplate control.
+        /// ddlGcAccounts control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDeleteTemplate;
+        protected global::System.Web.UI.WebControls.DropDownList ddlGcAccounts;
+        
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSave;
     }
 }

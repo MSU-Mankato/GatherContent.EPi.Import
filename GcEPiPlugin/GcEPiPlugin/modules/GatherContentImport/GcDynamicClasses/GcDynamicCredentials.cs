@@ -4,7 +4,7 @@ using System.Linq;
 using EPiServer.Data;
 using EPiServer.Data.Dynamic;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses
+namespace GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses
 {
     [EPiServerDataStore(AutomaticallyRemapStore = true)]
     public class GcDynamicCredentials : IDynamicData

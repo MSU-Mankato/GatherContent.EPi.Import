@@ -1,4 +1,4 @@
-<%@ Page Language="c#" Codebehind="GcEpiTemplateMappings.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentPlugin.GcEpiTemplateMappings" Title="Template Mappings" %>
+<%@ Page Language="c#" Codebehind="GcEpiTemplateMappings.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentImport.GcEpiTemplateMappings" Title="Template Mappings" %>
 <html>
 <head id="Head1" runat="server">
     <title>New GatherContent Mapping</title>

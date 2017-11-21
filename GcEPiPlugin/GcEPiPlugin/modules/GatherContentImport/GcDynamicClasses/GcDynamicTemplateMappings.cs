@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Data;
 using EPiServer.Data.Dynamic;
-using GcEPiPlugin.modules.GatherContentPlugin.GcEpiObjects;
+using GcEPiPlugin.modules.GatherContentImport.GcEpiObjects;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses
+namespace GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses
 {
     [EPiServerDataStore(AutomaticallyRemapStore = true)]
     public class GcDynamicTemplateMappings : IDynamicData

@@ -6,10 +6,10 @@ using EPiServer.PlugIn;
 using EPiServer.Security;
 using EPiServer;
 using GatherContentConnect;
-using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses;
 using Newtonsoft.Json;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentImport
 {
     [GuiPlugIn(DisplayName = "GC-EPi Template Mappings", Description = "Shows all the template mappings for a particular account.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx")]
     public partial class GcEpiTemplateMappings : SimplePage

@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GcEPiPlugin.modules.GatherContentPlugin {
+namespace GcEPiPlugin.modules.GatherContentImport {
     
     
-    public partial class NewGcMappingStep3 {
+    public partial class NewGcMappingStep4 {
         
         /// <summary>
         /// Head1 control.
@@ -58,49 +58,13 @@ namespace GcEPiPlugin.modules.GatherContentPlugin {
         protected global::System.Web.UI.WebControls.Label projectName;
         
         /// <summary>
-        /// ddlPostTypes control.
+        /// tableMappings control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPostTypes;
-        
-        /// <summary>
-        /// ddlEpiContentTypes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlEpiContentTypes;
-        
-        /// <summary>
-        /// ddlAuthors control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlAuthors;
-        
-        /// <summary>
-        /// ddlStatuses control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlStatuses;
-        
-        /// <summary>
-        /// tableGcStatusesMap control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tableGcStatusesMap;
+        protected global::System.Web.UI.WebControls.Table tableMappings;
         
         /// <summary>
         /// btnPreviousStep control.
@@ -112,12 +76,12 @@ namespace GcEPiPlugin.modules.GatherContentPlugin {
         protected global::System.Web.UI.WebControls.Button btnPreviousStep;
         
         /// <summary>
-        /// btnNextStep control.
+        /// btnSaveMapping control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnNextStep;
+        protected global::System.Web.UI.WebControls.Button btnSaveMapping;
     }
 }

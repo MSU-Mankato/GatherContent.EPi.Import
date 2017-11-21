@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GcEPiPlugin.modules.GatherContentPlugin {
+namespace GcEPiPlugin.modules.GatherContentImport {
     
     
     public partial class NewGcMappingStep2 {

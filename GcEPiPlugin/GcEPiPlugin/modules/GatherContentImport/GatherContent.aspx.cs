@@ -7,9 +7,9 @@ using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
 using Castle.Core.Internal;
-using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentImport
 {
     [GuiPlugIn(DisplayName = "GatherContent Config Setup", Description = "GatherContent Accounts and Settings", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/GatherContent.aspx")]
     public partial class GatherContent : SimplePage

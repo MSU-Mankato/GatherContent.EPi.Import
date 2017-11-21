@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GcEPiPlugin.modules.GatherContentPlugin {
+namespace GcEPiPlugin.modules.GatherContentImport {
     
     
-    public partial class GatherContent {
+    public partial class ReviewItemsForImport {
         
         /// <summary>
         /// Head1 control.
@@ -22,15 +22,6 @@ namespace GcEPiPlugin.modules.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlHead Head1;
         
         /// <summary>
-        /// RequiredResourcesHeader control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::EPiServer.Framework.Web.WebControls.RequiredClientResources RequiredResourcesHeader;
-        
-        /// <summary>
         /// form1 control.
         /// </summary>
         /// <remarks>
@@ -40,39 +31,57 @@ namespace GcEPiPlugin.modules.GatherContentPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// txtEmailAddress control.
+        /// templateName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmailAddress;
+        protected global::System.Web.UI.WebControls.Label templateName;
         
         /// <summary>
-        /// txtApiKey control.
+        /// templateDescription control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtApiKey;
+        protected global::System.Web.UI.WebControls.Label templateDescription;
         
         /// <summary>
-        /// ddlGcAccounts control.
+        /// projectName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlGcAccounts;
+        protected global::System.Web.UI.WebControls.Label projectName;
         
         /// <summary>
-        /// btnSave control.
+        /// rptGcItems control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
+        protected global::System.Web.UI.WebControls.Repeater rptGcItems;
+        
+        /// <summary>
+        /// btnPrevious control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnPrevious;
+        
+        /// <summary>
+        /// btnImportItem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnImportItem;
     }
 }

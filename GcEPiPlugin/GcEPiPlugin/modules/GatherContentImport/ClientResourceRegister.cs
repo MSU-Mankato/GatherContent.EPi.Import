@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using EPiServer.Framework.Web.Resources;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentImport
 {
     [ClientResourceRegister]
     public class ClientResourceRegister : IClientResourceRegister

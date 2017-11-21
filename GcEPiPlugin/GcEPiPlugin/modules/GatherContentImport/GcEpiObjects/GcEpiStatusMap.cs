@@ -1,6 +1,6 @@
 ﻿using EPiServer.Data.Dynamic;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin.GcEpiObjects
+namespace GcEPiPlugin.modules.GatherContentImport.GcEpiObjects
 {
     [EPiServerDataStore(AutomaticallyRemapStore = true)]
     public class GcEpiStatusMap

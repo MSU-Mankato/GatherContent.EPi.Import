@@ -9,11 +9,11 @@ using EPiServer;
 using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 using GatherContentConnect;
-using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
-using GcEPiPlugin.modules.GatherContentPlugin.GcEpiObjects;
+using GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentImport.GcEpiObjects;
 using Newtonsoft.Json;
 
-namespace GcEPiPlugin.modules.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentImport
 {
     [GuiPlugIn(DisplayName = "New GC Mapping Part 4", Description = "part 4 of gc mapping", Area = PlugInArea.AdminMenu,
         Url = "~/modules/GatherContentPlugin/NewGcMappingStep4.aspx")]

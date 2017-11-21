@@ -6,10 +6,10 @@ using EPiServer.PlugIn;
 using EPiServer;
 using EPiServer.Security;
 using GatherContentConnect;
-using GcEPiPlugin.modules.GatherContentPlugin.GcDynamicClasses;
+using GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses;
 
 
-namespace GcEPiPlugin.modules.GatherContentPlugin
+namespace GcEPiPlugin.modules.GatherContentImport
 {
     [GuiPlugIn(DisplayName = "New GC Mapping Step 2", Description = "part 2 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingStep2.aspx")]
     public partial class NewGcMappingStep2 : SimplePage

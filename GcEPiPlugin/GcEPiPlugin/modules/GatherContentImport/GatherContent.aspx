@@ -1,4 +1,4 @@
-<%@ Page Language="c#" Codebehind="GatherContent.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentPlugin.GatherContent" Title="GatherContentAccounts" %>
+<%@ Page Language="c#" Codebehind="GatherContent.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentImport.GatherContent" Title="GatherContentAccounts" %>
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head id="Head1" runat="server">
     <EPiServer:RequiredClientResources RenderingArea="Header" ID="RequiredResourcesHeader" runat="server" />
