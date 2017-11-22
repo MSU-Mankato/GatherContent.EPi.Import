@@ -11,7 +11,7 @@ using GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses;
 
 namespace GcEPiPlugin.modules.GatherContentImport
 {
-    [GuiPlugIn(DisplayName = "New GC Mapping Step 2", Description = "part 2 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingStep2.aspx")]
+    [GuiPlugIn(DisplayName = "New GC Mapping Step 2", Description = "part 2 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentImport/NewGcMappingStep2.aspx")]
     public partial class NewGcMappingStep2 : SimplePage
     {
 
@@ -36,14 +36,14 @@ namespace GcEPiPlugin.modules.GatherContentImport
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty())
             {
-                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
+                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentImport/GatherContent.aspx'</script>");
                 Visible = false;
                 return;
             }
 
             if (Session["ProjectId"] == null )
             {
-                Response.Write("<script>alert('Please select the GatherContent Project!');window.location='/modules/GatherContentPlugin/NewGcMappingStep1.aspx'</script>");
+                Response.Write("<script>alert('Please select the GatherContent Project!');window.location='/modules/GatherContentImport/NewGcMappingStep1.aspx'</script>");
                 Visible = false;
                 return;
             }
@@ -57,7 +57,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             {
                 if (mappings.Any(mapping => mapping.TemplateId == template.Id.ToString()))
                 {
-                    rblTemp.Items.Add(new ListItem( $"{template.Name} &nbsp; <a href='/modules/GatherContentPlugin/ReviewItemsForImport.aspx?" +
+                    rblTemp.Items.Add(new ListItem( $"{template.Name} &nbsp; <a href='/modules/GatherContentImport/ReviewItemsForImport.aspx?" +
                                                    $"TemplateId={template.Id}&ProjectId={projectId}'> " +
                                                    $"Review Items for Import </a> <br>{template.Description}", template.Id.ToString()){ Enabled = false });
                 }
@@ -84,7 +84,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 return;
             }
             Session["TemplateId"] = selectedValue;
-            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingStep3.aspx");
+            Response.Redirect("~/modules/GatherContentImport/NewGcMappingStep3.aspx");
         }
     }
 }

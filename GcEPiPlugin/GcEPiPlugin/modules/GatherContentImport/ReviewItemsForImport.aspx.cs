@@ -17,7 +17,7 @@ using GcEPiPlugin.modules.GatherContentImport.GcDynamicClasses;
 
 namespace GcEPiPlugin.modules.GatherContentImport
 {
-    [GuiPlugIn(DisplayName = "Review GC Items For Import", Description = "", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/ReviewItemsForImport.aspx")]
+    [GuiPlugIn(DisplayName = "Review GC Items For Import", Description = "", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentImport/ReviewItemsForImport.aspx")]
     public partial class ReviewItemsForImport : SimplePage
     {
         protected GcConnectClient Client;
@@ -43,14 +43,14 @@ namespace GcEPiPlugin.modules.GatherContentImport
             Session["ProjectId"] = Server.UrlDecode(Request.QueryString["ProjectId"]);
             if (credentialsStore.IsNullOrEmpty())
             {
-                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
+                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentImport/GatherContent.aspx'</script>");
                 Visible = false;
                 return;
             }
 
             if (Session["TemplateId"] == null || Session["ProjectId"] == null)
             {
-                Response.Write("<script>alert('This page is not directly accessible! Review your GatherContent items from Template Mappings page!');window.location='/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx'</script>");
+                Response.Write("<script>alert('This page is not directly accessible! Review your GatherContent items from Template Mappings page!');window.location='/modules/GatherContentImport/GcEpiTemplateMappings.aspx'</script>");
                 Visible = false;
                 return;
             }

@@ -16,7 +16,7 @@ using EPiServer.Shell.Security;
 
 namespace GcEPiPlugin.modules.GatherContentImport
 {
-    [GuiPlugIn(DisplayName = "New GC Mapping Step 3", Description = "part 3 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingStep3.aspx")]
+    [GuiPlugIn(DisplayName = "New GC Mapping Step 3", Description = "part 3 of gc mapping", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentImport/NewGcMappingStep3.aspx")]
     public partial class NewGcMappingStep3 : SimplePage
     {
 
@@ -49,14 +49,14 @@ namespace GcEPiPlugin.modules.GatherContentImport
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty())
             {
-                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
+                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentImport/GatherContent.aspx'</script>");
                 Visible = false;
                 return;
             }
 
             if (Session["ProjectId"] == null || Session["TemplateId"] == null)
             {
-                Response.Write("<script>alert('Please select the GatherContent Template!');window.location='/modules/GatherContentPlugin/NewGcMappingStep2.aspx'</script>");
+                Response.Write("<script>alert('Please select the GatherContent Template!');window.location='/modules/GatherContentImport/NewGcMappingStep2.aspx'</script>");
                 Visible = false;
                 return;
             }
@@ -183,7 +183,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                     OnImportChangeGcStatus = Request.Form[key.Replace("mappedEPi-", "onImportGc-")] + "~" + key.Substring(10)
                 }).ToList();
 			Session["StatusMaps"] = gcEpiStatusMaps;
-            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingStep4.aspx");
+            Response.Redirect("~/modules/GatherContentImport/NewGcMappingStep4.aspx");
         }
 
         protected void DdlPostTypes_OnSelectedIndexChanged(object sender, EventArgs e)

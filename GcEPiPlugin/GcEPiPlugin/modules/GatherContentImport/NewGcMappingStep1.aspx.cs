@@ -10,7 +10,7 @@ using EPiServer.Security;
 
 namespace GcEPiPlugin.modules.GatherContentImport
 {
-    [GuiPlugIn(DisplayName = "New GC Mapping Step 1", Description = "This is where the new gather content mapping starts from.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/NewGcMappingStep1.aspx")]
+    [GuiPlugIn(DisplayName = "New GC Mapping Step 1", Description = "This is where the new gather content mapping starts from.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentImport/NewGcMappingStep1.aspx")]
     public partial class NewGcMappingStep1 : SimplePage
     {
         private GcConnectClient _client;
@@ -34,7 +34,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty())
             {
-                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
+                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentImport/GatherContent.aspx'</script>");
                 Visible = false;
                 return;
             }
@@ -55,7 +55,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
         {
 			var selectedValue = Request.Form["rblGcProjects"];
 			Session["ProjectId"] = selectedValue;
-            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingStep2.aspx");
+            Response.Redirect("~/modules/GatherContentImport/NewGcMappingStep2.aspx");
         }
     }
 }

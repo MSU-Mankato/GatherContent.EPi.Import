@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace GcEPiPlugin.modules.GatherContentImport
 {
-    [GuiPlugIn(DisplayName = "GC-EPi Template Mappings", Description = "Shows all the template mappings for a particular account.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx")]
+    [GuiPlugIn(DisplayName = "GC-EPi Template Mappings", Description = "Shows all the template mappings for a particular account.", Area = PlugInArea.AdminMenu, Url = "~/modules/GatherContentImport/GcEpiTemplateMappings.aspx")]
     public partial class GcEpiTemplateMappings : SimplePage
     {
         protected GcConnectClient Client;
@@ -35,7 +35,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty())
             {
-                Response.Write("<script>alert('Please setup the GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
+                Response.Write("<script>alert('Please setup the GatherContent config first!');window.location='/modules/GatherContentImport/GatherContent.aspx'</script>");
                 Visible = false;
                 return;
             }
@@ -49,7 +49,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
 
         protected void BtnAddNew_OnClick(object sender, EventArgs e)
         {
-            Response.Redirect("~/modules/GatherContentPlugin/NewGcMappingStep1.aspx");
+            Response.Redirect("~/modules/GatherContentImport/NewGcMappingStep1.aspx");
         }
 
         protected void BtnDeleteTemplate_OnClick(object sender, EventArgs e)
@@ -80,7 +80,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 var serializedStatusMaps = JsonConvert.SerializeObject(map.StatusMaps);
                 var serializedEpiFieldMaps = JsonConvert.SerializeObject(map.EpiFieldMaps);
                 buttonEditTemplateMap.PostBackUrl =
-                    $"~/modules/GatherContentPlugin/NewGcMappingStep4.aspx?AccountId={map.AccountId}" +
+                    $"~/modules/GatherContentImport/NewGcMappingStep4.aspx?AccountId={map.AccountId}" +
                     $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
                     $"&DefaultStatus={map.DefaultStatus}&EpiContentType={map.EpiContentType}&StatusMaps={serializedStatusMaps}" +
                     $"&EpiFieldMaps={serializedEpiFieldMaps}&PublishedDateTime={map.PublishedDateTime}";
@@ -94,7 +94,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
                 checkBoxTemplate.ID = $"{map.TemplateId}";
             if (e.Item.FindControl("btnItemsReview") is Button buttonItemsReview)
-                buttonItemsReview.PostBackUrl = "~/modules/GatherContentPlugin/ReviewItemsForImport.aspx?" +
+                buttonItemsReview.PostBackUrl = "~/modules/GatherContentImport/ReviewItemsForImport.aspx?" +
                                                     $"TemplateId={map.TemplateId}&ProjectId={map.ProjectId}";
         }
     }

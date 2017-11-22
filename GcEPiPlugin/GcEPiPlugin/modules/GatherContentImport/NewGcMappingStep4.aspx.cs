@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 namespace GcEPiPlugin.modules.GatherContentImport
 {
     [GuiPlugIn(DisplayName = "New GC Mapping Part 4", Description = "part 4 of gc mapping", Area = PlugInArea.AdminMenu,
-        Url = "~/modules/GatherContentPlugin/NewGcMappingStep4.aspx")]
+        Url = "~/modules/GatherContentImport/NewGcMappingStep4.aspx")]
     public partial class NewGcMappingStep4 : SimplePage
     {
         private GcConnectClient _client;
@@ -54,7 +54,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             if (credentialsStore.IsNullOrEmpty())
             {
-                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentPlugin/GatherContent.aspx'</script>");
+                Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentImport/GatherContent.aspx'</script>");
                 Visible = false;
                 return;
             }
@@ -62,7 +62,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             if (Session["ProjectId"] == null || Session["TemplateId"] == null 
                     || Session["PostType"] == null || (string) Session["PostType"] == "-1")
             {
-                Response.Write("<script>alert('Please set the Mapping Defaults!');window.location='/modules/GatherContentPlugin/NewGcMappingStep3.aspx'</script>");
+                Response.Write("<script>alert('Please set the Mapping Defaults!');window.location='/modules/GatherContentImport/NewGcMappingStep3.aspx'</script>");
                 Visible = false;
                 return;
             }
@@ -164,7 +164,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             GcDynamicTemplateMappings.DeleteItem(mappingsStore[existingIndex].Id);
             GcDynamicTemplateMappings.SaveStore(newMapping);
             Session.Clear();
-            Response.Redirect("~/modules/GatherContentPlugin/GcEpiTemplateMappings.aspx");
+            Response.Redirect("~/modules/GatherContentImport/GcEpiTemplateMappings.aspx");
         }
     }
 }
