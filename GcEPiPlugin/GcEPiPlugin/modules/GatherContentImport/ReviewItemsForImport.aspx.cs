@@ -21,6 +21,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
     public partial class ReviewItemsForImport : SimplePage
     {
         protected GcConnectClient Client;
+        private string _defaultParentId;
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -41,6 +42,8 @@ namespace GcEPiPlugin.modules.GatherContentImport
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             Session["TemplateId"] = Server.UrlDecode(Request.QueryString["TemplateId"]);
             Session["ProjectId"] = Server.UrlDecode(Request.QueryString["ProjectId"]);
+            var currentMapping = GcDynamicTemplateMappings
+                .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
             if (credentialsStore.IsNullOrEmpty())
             {
                 Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentImport/GatherContent.aspx'</script>");
@@ -61,13 +64,60 @@ namespace GcEPiPlugin.modules.GatherContentImport
             var projectId = Convert.ToInt32(Session["ProjectId"]);
             projectName.Text = Client.GetProjectById(projectId).Name;
             templateDescription.Text = gcTemplate.Description;
+            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            switch (currentMapping.PostType)
+            {
+                case "PageType":
+                    ddlDefaultParent.Items.Add(new ListItem("RootPage", "1"));
+                    foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
+                    {
+                        try
+                        {
+                            var pageData = contentRepository.Get<PageData>(cr);
+                            if (pageData.ContentLink.ID == 2 || pageData.ParentLink.ID == 2) continue;
+                            ddlDefaultParent.Items.Add(new ListItem(pageData.PageName, pageData.ContentLink.ID.ToString()));
+                        }
+                        catch (TypeMismatchException ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    }
+                    break;
+                case "BlockType":
+                    ddlDefaultParent.Items.Add(new ListItem("Root Folder", "3"));
+                    foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse("3")))
+                    {
+                        try
+                        {
+                            var blockData = contentRepository.Get<BlockData>(cr);
+                            // ReSharper disable once SuspiciousTypeConversion.Global
+                            var content = blockData as IContent;
+                            // ReSharper disable once PossibleNullReferenceException
+                            if (content.ContentLink.ID == 2 || content.ContentLink.ID == 2) continue;
+                            ddlDefaultParent.Items.Add(new ListItem(content.Name, content.ContentLink.ID.ToString()));
+                        }
+                        catch (TypeMismatchException ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                    }
+                    break;
+            }
             rptGcItems.DataSource = Client.GetItemsByTemplateId(templateId, projectId);
             rptGcItems.DataBind();
+        }
+        
+        protected void btnDefaultParentSave_OnClick(object sender, EventArgs e)
+        {
+            _defaultParentId = Request.Form["ddlDefaultParent"];
+            Response.Redirect($"~/modules/GatherContentImport/ReviewItemsForImport.aspx?DefaultParentId={_defaultParentId}&" +
+                              $"TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}");
         }
 
         protected void RptGcItems_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
             var gcItem = e.Item.DataItem as GcItem;
+            var queryDefaultParentId = Server.UrlDecode(Request.QueryString["DefaultParentId"]);
             var enableItemFlag = true;
             var credentialsStore = GcDynamicCredentials.RetrieveStore().ToList().First();
             var contentStore = GcDynamicImports.RetrieveStore();
@@ -86,6 +136,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 linkIsImported.Text = "---------";
                 if (currentMapping.PostType == "PageType")
                 {
+                    _defaultParentId = queryDefaultParentId.IsNullOrEmpty() ? "1" : queryDefaultParentId;
                     foreach (var cs in contentStore)
                     {
                         try
@@ -113,6 +164,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 }
                 else
                 {
+                    _defaultParentId = queryDefaultParentId.IsNullOrEmpty() ? "3" : queryDefaultParentId;
                     foreach (var cs in contentStore)
                     {
                         try
@@ -145,8 +197,9 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 dropDownListParentId.ID = $"txt{gcItem.Id}";
                 if (currentMapping.PostType == "PageType")
                 {
-                    dropDownListParentId.Items.Add(new ListItem("Root Page", "1"));
-                    foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
+                    var parentData = contentRepository.Get<PageData>(ContentReference.Parse(_defaultParentId));
+                    dropDownListParentId.Items.Add(new ListItem(parentData.PageName, parentData.ContentLink.ID.ToString())); 
+                    foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse(_defaultParentId)))
                     {
                         try
                         {
@@ -162,8 +215,11 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 }
                 else
                 {
-                    dropDownListParentId.Items.Add(new ListItem("Root Folder", "3"));
-                    foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse("3")))
+                    // ReSharper disable once SuspiciousTypeConversion.Global
+                    var parentData = contentRepository.Get<BlockData>(ContentReference.Parse(_defaultParentId)) as IContent;
+                    // ReSharper disable once PossibleNullReferenceException
+                    dropDownListParentId.Items.Add(new ListItem(parentData.Name, parentData.ContentLink.ID.ToString()));
+                    foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse(_defaultParentId)))
                     {
                         try
                         {

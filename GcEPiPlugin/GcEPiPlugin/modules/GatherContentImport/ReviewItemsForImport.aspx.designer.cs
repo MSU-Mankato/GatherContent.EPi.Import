@@ -58,6 +58,24 @@ namespace GcEPiPlugin.modules.GatherContentImport {
         protected global::System.Web.UI.WebControls.Label projectName;
         
         /// <summary>
+        /// ddlDefaultParent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDefaultParent;
+        
+        /// <summary>
+        /// btnDefaultParentSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDefaultParentSave;
+        
+        /// <summary>
         /// rptGcItems control.
         /// </summary>
         /// <remarks>

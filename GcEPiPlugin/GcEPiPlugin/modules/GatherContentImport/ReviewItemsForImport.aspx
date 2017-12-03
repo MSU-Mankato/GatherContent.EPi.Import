@@ -28,7 +28,11 @@
     <h2>Import Items For: <asp:Label runat="server" ID="templateName"></asp:Label></h2>
     <h4><asp:Label runat="server" ID="templateDescription"></asp:Label></h4>
     <p style="font-style: italic;">Project: <asp:Label runat="server" ID="projectName"></asp:Label></p>
-    <fieldset>
+    <p style="font-style: italic;">Default Parent Page/Block:
+        <asp:DropDownList runat="server" ID="ddlDefaultParent"/> &nbsp; &nbsp;
+        <asp:Button runat="server" Text="Save" ID="btnDefaultParentSave" OnClick="btnDefaultParentSave_OnClick"/>
+    </p>
+    <fieldset style="margin-top: 1%;">
         <table class="auto-style4">
             <asp:Repeater runat="server" ID="rptGcItems" OnItemCreated="RptGcItems_OnItemCreated">
                 <HeaderTemplate>
