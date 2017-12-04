@@ -139,22 +139,21 @@ namespace GcEPiPlugin.modules.GatherContentImport
                     _defaultParentId = queryDefaultParentId.IsNullOrEmpty() ? "1" : queryDefaultParentId;
                     foreach (var cs in contentStore)
                     {
+                        //Try to create page data of each page in the content store that matches the gcItemId.
                         try
                         {
                             if (cs.ItemId != gcItem.Id) continue;
                             var pageData = contentRepository.Get<PageData>(cs.ContentGuid);
+                            parentId = pageData.ParentLink.ID.ToString();
+                            enableItemFlag = false;
                             if (pageData.ParentLink.ID == 2)
                             {
-                                GcDynamicImports.DeleteItem(cs.Id);
-                            }
-                            else
-                            {
-                                linkIsImported.Text = "Page Imported";
-                                linkIsImported.NavigateUrl = pageData.LinkURL;
-                                parentId = pageData.ParentLink.ID.ToString();
-                                enableItemFlag = false;
+                                linkIsImported.Text = "Page in Trash";
                                 break;
                             }
+                            linkIsImported.Text = "Page Imported";
+                            linkIsImported.NavigateUrl = pageData.LinkURL;
+                            break;
                         }
                         catch (Exception ex)
                         {
@@ -176,28 +175,29 @@ namespace GcEPiPlugin.modules.GatherContentImport
                             // ReSharper disable once SuspiciousTypeConversion.Global
                             var blockData = contentRepository.Get<BlockData>(cs.ContentGuid) as IContent;
                             // ReSharper disable once PossibleNullReferenceException
+                            parentId = blockData.ParentLink.ID.ToString();
+                            enableItemFlag = false;
                             if (blockData.ParentLink.ID == 2)
                             {
-                                GcDynamicImports.DeleteItem(cs.Id);
-                            }
-                            else
-                            {
-                                linkIsImported.Text = "Block Imported";
-                                parentId = blockData.ParentLink.ID.ToString();
-                                enableItemFlag = false;
+                                linkIsImported.Text = "Block in Trash";
                                 break;
                             }
+                            linkIsImported.Text = "Block Imported";
+                            break;
                         }
-                        catch (TypeMismatchException ex)
+                        catch (Exception ex)
                         {
                             Console.WriteLine(ex);
+                            //This is in case the user moved the block to trash and deleted it permanently.
+                            if (ex is TypeMismatchException) continue;
+                            GcDynamicImports.DeleteItem(cs.Id);
                         }
                     }
                 }
             }
             if (e.Item.FindControl("ddlParentId") is DropDownList dropDownListParentId)
             {
-                dropDownListParentId.ID = $"txt{gcItem.Id}";
+                dropDownListParentId.ID = $"ddl{gcItem.Id}";
                 if (currentMapping.PostType == "PageType")
                 {
                     var parentData = contentRepository.Get<PageData>(ContentReference.Parse(_defaultParentId));
@@ -207,8 +207,18 @@ namespace GcEPiPlugin.modules.GatherContentImport
                         try
                         {
                             var pageData = contentRepository.Get<PageData>(cr);
-                            if (pageData.ContentLink.ID == 2 || pageData.ParentLink.ID == 2) continue;
-                            dropDownListParentId.Items.Add(new ListItem(pageData.PageName, pageData.ContentLink.ID.ToString()));
+                            if (pageData.ContentLink.ID == 2 || pageData.ParentLink.ID == 2)
+                            {
+                                //if the page is in trash, then add recycle bin in the drop down.
+                                if (parentId == "2")
+                                    dropDownListParentId.Items.Add(new ListItem(pageData.PageName,
+                                        pageData.ContentLink.ID.ToString()));
+                            }
+                            else
+                            {
+                                dropDownListParentId.Items.Add(new ListItem(pageData.PageName,
+                                    pageData.ContentLink.ID.ToString()));
+                            }
                         }
                         catch (TypeMismatchException ex)
                         {
@@ -230,7 +240,12 @@ namespace GcEPiPlugin.modules.GatherContentImport
                             // ReSharper disable once SuspiciousTypeConversion.Global
                             var content = blockData as IContent;
                             // ReSharper disable once PossibleNullReferenceException
-                            if (content.ContentLink.ID == 2 || content.ContentLink.ID == 2) continue;
+                            if (content.ContentLink.ID == 2 || content.ParentLink.ID == 2)
+                            {
+                                //if the block is in trash, then add recycle bin in the drop down.
+                                if (parentId == "2")
+                                    dropDownListParentId.Items.Add(new ListItem(content.Name, content.ContentLink.ID.ToString()));
+                            }
                             dropDownListParentId.Items.Add(new ListItem(content.Name, content.ContentLink.ID.ToString()));
                         }
                         catch (TypeMismatchException ex)
@@ -343,6 +358,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                             if (!importItem) continue;
                             {
                                 var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
+                                saveActions.RemoveAt(1);
                                 var gcStatusIdForThisItem = item.CurrentStatus.Data.Id;
                                 saveActions.ForEach(x => {
                                     if (x.ToString() == currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] ==

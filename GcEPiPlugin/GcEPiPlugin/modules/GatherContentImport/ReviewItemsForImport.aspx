@@ -20,6 +20,9 @@
         .auto-style7 {
             height: 25px;
         }
+        td {
+            padding-top: 1%;
+        }
     </style>
 </head>
 <body>
@@ -28,10 +31,10 @@
     <h2>Import Items For: <asp:Label runat="server" ID="templateName"></asp:Label></h2>
     <h4><asp:Label runat="server" ID="templateDescription"></asp:Label></h4>
     <p style="font-style: italic;">Project: <asp:Label runat="server" ID="projectName"></asp:Label></p>
-    <p style="font-style: italic;">Default Parent Page/Block:
+    <h4>Default Parent Page/Block:
         <asp:DropDownList runat="server" ID="ddlDefaultParent"/> &nbsp; &nbsp;
         <asp:Button runat="server" Text="Save" ID="btnDefaultParentSave" OnClick="btnDefaultParentSave_OnClick"/>
-    </p>
+    </h4>
     <fieldset style="margin-top: 1%;">
         <table class="auto-style4">
             <asp:Repeater runat="server" ID="rptGcItems" OnItemCreated="RptGcItems_OnItemCreated">
