@@ -1,10 +1,15 @@
 <%@ Page Language="c#" Codebehind="ReviewItemsForImport.aspx.cs" AutoEventWireup="False" Inherits="GcEPiPlugin.modules.GatherContentImport.ReviewItemsForImport" Title="ReviewItemsForImport" %>
 <html>
 <head id="Head1" runat="server">
+    <link href=“/EPiServer/CMS/App_Themes/Default/Styles/system.css” type=“text/css” rel=“stylesheet”>
+    <link href=“/EPiServer/CMS/App_Themes/Default/Styles/ToolButton.css” type=“text/css” rel=“stylesheet”>
     <title>Review Items For Import</title>
     <style type="text/css">
         .auto-style4 {
             width: 1477px;
+        }
+        .auto-style4 tr:nth-child(even){
+            background-color: #f2f2f2;
         }
         .LinkNoUnderline
         {
@@ -33,9 +38,9 @@
     <p style="font-style: italic;">Project: <asp:Label runat="server" ID="projectName"></asp:Label></p>
     <h4>Default Parent Page/Block:
         <asp:DropDownList runat="server" ID="ddlDefaultParent"/> &nbsp; &nbsp;
-        <asp:Button runat="server" Text="Save" ID="btnDefaultParentSave" OnClick="btnDefaultParentSave_OnClick"/>
+        <asp:Button runat="server" Text="Set" ID="btnDefaultParentSave" OnClick="btnDefaultParentSave_OnClick"/>
     </h4>
-    <fieldset style="margin-top: 1%;">
+    <fieldset>
         <table class="auto-style4">
             <asp:Repeater runat="server" ID="rptGcItems" OnItemCreated="RptGcItems_OnItemCreated">
                 <HeaderTemplate>
