@@ -144,8 +144,10 @@ namespace GcEPiPlugin.modules.GatherContentImport
                         {
                             if (cs.ItemId != gcItem.Id) continue;
                             var pageData = contentRepository.Get<PageData>(cs.ContentGuid);
+                            //Setting the parentId and making sure the drop down loads from Root Page.
                             parentId = pageData.ParentLink.ID.ToString();
                             enableItemFlag = false;
+                            _defaultParentId = "1";
                             if (pageData.ParentLink.ID == 2)
                             {
                                 linkIsImported.Text = "Page in Trash";
@@ -175,8 +177,10 @@ namespace GcEPiPlugin.modules.GatherContentImport
                             // ReSharper disable once SuspiciousTypeConversion.Global
                             var blockData = contentRepository.Get<BlockData>(cs.ContentGuid) as IContent;
                             // ReSharper disable once PossibleNullReferenceException
+                            //Setting the parentId and making sure the drop down loads from Root Folder.
                             parentId = blockData.ParentLink.ID.ToString();
                             enableItemFlag = false;
+                            _defaultParentId = "3";
                             if (blockData.ParentLink.ID == 2)
                             {
                                 linkIsImported.Text = "Block in Trash";
@@ -294,7 +298,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 var item = Client.GetItemById(itemId);
                 var currentMapping = GcDynamicTemplateMappings
                     .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
-                var parentId = Request.Form[key.ToString().Replace("chk", "txt")];
+                var parentId = Request.Form[key.ToString().Replace("chk", "ddl")];
                 var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
                 var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
                 switch (currentMapping.PostType)
