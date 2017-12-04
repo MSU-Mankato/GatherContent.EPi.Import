@@ -68,7 +68,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             switch (currentMapping.PostType)
             {
                 case "PageType":
-                    ddlDefaultParent.Items.Add(new ListItem("RootPage", "1"));
+                    ddlDefaultParent.Items.Add(new ListItem("Root Page", "1"));
                     foreach (var cr in contentRepository.GetDescendents(ContentReference.RootPage))
                     {
                         try
@@ -156,9 +156,12 @@ namespace GcEPiPlugin.modules.GatherContentImport
                                 break;
                             }
                         }
-                        catch (TypeMismatchException ex)
+                        catch (Exception ex)
                         {
                             Console.WriteLine(ex);
+                            //This is in case the user moved the page to trash and deleted it permanently.
+                            if(ex is TypeMismatchException) continue;
+                            GcDynamicImports.DeleteItem(cs.Id);
                         }
                     }
                 }
