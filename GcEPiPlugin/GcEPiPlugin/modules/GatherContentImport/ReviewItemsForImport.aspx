@@ -11,6 +11,12 @@
         .auto-style4 tr:nth-child(even){
             background-color: #f2f2f2;
         }
+        .auto-style4 thead {
+            background-color: #d2d2d2;
+        }
+        .auto-style4 thead tr td{
+            font-weight: bold;
+        }
         .LinkNoUnderline
         {
             text-decoration:none;
@@ -40,7 +46,6 @@
         <asp:DropDownList runat="server" ID="ddlDefaultParent"/> &nbsp; &nbsp;
         <asp:Button runat="server" Text="Set" ID="btnDefaultParentSave" OnClick="btnDefaultParentSave_OnClick"/>
     </h4>
-    <fieldset>
         <table class="auto-style4">
             <asp:Repeater runat="server" ID="rptGcItems" OnItemCreated="RptGcItems_OnItemCreated">
                 <HeaderTemplate>
@@ -84,7 +89,6 @@
                 </FooterTemplate>
             </asp:Repeater>
         </table>
-    </fieldset>
     <p>
         <asp:Button runat="server" ID="btnPrevious" Text="Back" PostBackUrl="GcEpiTemplateMappings.aspx" />
         <asp:Button runat="server" ID="btnImportItem" Text="Import Items" Enabled="False" OnClick="BtnImportItem_OnClick" />

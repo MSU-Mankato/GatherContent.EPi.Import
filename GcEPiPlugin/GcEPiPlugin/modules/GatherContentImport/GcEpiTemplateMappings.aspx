@@ -3,9 +3,6 @@
 <head id="Head1" runat="server">
     <title>New GatherContent Mapping</title>
     <style type="text/css">
-        .auto-style4 {
-            width: 1394px;
-        }
         .LinkNoUnderline
         {
             text-decoration:none;
@@ -20,8 +17,27 @@
         .auto-style5 {
 			width: 194px;
 		}
-        table {
-	        border: 1px solid black;
+        .auto-style4 {
+            width: 1477px;
+        }
+        .auto-style4 tr:nth-child(even){
+            background-color: #f2f2f2;
+        }
+        .auto-style4 thead {
+            background-color: #d2d2d2;
+        }
+        .auto-style4 thead tr td{
+            font-weight: bold;
+        }
+        .LinkNoUnderline
+        {
+            text-decoration:none;
+        }
+        .auto-style7 {
+            height: 25px;
+        }
+        td {
+            padding-top: 1%;
         }
         </style>
 </head>

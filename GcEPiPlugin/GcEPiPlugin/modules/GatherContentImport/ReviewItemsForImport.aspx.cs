@@ -42,8 +42,6 @@ namespace GcEPiPlugin.modules.GatherContentImport
             var credentialsStore = GcDynamicCredentials.RetrieveStore();
             Session["TemplateId"] = Server.UrlDecode(Request.QueryString["TemplateId"]);
             Session["ProjectId"] = Server.UrlDecode(Request.QueryString["ProjectId"]);
-            var currentMapping = GcDynamicTemplateMappings
-                .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
             if (credentialsStore.IsNullOrEmpty())
             {
                 Response.Write("<script>alert('Please setup your GatherContent config first!');window.location='/modules/GatherContentImport/GatherContent.aspx'</script>");
@@ -57,6 +55,8 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 Visible = false;
                 return;
             }
+            var currentMapping = GcDynamicTemplateMappings
+                .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
             Client = new GcConnectClient(credentialsStore.ToList().First().ApiKey, credentialsStore.ToList().First().Email);
             var templateId = Convert.ToInt32(Session["TemplateId"]);
             var gcTemplate = Client.GetTemplateById(templateId);
