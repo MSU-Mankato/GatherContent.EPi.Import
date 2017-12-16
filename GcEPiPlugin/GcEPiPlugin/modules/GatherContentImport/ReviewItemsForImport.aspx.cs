@@ -65,6 +65,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             projectName.Text = Client.GetProjectById(projectId).Name;
             templateDescription.Text = gcTemplate.Description;
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var recycleBin = contentRepository.GetDescendents(ContentReference.Parse("2")).ToList();
             switch (currentMapping.PostType)
             {
                 case "PageType":
@@ -74,7 +75,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                         try
                         {
                             var pageData = contentRepository.Get<PageData>(cr);
-                            if (pageData.ContentLink.ID == 2 || pageData.ParentLink.ID == 2) continue;
+                            if (recycleBin.Contains(pageData.ContentLink) || pageData.ContentLink.ID == 2) continue;
                             ddlDefaultParent.Items.Add(new ListItem(pageData.PageName, pageData.ContentLink.ID.ToString()));
                         }
                         catch (TypeMismatchException ex)
@@ -93,7 +94,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                             // ReSharper disable once SuspiciousTypeConversion.Global
                             var content = blockData as IContent;
                             // ReSharper disable once PossibleNullReferenceException
-                            if (content.ContentLink.ID == 2 || content.ContentLink.ID == 2) continue;
+                            if (recycleBin.Contains(content.ContentLink) || content.ContentLink.ID == 2) continue;
                             ddlDefaultParent.Items.Add(new ListItem(content.Name, content.ContentLink.ID.ToString()));
                         }
                         catch (TypeMismatchException ex)
@@ -106,7 +107,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             rptGcItems.DataSource = Client.GetItemsByTemplateId(templateId, projectId);
             rptGcItems.DataBind();
         }
-        
+
         protected void btnDefaultParentSave_OnClick(object sender, EventArgs e)
         {
             _defaultParentId = Request.Form["ddlDefaultParent"];
@@ -123,6 +124,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             var contentStore = GcDynamicImports.RetrieveStore();
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var parentId = "";
+            var recycleBin = contentRepository.GetDescendents(ContentReference.Parse("2")).ToList();
             Client = new GcConnectClient(credentialsStore.ApiKey, credentialsStore.Email);
             var currentMapping = GcDynamicTemplateMappings
                 .RetrieveStore().First(i => i.TemplateId == Session["TemplateId"].ToString());
@@ -148,9 +150,11 @@ namespace GcEPiPlugin.modules.GatherContentImport
                             parentId = pageData.ParentLink.ID.ToString();
                             enableItemFlag = false;
                             _defaultParentId = "1";
-                            if (pageData.ParentLink.ID == 2)
+                            //if page is in trash, then set the import status to 'Page in Trash'.
+                            if (recycleBin.Contains(pageData.ContentLink))
                             {
                                 linkIsImported.Text = "Page in Trash";
+                                parentId = "2";
                                 break;
                             }
                             linkIsImported.Text = "Page Imported";
@@ -161,7 +165,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                         {
                             Console.WriteLine(ex);
                             //This is in case the user moved the page to trash and deleted it permanently.
-                            if(ex is TypeMismatchException) continue;
+                            if (ex is TypeMismatchException) continue;
                             GcDynamicImports.DeleteItem(cs.Id);
                         }
                     }
@@ -181,9 +185,11 @@ namespace GcEPiPlugin.modules.GatherContentImport
                             parentId = blockData.ParentLink.ID.ToString();
                             enableItemFlag = false;
                             _defaultParentId = "3";
-                            if (blockData.ParentLink.ID == 2)
+                            //if the block is in trash, then set the import status to 'Block in Trash'.
+                            if (recycleBin.Contains(blockData.ContentLink))
                             {
                                 linkIsImported.Text = "Block in Trash";
+                                parentId = "2";
                                 break;
                             }
                             linkIsImported.Text = "Block Imported";
@@ -205,15 +211,15 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 if (currentMapping.PostType == "PageType")
                 {
                     var parentData = contentRepository.Get<PageData>(ContentReference.Parse(_defaultParentId));
-                    dropDownListParentId.Items.Add(new ListItem(parentData.PageName, parentData.ContentLink.ID.ToString())); 
+                    dropDownListParentId.Items.Add(new ListItem(parentData.PageName, parentData.ContentLink.ID.ToString()));
                     foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse(_defaultParentId)))
                     {
                         try
                         {
                             var pageData = contentRepository.Get<PageData>(cr);
-                            if (pageData.ContentLink.ID == 2 || pageData.ParentLink.ID == 2)
+                            if (recycleBin.Contains(pageData.ContentLink) || pageData.ContentLink.ID == 2)
                             {
-                                //if the page is in trash, then add recycle bin in the drop down.
+                                //if the page is in trash, then add recycle bin to the drop down.
                                 if (parentId == "2")
                                     dropDownListParentId.Items.Add(new ListItem(pageData.PageName,
                                         pageData.ContentLink.ID.ToString()));
@@ -240,17 +246,16 @@ namespace GcEPiPlugin.modules.GatherContentImport
                     {
                         try
                         {
-                            var blockData = contentRepository.Get<BlockData>(cr);
                             // ReSharper disable once SuspiciousTypeConversion.Global
-                            var content = blockData as IContent;
+                            var blockData = contentRepository.Get<BlockData>(cr) as IContent;
                             // ReSharper disable once PossibleNullReferenceException
-                            if (content.ContentLink.ID == 2 || content.ParentLink.ID == 2)
+                            if (recycleBin.Contains(blockData.ContentLink) || blockData.ContentLink.ID == 2)
                             {
-                                //if the block is in trash, then add recycle bin in the drop down.
+                                //if the block is in trash, then add recycle bin to the drop down.
                                 if (parentId == "2")
-                                    dropDownListParentId.Items.Add(new ListItem(content.Name, content.ContentLink.ID.ToString()));
+                                    dropDownListParentId.Items.Add(new ListItem(blockData.Name, blockData.ContentLink.ID.ToString()));
                             }
-                            dropDownListParentId.Items.Add(new ListItem(content.Name, content.ContentLink.ID.ToString()));
+                            dropDownListParentId.Items.Add(new ListItem(blockData.Name, blockData.ContentLink.ID.ToString()));
                         }
                         catch (TypeMismatchException ex)
                         {
@@ -448,6 +453,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                             if (!importItem) continue;
                             {
                                 var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
+                                saveActions.RemoveAt(1);
                                 var gcStatusIdForThisItem = item.CurrentStatus.Data.Id;
                                 saveActions.ForEach(x => {
                                     if (x.ToString() == currentMapping.StatusMaps.Find(i => i.MappedEpiserverStatus.Split('~')[1] ==
