@@ -1,4 +1,4 @@
-**GatherContent – EPiServer Integration**
+**GatherContent ï¿½ EPiServer Integration**
 
 **Introduction:**
 
@@ -20,6 +20,9 @@ The module supports EPiServer 10.2+ and ASP.NET Web Forms 4.5.2.
 
 **Installation:**
 
+Download the NuGet package source https://www.nuget.org/packages/GatherContent.EPi.Import 
+or using the package manager: 
+pm> Install-Package GatherContent.EPi.Import -Version 0.7.6-beta 
 
 **Configuration:**
 
