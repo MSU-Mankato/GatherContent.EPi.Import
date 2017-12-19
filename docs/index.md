@@ -1,4 +1,4 @@
-**GatherContent � EPiServer Integration**
+**GatherContent - EPiServer Integration**
 
 **Introduction:**
 
