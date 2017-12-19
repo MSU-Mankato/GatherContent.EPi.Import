@@ -1,5 +1,7 @@
 **GatherContent - EPiServer Integration**
 
+[Download PDF](GatherContent-EPiServerIntegrationDocumentation.pdf)
+
 **Introduction:**
 
 How to get started with the GatherContent&#39;s EPiServer Integration to import your content.
