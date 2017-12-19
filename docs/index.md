@@ -6,7 +6,7 @@
 
 How to get started with the GatherContent&#39;s EPiServer Integration to import your content.
 
-Integrate GatherContent with EPiServer 10.2 (or higher) and ASP.NET Web Forms 4.5.2. You can:
+Integrate GatherContent with EPiServer 10.10.3 and ASP.NET Web Forms 4.5.2. You can:
 
 - Migrate content into EPiServer
 
@@ -18,7 +18,7 @@ To import content, template mappings must be created. This allows you to map eac
 
 **Versions Supported**
 
-The module supports EPiServer 10.2+ and ASP.NET Web Forms 4.5.2.
+The module supports EPiServer 10.10.3 and ASP.NET Web Forms 4.5.2.
 
 **Installation:**
 
