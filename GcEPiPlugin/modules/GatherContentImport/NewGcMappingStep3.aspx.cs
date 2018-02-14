@@ -89,6 +89,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 ddlAuthors.SelectedValue = Session["Author"].ToString();
                 ddlStatuses.SelectedValue = Session["DefaultStatus"].ToString();
                 var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
+
                 if (Session["PostType"].ToString() is "PageType")
                 {
                     var contentTypeList = contentTypeRepository.List().OfType<PageType>();
@@ -105,7 +106,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 {
                     var contentTypeList = contentTypeRepository.List().OfType<BlockType>();
                     var blockTypes = contentTypeList as IList<BlockType> ?? contentTypeList.ToList();
-                    blockTypes.ForEach(i => ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "block-" + i.Name)));
+                    blockTypes.ToList().ForEach(i => ddlEpiContentTypes.Items.Add(new ListItem(i.Name, "block-" + i.Name)));
                     ddlEpiContentTypes.Enabled = true;
                     btnNextStep.Enabled = true;
                 }

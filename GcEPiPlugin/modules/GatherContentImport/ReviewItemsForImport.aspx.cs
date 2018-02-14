@@ -85,17 +85,26 @@ namespace GcEPiPlugin.modules.GatherContentImport
                     }
                     break;
                 case "BlockType":
-                    ddlDefaultParent.Items.Add(new ListItem("Root Folder", "3"));
+
+                    // Add the root parent before everything else.
+                    ddlDefaultParent.Items.Add(new ListItem("SysGlobalAssets", "3"));
                     foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse("3")))
                     {
                         try
                         {
-                            var blockData = contentRepository.Get<BlockData>(cr);
+                            var blockData = contentRepository.Get<ContentFolder>(cr);
                             // ReSharper disable once SuspiciousTypeConversion.Global
                             var content = blockData as IContent;
+
+                            // If the block is in recycle bin,
+                            // Then do not add it to the drop down.
+                            if (recycleBin.Contains(content.ContentLink)) continue;
+
+
                             // ReSharper disable once PossibleNullReferenceException
                             if (recycleBin.Contains(content.ContentLink) || content.ContentLink.ID == 2) continue;
                             ddlDefaultParent.Items.Add(new ListItem(content.Name, content.ContentLink.ID.ToString()));
+                           
                         }
                         catch (TypeMismatchException ex)
                         {
@@ -239,15 +248,17 @@ namespace GcEPiPlugin.modules.GatherContentImport
                 else
                 {
                     // ReSharper disable once SuspiciousTypeConversion.Global
-                    var parentData = contentRepository.Get<BlockData>(ContentReference.Parse(_defaultParentId)) as IContent;
+                    var parentData = contentRepository.Get<ContentFolder>(ContentReference.Parse(_defaultParentId));
                     // ReSharper disable once PossibleNullReferenceException
                     dropDownListParentId.Items.Add(new ListItem(parentData.Name, parentData.ContentLink.ID.ToString()));
+
+                   
                     foreach (var cr in contentRepository.GetDescendents(ContentReference.Parse(_defaultParentId)))
                     {
                         try
                         {
                             // ReSharper disable once SuspiciousTypeConversion.Global
-                            var blockData = contentRepository.Get<BlockData>(cr) as IContent;
+                            var blockData = contentRepository.Get<ContentFolder>(cr) as IContent;
                             // ReSharper disable once PossibleNullReferenceException
                             if (recycleBin.Contains(blockData.ContentLink) || blockData.ContentLink.ID == 2)
                             {
