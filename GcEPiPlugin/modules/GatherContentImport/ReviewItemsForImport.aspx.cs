@@ -230,8 +230,9 @@ namespace GcEPiPlugin.modules.GatherContentImport
                             {
                                 //if the page is in trash, then add recycle bin to the drop down.
                                 if (parentId == "2")
-                                    dropDownListParentId.Items.Add(new ListItem(pageData.PageName,
-                                        pageData.ContentLink.ID.ToString()));
+                                    dropDownListParentId.Items.Add(new ListItem(
+                                         contentRepository.Get<PageData>(ContentReference.WasteBasket).Name, "2"));
+                                
                             }
                             else
                             {
@@ -258,15 +259,12 @@ namespace GcEPiPlugin.modules.GatherContentImport
                         try
                         {
                             // ReSharper disable once SuspiciousTypeConversion.Global
-                            var blockData = contentRepository.Get<ContentFolder>(cr) as IContent;
+                            var contentFolder = contentRepository.Get<ContentFolder>(cr);
                             // ReSharper disable once PossibleNullReferenceException
-                            if (recycleBin.Contains(blockData.ContentLink) || blockData.ContentLink.ID == 2)
-                            {
-                                //if the block is in trash, then add recycle bin to the drop down.
-                                if (parentId == "2")
-                                    dropDownListParentId.Items.Add(new ListItem(blockData.Name, blockData.ContentLink.ID.ToString()));
-                            }
-                            dropDownListParentId.Items.Add(new ListItem(blockData.Name, blockData.ContentLink.ID.ToString()));
+                            if (parentId == "2")
+                                dropDownListParentId.Items.Add(new ListItem(
+                                     contentRepository.Get<PageData>(ContentReference.WasteBasket).Name, "2"));
+                            dropDownListParentId.Items.Add(new ListItem(contentFolder.Name, contentFolder.ContentLink.ID.ToString()));
                         }
                         catch (TypeMismatchException ex)
                         {

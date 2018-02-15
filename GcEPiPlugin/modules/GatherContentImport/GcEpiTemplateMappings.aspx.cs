@@ -88,6 +88,7 @@ namespace GcEPiPlugin.modules.GatherContentImport
             if (e.Item.FindControl("lnkAccountSlug") is HyperLink linkAccountSlug)
                 linkAccountSlug.NavigateUrl = $"https://{slug}.gathercontent.com/";
             if (e.Item.FindControl("lnkProject") is HyperLink linkProject)
+          
                 linkProject.NavigateUrl = $"https://{slug}.gathercontent.com/projects/view/{map.ProjectId}";
             if (e.Item.FindControl("lnkTemplate") is HyperLink linkTemplate)
                 linkTemplate.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
