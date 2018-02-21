@@ -156,7 +156,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\GatherContentConnect\GatherContentConnect\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.7.41101.299, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Core.2.7.2\lib\net40-Client\NuGet.Core.dll</HintPath>
@@ -222,6 +222,7 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ItemGroup>
+    <Compile Include="Models\Blocks\TestBlock.cs" />
     <Compile Include="modules\GatherContentImport\ClientResourceProvider.cs" />
     <Compile Include="modules\GatherContentImport\ClientResourceRegister.cs" />
     <Compile Include="modules\GatherContentImport\GatherContent.aspx.cs">
@@ -285,7 +286,6 @@
   <ItemGroup>
     <Folder Include="Business\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Models\Blocks\" />
     <Folder Include="Models\Pages\" />
     <Folder Include="Models\ViewModels\" />
     <Folder Include="Static\" />
