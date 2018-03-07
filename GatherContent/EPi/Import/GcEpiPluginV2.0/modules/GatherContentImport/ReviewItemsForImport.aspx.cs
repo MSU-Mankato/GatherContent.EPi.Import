@@ -214,6 +214,7 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
                             <summary>
                                 We want to clear this list because we want the drop down to load from selected default parent and 
                                 if the previous item was already imported then the drop down would have all the options in them.
+                                This helps in avoiding recursion-overhead. This also prevents data persistence on page reloads.
                             </summary>
                          */
                         _sortedContent.Clear();
@@ -248,9 +249,9 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
                         catch (Exception ex)
                         {
                             Console.WriteLine(ex);
+                            if (ex is TypeMismatchException) continue;
 
                             // This is in case the user moved the page to trash and deleted it permanently.
-                            if (ex is TypeMismatchException) continue;
                             if (!(ex is ContentNotFoundException)) continue;
                             GcDynamicUtilities.DeleteItem<GcDynamicImports>(cs.Id);
                             enableItemFlag = true;
@@ -282,9 +283,9 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
                         catch (Exception ex)
                         {
                             Console.WriteLine(ex);
-
-                            //This is in case the user moved the block to trash and deleted it permanently.
                             if (ex is TypeMismatchException) continue;
+
+                            // This is in case the user moved the page to trash and deleted it permanently.
                             if (!(ex is ContentNotFoundException)) continue;
                             GcDynamicUtilities.DeleteItem<GcDynamicImports>(cs.Id);
                             enableItemFlag = true;
@@ -310,7 +311,7 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
                     {
                         if (recycleBin.Contains(pageData.ContentLink) || pageData.ContentLink.ID == 2)
                         {
-                            //if the page is in trash, then add recycle bin page to the drop down.
+                            // If the page is in trash, then add recycle bin page to the drop down so that it can be shown as the parent.
                             if (parentId == "2")
                                 dropDownListParentId.Items.Add(new ListItem(
                                     _contentRepository.Get<PageData>(ContentReference.WasteBasket).Name, "2"));
@@ -335,7 +336,7 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
 
                     if (parentId == "2")
                     {
-                        //if the block is in trash, then add recycle bin page to the drop down.
+                        // If the block is in trash, then add recycle bin page to the drop down so that it can be shown as the parent.
                         dropDownListParentId.Items.Add(new ListItem(
                             _contentRepository.Get<PageData>(ContentReference.WasteBasket).Name, "2"));
                     }
@@ -346,6 +347,8 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
                         dropDownListParentId.Items.Add(new ListItem(parentFolder.Name + " => " + contentFolder.Name, contentFolder.ContentLink.ID.ToString()));
                     }
                 }
+                
+                // If item is enabled, then enable the drop down containing the parents. Else, set the drop down to the content's parent value.
                 if (enableItemFlag)
                 {
                     dropDownListParentId.Enabled = true;
@@ -460,12 +463,29 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
             {
                 // If the key is not of checkbox type, then continue.
                 if (!key.ToString().Contains("chkImport")) continue;
+
+                // Set the  flag initially to 'true'.
                 var importItemFlag = true;
+
+                // The key consists of repeater Id in the first part. We only need the second part where 'chkImport' is present
+                // and it is after '$'. So, we split the string on '$'.
                 var splitString = key.ToString().Split('$');
+
+                // ItemId is extracted from the checkbox Id. The first part of it is always 'chkImport'. So, the Id to be extracted
+                // from the 9th index.
                 var itemId = splitString[2].Substring(9);
+
+                // Get the itemId from GatherContentConnect API with the Id we extracted in the previous step.
                 var item = Client.GetItemById(itemId);
+
+                // Get the item's name. This will be used for displaying the import message.
                 itemName = item.Name;
+
+                // We know that the item's parent path Id is in the drop down. And, both checkbox and drop down share the similar
+                // naming convention. So, we just get the key that contains the value of that drop down's selected value.
                 var parentId = Request.Form[key.ToString().Replace("chkImport", "ddl")];
+
+                // Since the post type of the item is known beforehand, we can separate the import process for different post types.
                 switch (currentMapping.PostType)
                 {
                     case "PageType":
