@@ -35,7 +35,7 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
         private readonly List<GcDynamicCredentials> _credentialsStore = GcDynamicUtilities.RetrieveStore<GcDynamicCredentials>();
         private readonly List<GcDynamicImports> _contentStore = GcDynamicUtilities.RetrieveStore<GcDynamicImports>();
         private readonly List<SaveAction> _saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
-        private List<IContent> _sortedContent = new EditableList<IContent>();
+        private readonly List<IContent> _sortedContent = new EditableList<IContent>();
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -252,6 +252,7 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
 
                             // This is in case the user moved the page to trash and deleted it permanently.
                             if (ex is TypeMismatchException) continue;
+                            if (!(ex is ContentNotFoundException)) continue;
                             GcDynamicUtilities.DeleteItem<GcDynamicImports>(cs.Id);
                             enableItemFlag = true;
                         }
@@ -285,6 +286,7 @@ namespace GcEpiPluginV2._0.modules.GatherContentImport
 
                             //This is in case the user moved the block to trash and deleted it permanently.
                             if (ex is TypeMismatchException) continue;
+                            if (!(ex is ContentNotFoundException)) continue;
                             GcDynamicUtilities.DeleteItem<GcDynamicImports>(cs.Id);
                             enableItemFlag = true;
                         }
