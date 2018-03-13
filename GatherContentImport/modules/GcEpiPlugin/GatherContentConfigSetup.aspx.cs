@@ -11,7 +11,7 @@ using GatherContentImport.GcDynamicClasses;
 
 namespace GatherContentImport.modules.GcEpiPlugin
 {
-    [GuiPlugIn(DisplayName = "GatherContent Config Setup", Description = "This is where the user sets up the GatherContent config", Area = PlugInArea.AdminMenu, Url = "~/modules/GcEpiImport/GatherContentConfigSetup.aspx")]
+    [GuiPlugIn(DisplayName = "GatherContent Config Setup", Description = "This is where the user sets up the GatherContent config", Area = PlugInArea.AdminMenu, Url = "~/modules/GcEpiPlugin/GatherContentConfigSetup.aspx")]
     public partial class GatherContentConfigSetup : SimplePage
     {
 
