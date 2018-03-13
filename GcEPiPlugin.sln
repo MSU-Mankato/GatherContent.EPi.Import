@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatherContentImport", "GatherContentImport\GatherContentImport.csproj", "{4BE3FB45-63D6-4455-86FF-54DBA3D064FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatherContentImport", "V2\GatherContentImport.csproj", "{4BE3FB45-63D6-4455-86FF-54DBA3D064FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GcEpiPluginV2._0")]
+[assembly: AssemblyTitle("GatherContentImport")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GcEpiPluginV2._0")]
+[assembly: AssemblyProduct("GatherContentImport")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("11059fee-51dc-4990-aae9-648362e5a61f")]
+[assembly: Guid("4be3fb45-63d6-4455-86ff-54dba3d064fc")]
 
 // Version information for an assembly consists of the following four values:
 //
