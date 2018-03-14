@@ -1,4 +1,4 @@
-<%@ Page Language="c#" Codebehind="ReviewItemsForImport.aspx.cs" AutoEventWireup="False" Inherits="GatherContentImport.modules.GcEpiPlugin.ReviewItemsForImport" Title="ReviewItemsForImport" %>
+<%@ Page Language="c#" Codebehind="ReviewItemsForImport.aspx.cs" AutoEventWireup="False" Inherits="GatherContentImport.modules.GcEpiPlugin.ReviewItemsForImport" Title="ReviewItemsForImport" Async="true" %>
 <html>
 <head id="Head1" runat="server">
     <link href="/EPiServer/CMS/App_Themes/Default/Styles/system.css" type="text/css" rel="stylesheet">

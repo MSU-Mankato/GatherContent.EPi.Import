@@ -535,19 +535,17 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                         case "choice_checkbox":
                                             myPage.Property[propDef.Name].Value = GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
                                             break;
-                                        default:
-                                            var files = Client.GetFilesByItemId(item.Id);
-                                            files.ToList().ForEach(async i =>
-                                            {
-                                                await GcEpiContentParser.ImageParserAsync(i.Url, i.FileName);
-                                            });
-                                            break;
                                     }
                                 }));
                             }
                             if (!importItemFlag) continue;
                             {
                                 SaveContent(myPage, item, currentMapping);
+                                var files = Client.GetFilesByItemId(item.Id);
+                                files.ToList().ForEach(async i =>
+                                {
+                                    await GcEpiContentParser.ImageParserAsync(i.Url, i.FileName, myPage.ContentLink);
+                                });
                                 importCounter++;
                             }
                         }

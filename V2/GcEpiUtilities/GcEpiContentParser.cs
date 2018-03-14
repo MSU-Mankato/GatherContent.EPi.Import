@@ -6,8 +6,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using EPiServer;
+using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAccess;
+using EPiServer.Editor.TinyMCE.Plugins;
 using EPiServer.Framework.Blobs;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
@@ -66,10 +68,13 @@ namespace GatherContentImport.GcEpiUtilities
             }
         }
 
-        public static async Task<object> ImageParserAsync(string url, string imageName)
+        public static async Task<object> ImageParserAsync(string url, string imageName, ContentReference contentLink)
         {
+            var contentAssetHelper = ServiceLocator.Current.GetInstance<ContentAssetHelper>();
+            // get an existing content asset folder or create a new one
+            var assetsFolder = contentAssetHelper.GetOrCreateAssetFolder(contentLink);
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            var imageFile = contentRepository.GetDefault<ImageFile>(SiteDefinition.Current.GlobalAssetsRoot);
+            var imageFile = contentRepository.GetDefault<ImageFile>(assetsFolder.ContentLink);
             imageFile.Name = imageName;
             var blobFactory = ServiceLocator.Current.GetInstance<IBlobFactory>();
             using (var stream = await GcEpiImageExtractor.GetImageStreamAsync(url))

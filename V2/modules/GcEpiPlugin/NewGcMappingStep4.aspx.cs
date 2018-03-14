@@ -137,7 +137,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             {
                 {"text", new List<string> {"String", "LongString", "XhtmlString", "Number", "FloatNumber", "Date", "Url"}},
                 {"section", new List<string> {"String", "LongString", "XhtmlString", "Number", "FloatNumber", "Date", "Url"} },
-                {"files", new List<string>()},
+                {"files", new List<string>{"ContentReference"}},
                 {"choice_checkbox", new List<string> {"CheckBoxList", "AppSettingsMultiple"}},
                 {"choice_radio", new List<string> {"Boolean", "DropDownList"}}
             };
