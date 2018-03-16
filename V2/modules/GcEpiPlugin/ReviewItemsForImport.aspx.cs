@@ -544,7 +544,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 var files = Client.GetFilesByItemId(item.Id);
                                 files.ToList().ForEach(async i =>
                                 {
-                                    await GcEpiContentParser.ImageParserAsync(i.Url, i.FileName, myPage.ContentLink);
+                                    await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, myPage.ContentLink);
                                 });
                                 importCounter++;
                             }

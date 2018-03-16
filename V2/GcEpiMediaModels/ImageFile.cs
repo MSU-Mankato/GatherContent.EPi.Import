@@ -16,7 +16,7 @@ namespace GatherContentImport.GcEpiMediaModels
             Description = "Add a heading.",
             GroupName = SystemTabNames.Content,
             Order = 1)]
-        public virtual string Heading { get; set; }
+        public virtual string Copyright { get; set; }
 
 
         [Display(
@@ -24,6 +24,6 @@ namespace GatherContentImport.GcEpiMediaModels
             Description = "This is where the body of the content goes.",
             GroupName = SystemTabNames.Content,
             Order = 2)]
-        public virtual string MainBody { get; set; }
+        public virtual string Description { get; set; }
     }
 }

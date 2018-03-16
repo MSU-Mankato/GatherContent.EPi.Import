@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -16,6 +17,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using GatherContentConnect.Objects;
 using GatherContentImport.GcEpiMediaModels;
+using Image = System.Drawing.Image;
 
 namespace GatherContentImport.GcEpiUtilities
 {
@@ -86,6 +88,30 @@ namespace GatherContentImport.GcEpiUtilities
                 imageFile.BinaryData = blob;
                 return contentRepository.Save(imageFile, SaveAction.Default, AccessLevel.Administer);
             }
+        }
+
+        public static async Task<object> FileParserAsync(string url, string fileName, ContentReference contentLink)
+        {
+            var contentAssetHelper = ServiceLocator.Current.GetInstance<ContentAssetHelper>();
+            // get an existing content asset folder or create a new one
+            var assetsFolder = contentAssetHelper.GetOrCreateAssetFolder(contentLink);
+            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var file = contentRepository.GetDefault<ImageFile>(assetsFolder.ContentLink);
+            file.Name = fileName;
+            var blobFactory = ServiceLocator.Current.GetInstance<IBlobFactory>();
+            var client = new HttpClient();
+            var byteArrayData = await client.GetByteArrayAsync(url);
+
+            var blob = blobFactory.CreateBlob(file.BinaryDataContainer, Path.GetExtension(file.Name));
+            using (var s = blob.OpenWrite())
+            {
+                var w = new StreamWriter(s);
+                w.BaseStream.Write(byteArrayData, 0, byteArrayData.Length);
+                w.Flush();
+            }
+
+            file.BinaryData = blob;
+            return contentRepository.Save(file, SaveAction.Publish);
         }
     }
 }
