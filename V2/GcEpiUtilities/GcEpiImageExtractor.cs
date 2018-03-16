@@ -28,7 +28,7 @@ namespace GatherContentImport.GcEpiUtilities
                 var encoder = GetEncoder(img.RawFormat);
                 var encoderParameters = GetEncoderParameters();
 
-                img.Save(stream, encoder, encoderParameters);
+             //   img.Save(stream, encoder, encoderParameters);
 
                 stream.Seek(0, SeekOrigin.Begin);
             }
