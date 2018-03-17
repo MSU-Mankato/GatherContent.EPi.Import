@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Castle.Components.DictionaryAdapter;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
@@ -22,14 +23,11 @@ namespace GatherContentImport.GcEpiUtilities
 {
     public static class GcEpiContentParser
     {
-        public static Dictionary<string, string[]> FileExtensions = new Dictionary<string, string[]>
+        public static Dictionary<string, List<string>> FileExtensions = new Dictionary<string, List<string>>
         {
-            {"Video", ((MediaDescriptorAttribute) new VideoFile().GetType().GetCustomAttributes(typeof(DisplayAttribute), true)[0]).
-                ExtensionString.Split(',')},
-            {"Image", ((MediaDescriptorAttribute) new ImageFile().GetType().GetCustomAttributes(typeof(DisplayAttribute), true)[0]).
-                ExtensionString.Split(',')},
-            {"Generic", ((MediaDescriptorAttribute) new GenericFile().GetType().GetCustomAttributes(typeof(DisplayAttribute), true)[0]).
-                ExtensionString.Split(',')}
+            {"Video", new List<string>{"flv","mp4","webm","avi","wmv","mpeg","ogg","mov","ogv","qt","mp3","pcm","aac","wma","flac","alac","wav","aiff"}},
+            {"Image", new List<string>{"jpg","jpeg","jpe","ico","gif","bmp","png","tga","tiff","eps","svg","webp"}},
+            {"Generic", new List<string>{"pdf","doc","docx","txt","xsl","xslx","html","css","zip","rtf","rar","csv","xml", "log"}}
         };
         public static object TextParser(string text, string propertyType)
         {
@@ -83,8 +81,9 @@ namespace GatherContentImport.GcEpiUtilities
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
 
             // Extract the file extension of the file by its name.
-            var fileExtension = Path.GetExtension(fileName);
-            
+            var fileExtension = Path.GetExtension(fileName).Replace(".","");
+
+            // 
             MediaData file;
             if (FileExtensions["Image"].Contains(fileExtension))
             {
@@ -100,7 +99,7 @@ namespace GatherContentImport.GcEpiUtilities
             {
                 file = contentRepository.GetDefault<VideoFile>(assetsFolder.ContentLink);
             }
-            
+           
             else
             {
                 return false;
@@ -113,7 +112,7 @@ namespace GatherContentImport.GcEpiUtilities
                 var client = new HttpClient();
                 var byteArrayData = await client.GetByteArrayAsync(url);
 
-                var blob = blobFactory.CreateBlob(file.BinaryDataContainer, fileExtension);
+                var blob = blobFactory.CreateBlob(file.BinaryDataContainer, Path.GetExtension(fileName));
                 using (var s = blob.OpenWrite())
                 {
                     var w = new StreamWriter(s);
@@ -124,12 +123,11 @@ namespace GatherContentImport.GcEpiUtilities
                 contentRepository.Save(file, SaveAction.Default, AccessLevel.Administer);
                 return true;
             }
-
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return false;
-            } 
+            }
         }
     }
 }

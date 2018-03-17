@@ -9,7 +9,7 @@ using EPiServer.Web;
 namespace GatherContentImport.GcEpiMediaModels
 {
     [ContentType(DisplayName = "DefaultMedia1", GUID = "1fd342c6-002e-4312-bee7-e35ba7866a29", Description = "")]
-    [MediaDescriptor(ExtensionString = "flv,mp4,webm,avi,wmv,mpeg,ogg,mov,ogv,qt,mp3,pcm, aac,wma,flac,alac,wav,aiff,pcm")]
+    [MediaDescriptor(ExtensionString = "flv,mp4,webm,avi,wmv,mpeg,ogg,mov,ogv,qt,mp3,pcm,aac,wma,flac,alac,wav,aiff,pcm")]
     public class VideoFile : VideoData
     {
             [CultureSpecific]
