@@ -8,7 +8,7 @@ using EPiServer.Framework.DataAnnotations;
 namespace GatherContentImport.GcEpiMediaModels
 {
     [ContentType(DisplayName = "GenericFile", GUID = "6143d87a-740b-44db-bfae-9d0a84570358", Description = "")]
-    [MediaDescriptor(ExtensionString = "pdf,doc,docx")]
+    [MediaDescriptor(ExtensionString = "pdf,doc,docx,txt,xsl,xslx,html,css,zip,rtf,rar,csv,xml,log")]
     public class GenericFile : MediaData
     {
             [CultureSpecific]

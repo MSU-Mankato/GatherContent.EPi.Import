@@ -260,7 +260,9 @@
     <Compile Include="GcDynamicClasses\GcDynamicImports.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicTemplateMappings.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicUtilities.cs" />
+    <Compile Include="GcEpiMediaModels\GenericFile.cs" />
     <Compile Include="GcEpiMediaModels\ImageFile.cs" />
+    <Compile Include="GcEpiMediaModels\VideoFile.cs" />
     <Compile Include="GcEpiObjects\GcEpiStatusMap.cs" />
     <Compile Include="GcEpiUtilities\GcEpiContentParser.cs" />
     <Compile Include="GcEpiUtilities\GcEpiImageExtractor.cs" />
