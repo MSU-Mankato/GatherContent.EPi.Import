@@ -18,8 +18,10 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -222,30 +224,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientResources\css\chosen.css" />
-    <Content Include="ClientResources\css\chosen.min.css" />
     <Content Include="ClientResources\css\loading.css" />
-    <Content Include="ClientResources\css\prism.css" />
-    <Content Include="ClientResources\css\style.css" />
     <Content Include="ClientResources\img\chosen-sprite%402x.png" />
     <Content Include="ClientResources\img\chosen-sprite.png" />
-    <Content Include="ClientResources\img\chosen.png" />
     <Content Include="ClientResources\img\loading-icon.png" />
-    <Content Include="ClientResources\img\loading.png" />
-    <Content Include="ClientResources\img\oss-credit.png" />
     <Content Include="ClientResources\js\chosen.jquery.js" />
-    <Content Include="ClientResources\js\chosen.jquery.min.js" />
     <Content Include="ClientResources\js\chosen.proto.js" />
-    <Content Include="ClientResources\js\chosen.proto.min.js" />
     <Content Include="ClientResources\js\init.js" />
     <Content Include="ClientResources\js\init.proto.js" />
-    <Content Include="ClientResources\js\jquery-1.12.4.min.js" />
-    <None Include="ClientResources\js\jquery-1.4.1-vsdoc.js" />
-    <Content Include="ClientResources\js\jquery-1.4.1.js" />
-    <Content Include="ClientResources\js\jquery-1.4.1.min.js" />
-    <Content Include="ClientResources\js\jquery-3.2.1.min.js" />
     <Content Include="ClientResources\js\loading.js" />
-    <Content Include="ClientResources\js\prism.js" />
-    <Content Include="ClientResources\js\prototype-1.7.0.0.js" />
     <Content Include="modules\GcEpiPlugin\GatherContentConfigSetup.aspx" />
     <Content Include="modules\GcEpiPlugin\GcEpiTemplateMappings.aspx" />
     <Content Include="modules\GcEpiPlugin\NewGcMappingStep1.aspx" />
