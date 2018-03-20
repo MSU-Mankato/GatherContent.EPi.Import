@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>GatherContent.EPi.Import</id>
+        <version>0.7.70-beta</version>
+        <title>GatherContent.EPi.Import</title>
+        <authors>Minnesota State University,Mankato</authors>
+        <owners>Minnesota State University,Mankato</owners>
+        <licenseUrl>https://github.com/MSU-Mankato/GatherContent.EPi.Import/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/MSU-Mankato/GatherContent.EPi.Import</projectUrl>
+        <iconUrl>http://www.mnsu.edu/images/default-purple2x.jpg</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>GatherContent EPiServer Connector</description>
+        <summary>GatherContent EPiServer connector for importing your GatherContent items into EPiServer.</summary>
+        <releaseNotes>Pre-Release.
+Requires EPi 11.2.1
+0.7.70: various bug-fixes</releaseNotes>
+        <copyright>Copyright 2018 Minnesota State University,Mankato</copyright>
+        <language>en-US</language>
+        <tags>Episerver, GatherContent, CMS</tags>
+        <dependencies>
+            <group />
+            <group targetFramework=".NETFramework4.6.2">
+                <dependency id="GatherContentConnect" version="0.7.1-ci-20171115-163745" />
+                <dependency id="EPiServer.CMS" version="11.2.1" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="modules\GcEpiPlugin\GatherContentConfigSetup.aspx" target="content\modules\GcEpiPlugin\GatherContentConfigSetup.aspx" />
+        <file src="modules\GcEpiPlugin\GcEpiTemplateMappings.aspx" target="content\modules\GcEpiPlugin\GcEpiTemplateMappings.aspx" />
+        <file src="modules\GcEpiPlugin\NewGcMappingStep1.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep1.aspx" />
+        <file src="modules\GcEpiPlugin\NewGcMappingStep2.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep2.aspx" />
+        <file src="modules\GcEpiPlugin\NewGcMappingStep3.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep3.aspx" />
+        <file src="modules\GcEpiPlugin\NewGcMappingStep4.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep4.aspx" />
+        <file src="modules\GcEpiPlugin\ReviewItemsForImport.aspx" target="content\modules\GcEpiPlugin\ReviewItemsForImport.aspx" />
+        <file src="bin\GatherContentImport.dll" target="lib\net462"/>
+    </files>
+</package>

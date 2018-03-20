@@ -59,7 +59,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (_credentialsStore.IsNullOrEmpty())
             {
                 Response.Write("<script>alert('Please setup your GatherContent config first!');" +
-                               "window.location='/modules/GcEpiPlugin/GatherContent.aspx'</script>");
+                               "window.location='/modules/GcEpiPlugin/GatherContentConfigSetup.aspx'</script>");
                 Visible = false;
                 return;
             }
@@ -325,7 +325,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         }
                     }
                 }
-                else
+                else if (currentMapping.PostType == "PageType")
                 {
                     // Get the parent page data.
                     var parentData = _contentRepository.Get<ContentFolder>(ContentReference.Parse(_defaultParentId));

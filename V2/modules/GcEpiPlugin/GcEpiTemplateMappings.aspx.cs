@@ -40,7 +40,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (_credentialsStore.IsNullOrEmpty())
             {
                 Response.Write("<script>alert('Please setup the GatherContent config first!');" +
-                               "window.location='/modules/GcEpiPlugin/GatherContent.aspx'</script>");
+                               "window.location='/modules/GcEpiPlugin/GatherContentConfigSetup.aspx'</script>");
                 Visible = false;
                 return;
             }
