@@ -12,9 +12,7 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>GatherContent EPiServer Connector</description>
         <summary>GatherContent EPiServer connector for importing your GatherContent items into EPiServer.</summary>
-        <releaseNotes>Pre-Release.
-Requires EPi 11.2.1
-0.7.70: various bug-fixes</releaseNotes>
+        <releaseNotes>Pre-Release.0.7.70: various bug-fixes</releaseNotes>
         <copyright>Copyright 2018 Minnesota State University,Mankato</copyright>
         <language>en-US</language>
         <tags>Episerver, GatherContent, CMS</tags>
@@ -35,6 +33,7 @@ Requires EPi 11.2.1
         <file src="modules\GcEpiPlugin\ReviewItemsForImport.aspx" target="content\modules\GcEpiPlugin\ReviewItemsForImport.aspx" />
         <file src="ClientResources\css\chosen.css" target="content\ClientResources\css\chosen.css"/>
         <file src="ClientResources\css\loading.css" target="content\ClientResources\css\loading.css"/>
+        <file src="ClientResources\css\style.css" target="content\ClientResources\css\style.css"/>
         <file src="ClientResources\img\chosen-sprite.png" target="content\ClientResources\img\chosen-sprite.png"/>
         <file src="ClientResources\img\chosen-sprite@2x.png" target="content\ClientResources\img\chosen-sprite@2x.png"/>
         <file src="ClientResources\img\loading-icon.png" target="content\ClientResources\img\loading-icon.png"/>
