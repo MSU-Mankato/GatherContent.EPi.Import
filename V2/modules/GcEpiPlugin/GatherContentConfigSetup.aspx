@@ -3,7 +3,6 @@
 <head id="Head1" runat="server">
     <EPiServer:RequiredClientResources RenderingArea="Header" ID="RequiredResourcesHeader" runat="server" />
     <title>GatherContent</title>
-    <link rel="stylesheet" href="/ClientResources/css/prism.css">
     <link rel="stylesheet" href="/ClientResources/css/chosen.css">
     <link rel="stylesheet" href="/ClientResources/css/loading.css">
 </head>
@@ -33,7 +32,6 @@
 
 </form>
 </body>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js" type="text/javascript"></script>
 <script src="/ClientResources/js/chosen.jquery.js" type="text/javascript"></script>
 <script src="/ClientResources/js/loading.js" type="text/javascript"></script>

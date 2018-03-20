@@ -19,7 +19,6 @@ Requires EPi 11.2.1
         <language>en-US</language>
         <tags>Episerver, GatherContent, CMS</tags>
         <dependencies>
-            <group />
             <group targetFramework=".NETFramework4.6.2">
                 <dependency id="GatherContentConnect" version="0.7.1-ci-20171115-163745" />
                 <dependency id="EPiServer.CMS" version="11.2.1" />
@@ -34,6 +33,16 @@ Requires EPi 11.2.1
         <file src="modules\GcEpiPlugin\NewGcMappingStep3.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep3.aspx" />
         <file src="modules\GcEpiPlugin\NewGcMappingStep4.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep4.aspx" />
         <file src="modules\GcEpiPlugin\ReviewItemsForImport.aspx" target="content\modules\GcEpiPlugin\ReviewItemsForImport.aspx" />
+        <file src="ClientResources\css\chosen.css" target="content\ClientResources\css\chosen.css"/>
+        <file src="ClientResources\css\loading.css" target="content\ClientResources\css\loading.css"/>
+        <file src="ClientResources\img\chosen-sprite.png" target="content\ClientResources\img\chosen-sprite.png"/>
+        <file src="ClientResources\img\chosen-sprite@2x.png" target="content\ClientResources\img\chosen-sprite@2x.png"/>
+        <file src="ClientResources\img\loading-icon.png" target="content\ClientResources\img\loading-icon.png"/>
+        <file src="ClientResources\js\chosen.jquery.js" target="content\ClientResources\js\chosen.jquery.js"/>
+        <file src="ClientResources\js\chosen.proto.js" target="content\ClientResources\js\chosen.proto.js"/>
+        <file src="ClientResources\js\init.js" target="content\ClientResources\js\init.js"/>
+        <file src="ClientResources\js\init.proto.js" target="content\ClientResources\js\init.proto.js"/>
+        <file src="ClientResources\js\loading.js" target="content\ClientResources\js\loading.js"/>
         <file src="bin\GatherContentImport.dll" target="lib\net462"/>
     </files>
 </package>
