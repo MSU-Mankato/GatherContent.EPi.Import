@@ -3,8 +3,6 @@
 <head id="Head1" runat="server">
     <link href="/EPiServer/CMS/App_Themes/Default/Styles/system.css" type="text/css" rel="stylesheet">
     <link href="/EPiServer/CMS/App_Themes/Default/Styles/ToolButton.css" type="text/css" rel="stylesheet">
-    <%--<link rel="stylesheet" href="/Scripts/style.css">--%>
-    <link rel="stylesheet" href="/ClientResources/css/prism.css">
     <link rel="stylesheet" href="/ClientResources/css/chosen.css">
     <link rel="stylesheet" href="/ClientResources/css/loading.css">
     <title>Review Items For Import</title>
@@ -122,7 +120,6 @@
 </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js" type="text/javascript"></script>
 <script src="/ClientResources/js/chosen.jquery.js" type="text/javascript"></script>
-<script src="/ClientResources/js/prism.js" type="text/javascript" charset="utf-8"></script>
 <script src="/ClientResources/js/loading.js" type="text/javascript"></script>
 </body>
 </html>

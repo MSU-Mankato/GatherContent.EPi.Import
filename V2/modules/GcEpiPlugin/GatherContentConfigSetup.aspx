@@ -36,6 +36,5 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js" type="text/javascript"></script>
 <script src="/ClientResources/js/chosen.jquery.js" type="text/javascript"></script>
-<script src="/ClientResources/js/prism.js" type="text/javascript" charset="utf-8"></script>
 <script src="/ClientResources/js/loading.js" type="text/javascript"></script>
 </html>
