@@ -43,5 +43,6 @@
         <file src="ClientResources\js\init.proto.js" target="content\ClientResources\js\init.proto.js"/>
         <file src="ClientResources\js\loading.js" target="content\ClientResources\js\loading.js"/>
         <file src="bin\GatherContentImport.dll" target="lib\net462"/>
+        <!-- <file src="MIT-license.txt" target="MIT-license.txt" /> -->
     </files>
 </package>
