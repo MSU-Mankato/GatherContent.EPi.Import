@@ -121,7 +121,6 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         {
                             var gcEpiMisc = new GcEpiMiscUtility();
                             var dropDownList = MetaDataProducer(gcEpiMisc.GetMediaTypes(), element, 6);
-                            dropDownList.Items.Add(new ListItem("Import", "Import"));
                             tCell.Controls.Add(dropDownList);
                         }
                     }
@@ -137,7 +136,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             {
                 {"text", new List<string> {"String", "LongString", "XhtmlString", "Number", "FloatNumber", "Date", "Url"}},
                 {"section", new List<string> {"String", "LongString", "XhtmlString", "Number", "FloatNumber", "Date", "Url"} },
-                {"files", new List<string>{"ContentReference"}},
+                {"files", new List<string>()},
                 {"choice_checkbox", new List<string> {"CheckBoxList", "AppSettingsMultiple"}},
                 {"choice_radio", new List<string> {"Boolean", "DropDownList"}}
             };
@@ -156,6 +155,11 @@ namespace GatherContentImport.modules.GcEpiPlugin
             // Create a drop down list with field names as the options.
             var ddlMetaData = new DropDownList { Height = 28, Width = 194, CssClass = "chosen-select" };
             ddlMetaData.Items.Add(new ListItem("Do Not Import", "-1"));
+            
+            // For GcFields that are attachment types, add an option called 'Import'.
+            if (element.Type == "files")
+                ddlMetaData.Items.Add(new ListItem("Import Attachments", "Import-Attachments"));
+
             contentType.PropertyDefinitions.ToList().
                 ForEach(i =>
                 {

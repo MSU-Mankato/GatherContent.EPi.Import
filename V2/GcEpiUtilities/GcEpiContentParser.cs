@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Castle.Components.DictionaryAdapter;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAccess;
 using EPiServer.Framework.Blobs;
-using EPiServer.Framework.DataAnnotations;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using GatherContentConnect.Objects;
-using GatherContentImport.GcEpiMediaModels;
+using GatherContentImport.Models.Media;
 
 namespace GatherContentImport.GcEpiUtilities
 {
@@ -69,14 +66,18 @@ namespace GatherContentImport.GcEpiUtilities
             return new SelectList(radioButtons, "Value", "Text", null);
         }
 
-        public static async Task<bool> FileParserAsync(string url, string fileName, ContentReference contentLink)
+        public static async Task<bool> FileParserAsync(string url, string fileName, string postType,ContentReference contentLink)
         {
-            // Get an instance of ContentAssetHelper class.
-            var contentAssetHelper = ServiceLocator.Current.GetInstance<ContentAssetHelper>();
+            // If the item is a page, then create a content link for 'For this Page'. Else, use the provided contentLink.
+            if (postType == "PageType")
+            {
+                // Get an instance of ContentAssetHelper class.
+                var contentAssetHelper = ServiceLocator.Current.GetInstance<ContentAssetHelper>();
 
-            // Get an existing content asset folder or create a new one
-            var assetsFolder = contentAssetHelper.GetOrCreateAssetFolder(contentLink);
-
+                // Get an existing content asset folder or create a new one
+                contentLink = contentAssetHelper.GetOrCreateAssetFolder(contentLink).ContentLink;
+            }
+            
             // Get an instance of IContentRepository.
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
 
@@ -87,17 +88,17 @@ namespace GatherContentImport.GcEpiUtilities
             MediaData file;
             if (FileExtensions["Image"].Contains(fileExtension))
             {
-                file = contentRepository.GetDefault<ImageFile>(assetsFolder.ContentLink);
+                file = contentRepository.GetDefault<ImageFile>(contentLink);
             }
 
             else if (FileExtensions["Generic"].Contains(fileExtension))
             {
-                file = contentRepository.GetDefault<GenericFile>(assetsFolder.ContentLink);
+                file = contentRepository.GetDefault<GenericFile>(contentLink);
             }
 
             else if (FileExtensions["Video"].Contains(fileExtension))
             {
-                file = contentRepository.GetDefault<VideoFile>(assetsFolder.ContentLink);
+                file = contentRepository.GetDefault<VideoFile>(contentLink);
             }
            
             else

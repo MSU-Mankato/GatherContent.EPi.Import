@@ -1,12 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
-using EPiServer.SpecializedProperties;
-using GatherContentImport.GcEpiMediaModels;
 
-namespace GatherContentImport.Models
+namespace GatherContentImport.Models.Media
 {
     [ContentType(DisplayName = "MediaTestPage", GUID = "99aa0297-3efb-4ec6-a844-dc1a5417e98c", Description = "")]
     public class MediaTestPage : PageData

@@ -325,7 +325,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         }
                     }
                 }
-                else if (currentMapping.PostType == "PageType")
+                else if (currentMapping.PostType == "BlockType")
                 {
                     // Get the parent page data.
                     var parentData = _contentRepository.Get<ContentFolder>(ContentReference.Parse(_defaultParentId));
@@ -486,6 +486,9 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 // naming convention. So, we just get the key that contains the value of that drop down's selected value.
                 var parentId = Request.Form[key.ToString().Replace("chkImport", "ddl")];
 
+                // A flag whether to import attachments or not.
+                var importFilesFlag = false;
+
                 // Since the post type of the item is known beforehand, we can separate the import process for different post types.
                 switch (currentMapping.PostType)
                 {
@@ -517,39 +520,46 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             {
                                 var splitStrings = map.Split('~');
                                 var fieldName = splitStrings[0];
+
+                                // Set the importFilesFlag to true if fieldName is "Import"
+                                if (fieldName == "Import-Attachments")
+                                    importFilesFlag = true;
                                 var propDef = pageType.PropertyDefinitions.ToList().Find(p => p.Name == fieldName);
                                 if (propDef == null) continue;
                                 var configs = item.Config.ToList();
                                 configs.ForEach(j => j.Elements.ToList().ForEach(x =>
                                 {
                                     if (x.Name != splitStrings[1]) return;
-                                    switch (x.Type)
-                                    {
-                                        case "text":
-                                            myPage.Property[propDef.Name].Value = GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
-                                            break;
-                                        case "section":
-                                            myPage.Property[propDef.Name].Value = GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
-                                            break;
-                                        case "choice_radio":
-                                        case "choice_checkbox":
-                                            myPage.Property[propDef.Name].Value = GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
-                                            break;
-                                    }
+                                    if (x.Type == "text")
+                                        myPage.Property[propDef.Name].Value =
+                                            GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
+                                    else if (x.Type == "section")
+                                        myPage.Property[propDef.Name].Value =
+                                            GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
+                                    else if (x.Type == "choice_radio" || x.Type == "choice_checkbox")
+                                        myPage.Property[propDef.Name].Value =
+                                            GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
                                 }));
                             }
                             if (!importItemFlag) continue;
                             {
                                 SaveContent(myPage, item, currentMapping);
                                 var files = Client.GetFilesByItemId(item.Id);
-                                files.ToList().ForEach(async i =>
+
+                                // Import all the attachments in the GatherContent with their appropriate media types
+                                // if the selected value of that field is import.
+                                if (importFilesFlag)
                                 {
-                                    await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, myPage.ContentLink);
-                                });
+                                    files.ToList().ForEach(async i =>
+                                    {
+                                        await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "PageType", myPage.ContentLink);
+                                    });
+                                }
                                 importCounter++;
                             }
                         }
                         break;
+
                     case "BlockType":
                         var blockParent = parentId.IsEmpty() ? ContentReference.GlobalBlockFolder : ContentReference.Parse(parentId);
                         var selectedBlockType = currentMapping.EpiContentType;
@@ -581,27 +591,41 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             {
                                 var splitStrings = map.Split('~');
                                 var fieldName = splitStrings[0];
+
+                                // Set the importFilesFlag to true if fieldName is "Import"
+                                if (fieldName == "Import-Attachments")
+                                    importFilesFlag = true;
                                 var propDef = blockType.PropertyDefinitions.ToList().Find(p => p.Name == fieldName);
                                 if (propDef == null) continue;
                                 var configs = item.Config.ToList();
-                                var result = new object();
                                 configs.ForEach(j => j.Elements.ToList().ForEach(x =>
                                 {
                                     if (x.Name != splitStrings[1]) return;
                                     if (x.Type == "text")
-                                        result = GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
+                                        myBlock.Property[propDef.Name].Value =
+                                            GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
                                     else if (x.Type == "section")
-                                        result = GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
+                                        myBlock.Property[propDef.Name].Value =
+                                            GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
                                     else if (x.Type == "choice_radio" || x.Type == "choice_checkbox")
-                                    {
-                                        result = GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
-                                    }
-                                    content.Property[propDef.Name].Value = result;
+                                        myBlock.Property[propDef.Name].Value =
+                                            GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
                                 }));
                             }
                             if (!importItemFlag) continue;
                             {
                                 SaveContent(content, item, currentMapping);
+                                var files = Client.GetFilesByItemId(item.Id);
+
+                                // Import all the attachments in the GatherContent with their appropriate media types
+                                // if the selected value of that field is import.
+                                if (importFilesFlag)
+                                {
+                                    files.ToList().ForEach(async i =>
+                                    {
+                                        await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "BlockType", blockParent);
+                                    });
+                                }
                                 importCounter++;
                             }
                         }
@@ -658,25 +682,25 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             var propDef = pageType.PropertyDefinitions.ToList().Find(p => p.Name == fieldName);
                             if (propDef == null) continue;
                             var configs = gcItem.Config.ToList();
-                            var result = new object();
                             configs.ForEach(j => j.Elements.ToList().ForEach(x =>
                             {
                                 if (x.Name != splitStrings[1]) return;
                                 if (x.Type == "text")
-                                    result = GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
+                                    pageClone.Property[propDef.Name].Value =
+                                        GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
                                 else if (x.Type == "section")
-                                    result = GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
+                                    pageClone.Property[propDef.Name].Value =
+                                        GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
                                 else if (x.Type == "choice_radio" || x.Type == "choice_checkbox")
-                                {
-                                    result = GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
-                                }
-                                pageClone.Property[propDef.Name].Value = result;
+                                    pageClone.Property[propDef.Name].Value =
+                                        GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
                             }));
                         }
                         GcDynamicUtilities.DeleteItem<GcDynamicImports>(_contentStore[_contentStore.FindIndex(i => i.ItemId.ToString() == itemId)].Id);
                         SaveContent(pageClone, gcItem, currentMapping);
                         updateCount++;
                         break;
+
                     case "BlockType":
                         // ReSharper disable once SuspiciousTypeConversion.Global
                         var blockToUpdate = _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
@@ -695,19 +719,18 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             var propDef = blockType.PropertyDefinitions.ToList().Find(p => p.Name == fieldName);
                             if (propDef == null) continue;
                             var configs = gcItem.Config.ToList();
-                            var result = new object();
                             configs.ForEach(j => j.Elements.ToList().ForEach(x =>
                             {
                                 if (x.Name != splitStrings[1]) return;
                                 if (x.Type == "text")
-                                    result = GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
+                                    blockClone.Property[propDef.Name].Value =
+                                        GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
                                 else if (x.Type == "section")
-                                    result = GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
+                                    blockClone.Property[propDef.Name].Value =
+                                        GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
                                 else if (x.Type == "choice_radio" || x.Type == "choice_checkbox")
-                                {
-                                    result = GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
-                                }
-                                blockClone.Property[propDef.Name].Value = result;
+                                    blockClone.Property[propDef.Name].Value =
+                                        GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
                             }));
                         }
                         GcDynamicUtilities.DeleteItem<GcDynamicImports>(_contentStore[_contentStore.FindIndex(i => i.ItemId.ToString() == itemId)].Id);

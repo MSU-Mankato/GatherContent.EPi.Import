@@ -4,7 +4,7 @@ using EPiServer.Framework.DataAnnotations;
 using System.ComponentModel.DataAnnotations;
 using EPiServer.DataAbstraction;
 
-namespace GatherContentImport.GcEpiMediaModels
+namespace GatherContentImport.Models.Media
 {
     [ContentType(DisplayName = "Image File", GUID = "0A89E464-56D4-449F-AEA8-2BF774AB8730")]
     [MediaDescriptor(ExtensionString = "jpg,jpeg,jpe,ico,gif,bmp,png,tga,tiff,eps,svg,webp")]

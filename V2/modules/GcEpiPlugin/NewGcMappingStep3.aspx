@@ -42,7 +42,6 @@
                         <asp:ListItem Text="Select a Post Type" Value="-1"></asp:ListItem>
                         <asp:ListItem Text="Page Type" Value="PageType"></asp:ListItem>
                         <asp:ListItem Text="Block Type" Value="BlockType"></asp:ListItem>
-                        <asp:ListItem Text="Media Type" Value="MediaType"></asp:ListItem>
                         <%--<asp:ListItem Text="Media Type" Value="MediaType"></asp:ListItem>--%>
                     </asp:DropDownList>
                 </td>
