@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Castle.Components.DictionaryAdapter;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
@@ -49,6 +50,9 @@ namespace GatherContentImport.GcEpiUtilities
                 case "String":
                 case "LongString":
                     return regexResult;
+                case "StringList":
+                    var strings = regexResult.Split(',').Select(p => p.Trim()).ToList();
+                    return strings;
                 default:
                     return text;
             }

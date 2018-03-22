@@ -134,7 +134,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             // Define the dictionary of all the available Episerver types for GatherContent types.
             var typeDictionary = new Dictionary<string, List<string>>
             {
-                {"text", new List<string> {"String", "LongString", "XhtmlString", "Number", "FloatNumber", "Date", "Url"}},
+                {"text", new List<string> {"String", "LongString", "XhtmlString", "Number", "FloatNumber", "Date", "StringList", "Url"}},
                 {"section", new List<string> {"String", "LongString", "XhtmlString", "Number", "FloatNumber", "Date", "Url"} },
                 {"files", new List<string>()},
                 {"choice_checkbox", new List<string> {"CheckBoxList", "AppSettingsMultiple"}},
