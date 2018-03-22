@@ -28,7 +28,7 @@ namespace GatherContentImport.modules.GcEpiPlugin {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::EPiServer.Framework.Web.WebControls.RequiredClientResources RequiredResourcesHeader;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl RequiredResourcesHeader;
         
         /// <summary>
         /// form1 control.

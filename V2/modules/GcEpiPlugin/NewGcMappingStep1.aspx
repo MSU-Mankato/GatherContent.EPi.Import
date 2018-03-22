@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head id="Head1" runat="server">
     <title>New GatherContent Mapping</title>
-    <link rel="stylesheet" href="/ClientResources/css/loading.css">
+    <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/chosen.css">
+    <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/loading.css">
 </head>
 <body>
 <form id="form1" runat="server">
@@ -20,6 +21,7 @@
     </fieldset>
 </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js" type="text/javascript"></script>
-<script src="/ClientResources/js/loading.js" type="text/javascript"></script>
+<script src="/modules/GcEpiPlugin/ClientResources/js/chosen.jquery.js" type="text/javascript"></script>
+<script src="/modules/GcEpiPlugin/ClientResources/js/loading.js" type="text/javascript"></script>
 </body>
 </html>
