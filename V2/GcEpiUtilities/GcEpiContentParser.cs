@@ -20,12 +20,6 @@ namespace GatherContentImport.GcEpiUtilities
 {
     public static class GcEpiContentParser
     {
-        public static Dictionary<string, List<string>> FileExtensions = new Dictionary<string, List<string>>
-        {
-            {"Video", new List<string>{"flv","mp4","webm","avi","wmv","mpeg","ogg","mov","ogv","qt","mp3","pcm","aac","wma","flac","alac","wav","aiff"}},
-            {"Image", new List<string>{"jpg","jpeg","jpe","ico","gif","bmp","png","tga","tiff","eps","svg","webp"}},
-            {"Generic", new List<string>{"pdf","doc","docx","txt","xsl","xslx","html","css","zip","rtf","rar","csv","xml", "log"}}
-        };
         public static object TextParser(string text, string propertyType)
         {
             bool success;
@@ -66,8 +60,16 @@ namespace GatherContentImport.GcEpiUtilities
             return new SelectList(radioButtons, "Value", "Text", null);
         }
 
-        public static async Task<bool> FileParserAsync(string url, string fileName, string postType,ContentReference contentLink)
+        public static async Task<bool> FileParserAsync(string url, string fileName, string postType, ContentReference contentLink, SaveAction saveAction)
         {
+            // Initialize fileExtensions dictionary with all the supported audio, video and generic files.
+            var fileExtensions = new Dictionary<string, List<string>>
+            {
+                {"Video", new List<string>{"flv","mp4","webm","avi","wmv","mpeg","ogg","mov","ogv","qt","mp3","pcm","aac","wma","flac","alac","wav","aiff"}},
+                {"Image", new List<string>{"jpg","jpeg","jpe","ico","gif","bmp","png","tga","tiff","eps","svg","webp"}},
+                {"Generic", new List<string>{"pdf","doc","docx","txt","xsl","xslx","html","css","zip","rtf","rar","csv","xml", "log"}}
+            };
+
             // If the item is a page, then create a content link for 'For this Page'. Else, use the provided contentLink.
             if (postType == "PageType")
             {
@@ -84,19 +86,19 @@ namespace GatherContentImport.GcEpiUtilities
             // Extract the file extension of the file by its name.
             var fileExtension = Path.GetExtension(fileName).Replace(".","");
 
-            // 
+            // Initialize a new MediaData object.
             MediaData file;
-            if (FileExtensions["Image"].Contains(fileExtension))
+            if (fileExtensions["Image"].Contains(fileExtension))
             {
                 file = contentRepository.GetDefault<ImageFile>(contentLink);
             }
 
-            else if (FileExtensions["Generic"].Contains(fileExtension))
+            else if (fileExtensions["Generic"].Contains(fileExtension))
             {
                 file = contentRepository.GetDefault<GenericFile>(contentLink);
             }
 
-            else if (FileExtensions["Video"].Contains(fileExtension))
+            else if (fileExtensions["Video"].Contains(fileExtension))
             {
                 file = contentRepository.GetDefault<VideoFile>(contentLink);
             }
@@ -121,7 +123,7 @@ namespace GatherContentImport.GcEpiUtilities
                     w.Flush();
                 }
                 file.BinaryData = blob;
-                contentRepository.Save(file, SaveAction.Default, AccessLevel.Administer);
+                contentRepository.Save(file, saveAction, AccessLevel.Administer);
                 return true;
             }
             catch (Exception e)

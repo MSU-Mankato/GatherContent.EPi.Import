@@ -409,7 +409,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
         }
 
         // This method saves the content in accordance with the save action selected by the user for the item.
-        private void SaveContent(IContent content, IGcItem item, GcDynamicTemplateMappings currentMapping)
+        private SaveAction SaveContent(IContent content, IGcItem item, GcDynamicTemplateMappings currentMapping)
         {
             /*
                 <summary>
@@ -440,6 +440,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now.ToLocalTime());
             GcDynamicUtilities.SaveStore(dds);
+            return saveAction;
         }
 
         protected void BtnImportItem_OnClick(object sender, EventArgs e)
@@ -499,7 +500,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         foreach (var pageType in pageTypes)
                         {
                             if (selectedPageType.Substring(5) != pageType.Name) continue;
-                            var myPage = _contentRepository.GetDefault<PageData>(pageParent, pageType.ID);
+                            var newPage = _contentRepository.GetDefault<PageData>(pageParent, pageType.ID);
                             foreach (var cs in _contentStore)
                             {
                                 try
@@ -515,7 +516,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                     Console.WriteLine(ex);
                                 }
                             }
-                            myPage.PageName = item.Name;
+                            newPage.PageName = item.Name;
                             foreach (var map in currentMapping.EpiFieldMaps)
                             {
                                 var splitStrings = map.Split('~');
@@ -531,19 +532,19 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 {
                                     if (x.Name != splitStrings[1]) return;
                                     if (x.Type == "text")
-                                        myPage.Property[propDef.Name].Value =
+                                        newPage.Property[propDef.Name].Value =
                                             GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
                                     else if (x.Type == "section")
-                                        myPage.Property[propDef.Name].Value =
+                                        newPage.Property[propDef.Name].Value =
                                             GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
                                     else if (x.Type == "choice_radio" || x.Type == "choice_checkbox")
-                                        myPage.Property[propDef.Name].Value =
+                                        newPage.Property[propDef.Name].Value =
                                             GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
                                 }));
                             }
                             if (!importItemFlag) continue;
                             {
-                                SaveContent(myPage, item, currentMapping);
+                                var saveAction = SaveContent(newPage, item, currentMapping);
                                 var files = Client.GetFilesByItemId(item.Id);
 
                                 // Import all the attachments in the GatherContent with their appropriate media types
@@ -552,7 +553,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 {
                                     files.ToList().ForEach(async i =>
                                     {
-                                        await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "PageType", myPage.ContentLink);
+                                        await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "PageType", newPage.ContentLink, saveAction);
                                     });
                                 }
                                 importCounter++;
@@ -567,7 +568,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         foreach (var blockType in blockTypes)
                         {
                             if (selectedBlockType.Substring(6) != blockType.Name) continue;
-                            var myBlock = _contentRepository.GetDefault<BlockData>(blockParent, blockType.ID);
+                            var newBlock = _contentRepository.GetDefault<BlockData>(blockParent, blockType.ID);
                             foreach (var cs in _contentStore)
                             {
                                 try
@@ -584,7 +585,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 }
                             }
                             // ReSharper disable once SuspiciousTypeConversion.Global
-                            var content = myBlock as IContent;
+                            var content = newBlock as IContent;
                             // ReSharper disable once PossibleNullReferenceException
                             content.Name = item.Name;
                             foreach (var map in currentMapping.EpiFieldMaps)
@@ -602,19 +603,19 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 {
                                     if (x.Name != splitStrings[1]) return;
                                     if (x.Type == "text")
-                                        myBlock.Property[propDef.Name].Value =
+                                        newBlock.Property[propDef.Name].Value =
                                             GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
                                     else if (x.Type == "section")
-                                        myBlock.Property[propDef.Name].Value =
+                                        newBlock.Property[propDef.Name].Value =
                                             GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
                                     else if (x.Type == "choice_radio" || x.Type == "choice_checkbox")
-                                        myBlock.Property[propDef.Name].Value =
+                                        newBlock.Property[propDef.Name].Value =
                                             GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
                                 }));
                             }
                             if (!importItemFlag) continue;
                             {
-                                SaveContent(content, item, currentMapping);
+                                var saveAction =SaveContent(content, item, currentMapping);
                                 var files = Client.GetFilesByItemId(item.Id);
 
                                 // Import all the attachments in the GatherContent with their appropriate media types
@@ -623,7 +624,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 {
                                     files.ToList().ForEach(async i =>
                                     {
-                                        await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "BlockType", blockParent);
+                                        await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "BlockType", blockParent, saveAction);
                                     });
                                 }
                                 importCounter++;
