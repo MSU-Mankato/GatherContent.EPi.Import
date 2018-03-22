@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -20,6 +21,7 @@ namespace GatherContentImport.GcEpiUtilities
 {
     public static class GcEpiContentParser
     {
+        private static readonly IContentRepository ContentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
         public static object TextParser(string text, string propertyType)
         {
             bool success;
@@ -60,7 +62,7 @@ namespace GatherContentImport.GcEpiUtilities
             return new SelectList(radioButtons, "Value", "Text", null);
         }
 
-        public static async Task<bool> FileParserAsync(string url, string fileName, string postType, ContentReference contentLink, SaveAction saveAction)
+        public static async Task<bool> FileParserAsync(GcFile gcFile, string postType, ContentReference contentLink, SaveAction saveAction, string action)
         {
             // Initialize fileExtensions dictionary with all the supported audio, video and generic files.
             var fileExtensions = new Dictionary<string, List<string>>
@@ -84,7 +86,7 @@ namespace GatherContentImport.GcEpiUtilities
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
 
             // Extract the file extension of the file by its name.
-            var fileExtension = Path.GetExtension(fileName).Replace(".","");
+            var fileExtension = Path.GetExtension(gcFile.FileName).Replace(".","");
 
             // Initialize a new MediaData object.
             MediaData file;
@@ -108,14 +110,35 @@ namespace GatherContentImport.GcEpiUtilities
                 return false;
             }
 
-            file.Name = fileName;
+            file.Name = gcFile.FileName;
+            file.Property["GcFileId"].Value = gcFile.Id;
+            file.Property["GcFileName"].Value = gcFile.FileName;
+            file.Property["GcFileItemId"].Value = gcFile.ItemId;
+
+            if (action == "Update")
+            {
+                // Check if the file is already imported.
+                var importedFiles = ContentRepository.GetChildren<MediaData>(contentLink, CultureInfo.InvariantCulture).ToList();
+                foreach (var importedFile in importedFiles)
+                {
+                    var importedFileGcFileId = (int?) importedFile.Property["GcFileId"].Value;
+                    var importedFileGcFileName = (string) importedFile.Property["GcFileName"].Value;
+                    var importedFileGcFileItemId = (int?) importedFile.Property["GcFileItemId"].Value;
+                    if (importedFileGcFileName != gcFile.FileName ||
+                        importedFileGcFileItemId != gcFile.ItemId) continue;
+                    if (importedFileGcFileId == gcFile.Id)
+                        return false;
+                    contentRepository.Delete(importedFile.ContentLink, true, AccessLevel.Administer);
+                }
+            }
+
             var blobFactory = ServiceLocator.Current.GetInstance<IBlobFactory>();
             try
             {
                 var client = new HttpClient();
-                var byteArrayData = await client.GetByteArrayAsync(url);
+                var byteArrayData = await client.GetByteArrayAsync(gcFile.Url);
 
-                var blob = blobFactory.CreateBlob(file.BinaryDataContainer, Path.GetExtension(fileName));
+                var blob = blobFactory.CreateBlob(file.BinaryDataContainer, Path.GetExtension(gcFile.FileName));
                 using (var s = blob.OpenWrite())
                 {
                     var w = new StreamWriter(s);

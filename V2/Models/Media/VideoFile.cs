@@ -5,6 +5,7 @@ using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using EPiServer.Framework.DataAnnotations;
 using EPiServer.Web;
+using GatherContentConnect.Objects;
 
 namespace GatherContentImport.Models.Media
 {
@@ -12,16 +13,21 @@ namespace GatherContentImport.Models.Media
     [MediaDescriptor(ExtensionString = "flv,mp4,webm,avi,wmv,mpeg,ogg,mov,ogv,qt,mp3,pcm,aac,wma,flac,alac,wav,aiff,pcm")]
     public class VideoFile : VideoData
     {
-            [CultureSpecific]
-            [Editable(true)]
-            [Display(
-                Name = "Description",
-                Description = "Description field's description",
-                GroupName = SystemTabNames.Content,
-                Order = 1)]
-            public virtual string Copyright { get; set; }
-
-        [UIHint(UIHint.Image)]
+        [CultureSpecific]
+        [Editable(true)]
+        [Display(
+            Name = "Copyright",
+            Description = "This is the copyright",
+            GroupName = SystemTabNames.Content,
+            Order = 1)]
+        public virtual string Copyright { get; set; }
+        
         public virtual ContentReference PreviewImage { get; set; }
+        
+        public virtual int GcFileId { get; set; }
+
+        public virtual string GcFileName { get; set; }
+        
+        public virtual int GcFileItemId { get; set; }
     }
 }

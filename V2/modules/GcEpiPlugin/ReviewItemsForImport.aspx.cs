@@ -494,8 +494,6 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 _contentRepository.Save(content, saveAction, AccessLevel.Administer);
             }
 
-            var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now.ToLocalTime());
-            GcDynamicUtilities.SaveStore(dds);
             return saveAction;
         }
 
@@ -579,8 +577,10 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 var saveAction = SaveContent(newPage, item, currentMapping);
                                 filteredFiles.ForEach(async i =>
                                 {
-                                    await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "PageType", newPage.ContentLink, saveAction);
+                                    await GcEpiContentParser.FileParserAsync(i, "PageType", newPage.ContentLink, saveAction, "Import");
                                 });
+                                var dds = new GcDynamicImports(newPage.ContentGuid, item.Id, DateTime.Now.ToLocalTime());
+                                GcDynamicUtilities.SaveStore(dds);
                                 importCounter++;
                             }
                         }
@@ -619,8 +619,10 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 var saveAction = SaveContent(content, item, currentMapping);
                                 filteredFiles.ForEach(async i =>
                                 {
-                                    await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "BlockType", blockParent, saveAction);
+                                    await GcEpiContentParser.FileParserAsync(i, "BlockType", blockParent, saveAction, "Import");
                                 });
+                                var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now.ToLocalTime());
+                                GcDynamicUtilities.SaveStore(dds);
                                 importCounter++;
                             }
                         }
@@ -662,6 +664,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 var gcItem = Client.GetItemById(itemId);
                 var importedItem = _contentStore.Find(x => x.ItemId.ToString() == itemId);
                 var currentMapping = _mappingsStore.First(i => i.TemplateId == gcItem.TemplateId.ToString());
+                SaveAction saveAction;
+                GcDynamicImports dds;
 
                 // fetch all the GcFile collection for this item.
                 List<GcFile> filteredFiles;
@@ -674,7 +678,13 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             .Find(i => i.ID == pageClone.ContentTypeID);
                         filteredFiles = MapValuesFromGcToEpi(pageClone, pageType, currentMapping, gcItem);
                         GcDynamicUtilities.DeleteItem<GcDynamicImports>(_contentStore[_contentStore.FindIndex(i => i.ItemId.ToString() == itemId)].Id);
-                        SaveContent(pageClone, gcItem, currentMapping);
+                        saveAction = SaveContent(pageClone, gcItem, currentMapping);
+                        filteredFiles.ForEach(async i =>
+                        {
+                            await GcEpiContentParser.FileParserAsync(i, "PageType", pageClone.ContentLink, saveAction, "Update");
+                        });
+                        dds = new GcDynamicImports(pageClone.ContentGuid, gcItem.Id, DateTime.Now.ToLocalTime());
+                        GcDynamicUtilities.SaveStore(dds);
                         updateCounter++;
                         break;
 
@@ -688,7 +698,14 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             .Find(i => i.ID == cloneContent.ContentTypeID);
                         filteredFiles = MapValuesFromGcToEpi(cloneContent, blockType, currentMapping, gcItem);
                         GcDynamicUtilities.DeleteItem<GcDynamicImports>(_contentStore[_contentStore.FindIndex(i => i.ItemId.ToString() == itemId)].Id);
-                        SaveContent(cloneContent, gcItem, currentMapping);
+                        saveAction = SaveContent(cloneContent, gcItem, currentMapping);
+                        filteredFiles.ForEach(async i =>
+                        {
+                            await GcEpiContentParser.FileParserAsync(i, "BlockType", cloneContent.ContentLink, saveAction, "Update");
+                        });
+                        dds = new GcDynamicImports(cloneContent.ContentGuid, gcItem.Id, DateTime.Now.ToLocalTime());
+                        GcDynamicUtilities.SaveStore(dds);
+                        
                         updateCounter++;
                         break;
                 }

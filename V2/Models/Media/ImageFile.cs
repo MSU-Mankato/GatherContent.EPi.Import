@@ -3,6 +3,7 @@ using EPiServer.DataAnnotations;
 using EPiServer.Framework.DataAnnotations;
 using System.ComponentModel.DataAnnotations;
 using EPiServer.DataAbstraction;
+using GatherContentConnect.Objects;
 
 namespace GatherContentImport.Models.Media
 {
@@ -12,18 +13,24 @@ namespace GatherContentImport.Models.Media
     {
         [CultureSpecific]
         [Display(
-            Name = "Heading",
-            Description = "Add a heading.",
+            Name = "Copyright",
+            Description = "This is the copyright.",
             GroupName = SystemTabNames.Content,
             Order = 1)]
         public virtual string Copyright { get; set; }
 
 
         [Display(
-            Name = "Main Body",
-            Description = "This is where the body of the content goes.",
+            Name = "Description",
+            Description = "This is the file description",
             GroupName = SystemTabNames.Content,
             Order = 2)]
         public virtual string Description { get; set; }
+
+        public virtual int GcFileId { get; set; }
+
+        public virtual string GcFileName { get; set; }
+
+        public virtual int GcFileItemId { get; set; }
     }
 }

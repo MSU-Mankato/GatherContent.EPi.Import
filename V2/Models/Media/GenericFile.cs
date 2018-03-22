@@ -4,6 +4,7 @@ using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using EPiServer.Framework.DataAnnotations;
+using GatherContentConnect.Objects;
 
 namespace GatherContentImport.Models.Media
 {
@@ -11,13 +12,19 @@ namespace GatherContentImport.Models.Media
     [MediaDescriptor(ExtensionString = "pdf,doc,docx,txt,xsl,xslx,html,css,zip,rtf,rar,csv,xml,log")]
     public class GenericFile : MediaData
     {
-            [CultureSpecific]
-            [Editable(true)]
-            [Display(
-                Name = "Description",
-                Description = "Description field's description",
-                GroupName = SystemTabNames.Content,
-                Order = 1)]
-           public virtual string Description { get; set; }
+        [CultureSpecific]
+        [Editable(true)]
+        [Display(
+            Name = "Description",
+            Description = "Description field's description",
+            GroupName = SystemTabNames.Content,
+            Order = 1)]
+        public virtual string Description { get; set; }
+
+        public virtual int GcFileId { get; set; }
+
+        public virtual string GcFileName { get; set; }
+
+        public virtual int GcFileItemId { get; set; }
     }
 }
