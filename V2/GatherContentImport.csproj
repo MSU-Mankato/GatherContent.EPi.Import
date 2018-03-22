@@ -128,7 +128,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\sunny\Source\Repos\GatherContentConnect\GatherContentConnect\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.5.2\lib\net45\StructureMap.dll</HintPath>
@@ -247,9 +247,9 @@
     <Compile Include="GcDynamicClasses\GcDynamicImports.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicTemplateMappings.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicUtilities.cs" />
-    <Compile Include="Models\Media\GenericFile.cs" />
-    <Compile Include="Models\Media\ImageFile.cs" />
-    <Compile Include="Models\Media\VideoFile.cs" />
+    <Compile Include="Models\Media\GcEpiGenericFile.cs" />
+    <Compile Include="Models\Media\GcEpiImageFile.cs" />
+    <Compile Include="Models\Media\GcEpiVideoFile.cs" />
     <Compile Include="GcEpiObjects\GcEpiStatusMap.cs" />
     <Compile Include="GcEpiUtilities\GcEpiContentParser.cs" />
     <Compile Include="GcEpiUtilities\GcEpiImageExtractor.cs" />
