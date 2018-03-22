@@ -7,7 +7,7 @@
 }
 $('.chosen-select').chosen();
 function loadingAnimation() {
-    var loading = '<div class="loading"><div class="animation-holder"><img src="/ClientResources/img/loading-icon.png"></div></div>';
+    var loading = '<div class="loading"><div class="animation-holder"><img src="/modules/GcEpiPlugin/ClientResources/img/loading-icon.png"></div></div>';
     $('body').append(loading);
 }
 
