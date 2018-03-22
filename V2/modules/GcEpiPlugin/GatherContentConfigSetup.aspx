@@ -1,7 +1,6 @@
 <%@ Page Language="c#" Codebehind="GatherContentConfigSetup.aspx.cs" AutoEventWireup="False" Inherits="GatherContentImport.modules.GcEpiPlugin.GatherContentConfigSetup" Title="GatherContentConfigSetup" %>
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head id="Head1" runat="server">
-    <EPiServer RenderingArea="Header" ID="RequiredResourcesHeader" runat="server" />
     <title>GatherContent</title>
     <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/chosen.css">
     <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/loading.css">
