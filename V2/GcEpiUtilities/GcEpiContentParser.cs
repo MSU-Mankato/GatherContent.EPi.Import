@@ -51,8 +51,16 @@ namespace GatherContentImport.GcEpiUtilities
                 case "LongString":
                     return regexResult;
                 case "StringList":
-                    var strings = regexResult.Split(',').Select(p => p.Trim()).ToList();
-                    return strings;
+                    try
+                    {
+                        var strings = regexResult.Split(',').Select(p => p.Trim()).ToList();
+                        return strings;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        return new List<string>();
+                    }
                 default:
                     return text;
             }
