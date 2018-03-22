@@ -6,9 +6,9 @@ using EPiServer.DataAbstraction;
 
 namespace GatherContentImport.Models.Media
 {
-    [ContentType(DisplayName = "Image File", GUID = "0A89E464-56D4-449F-AEA8-2BF774AB8730")]
+    [ContentType(DisplayName = "GcEpi-Image File", GUID = "0A89E464-56D4-449F-AEA8-2BF774AB8730")]
     [MediaDescriptor(ExtensionString = "jpg,jpeg,jpe,ico,gif,bmp,png,tga,tiff,eps,svg,webp")]
-    public class ImageFile : ImageData
+    public class GcEpiImageFile : ImageData
     {
         [CultureSpecific]
         [Display(

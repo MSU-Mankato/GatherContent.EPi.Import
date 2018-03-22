@@ -6,9 +6,9 @@ using EPiServer.Framework.DataAnnotations;
 
 namespace GatherContentImport.Models.Media
 {
-    [ContentType(DisplayName = "Video File", GUID = "1fd342c6-002e-4312-bee7-e35ba7866a29", Description = "")]
+    [ContentType(DisplayName = "GcEpi-Video File", GUID = "1fd342c6-002e-4312-bee7-e35ba7866a29", Description = "")]
     [MediaDescriptor(ExtensionString = "flv,mp4,webm,avi,wmv,mpeg,ogg,mov,ogv,qt,mp3,pcm,aac,wma,flac,alac,wav,aiff,pcm")]
-    public class VideoFile : VideoData
+    public class GcEpiVideoFile : VideoData
     {
         [CultureSpecific]
         [Editable(true)]
