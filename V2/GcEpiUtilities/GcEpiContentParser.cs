@@ -111,9 +111,7 @@ namespace GatherContentImport.GcEpiUtilities
             }
 
             file.Name = gcFile.FileName;
-            file.Property["GcFileId"].Value = gcFile.Id;
-            file.Property["GcFileName"].Value = gcFile.FileName;
-            file.Property["GcFileItemId"].Value = gcFile.ItemId;
+            file.Property["GcFileInfo"].Value = gcFile.Id + "~" + gcFile.FileName + "~" + gcFile.ItemId;
 
             if (action == "Update")
             {
@@ -121,9 +119,10 @@ namespace GatherContentImport.GcEpiUtilities
                 var importedFiles = ContentRepository.GetChildren<MediaData>(contentLink, CultureInfo.InvariantCulture).ToList();
                 foreach (var importedFile in importedFiles)
                 {
-                    var importedFileGcFileId = (int?) importedFile.Property["GcFileId"].Value;
-                    var importedFileGcFileName = (string) importedFile.Property["GcFileName"].Value;
-                    var importedFileGcFileItemId = (int?) importedFile.Property["GcFileItemId"].Value;
+                    var propSubStrings = importedFile.Property["GcFileInfo"].Value.ToString().Split('~');
+                    var importedFileGcFileId = Convert.ToInt32(propSubStrings[0]);
+                    var importedFileGcFileName = propSubStrings[1];
+                    var importedFileGcFileItemId = Convert.ToInt32(propSubStrings[2]);
                     if (importedFileGcFileName != gcFile.FileName ||
                         importedFileGcFileItemId != gcFile.ItemId) continue;
                     if (importedFileGcFileId == gcFile.Id)

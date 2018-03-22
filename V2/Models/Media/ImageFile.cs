@@ -3,7 +3,6 @@ using EPiServer.DataAnnotations;
 using EPiServer.Framework.DataAnnotations;
 using System.ComponentModel.DataAnnotations;
 using EPiServer.DataAbstraction;
-using GatherContentConnect.Objects;
 
 namespace GatherContentImport.Models.Media
 {
@@ -27,10 +26,6 @@ namespace GatherContentImport.Models.Media
             Order = 2)]
         public virtual string Description { get; set; }
 
-        public virtual int GcFileId { get; set; }
-
-        public virtual string GcFileName { get; set; }
-
-        public virtual int GcFileItemId { get; set; }
+        public virtual string GcFileInfo { get; set; }
     }
 }

@@ -1,15 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using EPiServer.Framework.DataAnnotations;
-using EPiServer.Web;
-using GatherContentConnect.Objects;
 
 namespace GatherContentImport.Models.Media
 {
-    [ContentType(DisplayName = "DefaultMedia1", GUID = "1fd342c6-002e-4312-bee7-e35ba7866a29", Description = "")]
+    [ContentType(DisplayName = "Video File", GUID = "1fd342c6-002e-4312-bee7-e35ba7866a29", Description = "")]
     [MediaDescriptor(ExtensionString = "flv,mp4,webm,avi,wmv,mpeg,ogg,mov,ogv,qt,mp3,pcm,aac,wma,flac,alac,wav,aiff,pcm")]
     public class VideoFile : VideoData
     {
@@ -24,10 +21,6 @@ namespace GatherContentImport.Models.Media
         
         public virtual ContentReference PreviewImage { get; set; }
         
-        public virtual int GcFileId { get; set; }
-
-        public virtual string GcFileName { get; set; }
-        
-        public virtual int GcFileItemId { get; set; }
+        public virtual string GcFileInfo { get; set; }
     }
 }
