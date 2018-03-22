@@ -408,37 +408,60 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                        $".gathercontent.com/item/{gcItem.Id}";
         }
 
-        private static void MapValuesFromGcToEpi(IContentData content, ContentType contentType, GcDynamicTemplateMappings currentMapping, IGcItem gcItem, IReadOnlyCollection<GcFile> gcFiles, ICollection<string> mediaFieldsToImport)
+        private List<GcFile> MapValuesFromGcToEpi(IContentData content, ContentType contentType, GcDynamicTemplateMappings currentMapping,
+            IGcItem gcItem)
         {
+            // fetch all the GcFile collection for this item.
+            var gcFiles = Client.GetFilesByItemId(gcItem.Id).ToList();
+
+            // This list contains the fields of the attachments for which the media has to be imported.
+            var mediaFieldsToImport = new List<string>();
+
+            // Get all the configs of this item.
+            var gcConfigs = gcItem.Config.ToList();
+
             foreach (var map in currentMapping.EpiFieldMaps)
             {
                 // First part of the string contains Epi field name and second part contains the Gc field name.
                 var fieldSplitStrings = map.Split('~');
-                var gcFieldName = fieldSplitStrings[0];
+                var epiFieldName = fieldSplitStrings[0];
+                var gcFieldName = fieldSplitStrings[1];
 
                 // Add the fields to 'mediaFieldsToImport' list whose Epi counter part is 'Import-Attachments'.
                 if (!gcFiles.IsNullOrEmpty())
                 {
-                    if (gcFiles.Any(i => i.Field == fieldSplitStrings[1] && fieldSplitStrings[0] == "Import-Attachments"))
-                        mediaFieldsToImport.Add(fieldSplitStrings[1]);
+                    if (gcFiles.Any(i => i.Field == gcFieldName && epiFieldName == "Import-Attachments"))
+                        mediaFieldsToImport.Add(gcFieldName);
                 }
-                var propDef = contentType.PropertyDefinitions.ToList().Find(p => p.Name == gcFieldName);
+
+                /* 
+                    <summary>
+                        For the field name that matches the field name of Epi content type, find the GcElement whose name is 
+                        the extracted gcFieldName. Call a parser based on the GcElement type. (Files gets imported differently.)
+                    </summary>
+                 */
+                var propDef = contentType.PropertyDefinitions.ToList().Find(p => p.Name == epiFieldName);
                 if (propDef == null) continue;
-                var configs = gcItem.Config.ToList();
-                configs.ForEach(j => j.Elements.ToList().ForEach(x =>
-                {
-                    if (x.Name != fieldSplitStrings[1]) return;
-                    if (x.Type == "text")
-                        content.Property[propDef.Name].Value =
-                            GcEpiContentParser.TextParser(x.Value, propDef.Type.Name);
-                    else if (x.Type == "section")
-                        content.Property[propDef.Name].Value =
-                            GcEpiContentParser.TextParser(x.Subtitle, propDef.Type.Name);
-                    else if (x.Type == "choice_radio" || x.Type == "choice_checkbox")
-                        content.Property[propDef.Name].Value =
-                            GcEpiContentParser.ChoiceParser(x.Options, x.Type, propDef);
-                }));
+                foreach (var gcConfig in gcConfigs)
+                {    foreach (var gcElement in gcConfig.Elements.ToList())
+                    {
+                        if (gcElement.Name != gcFieldName) continue;
+                        if (gcElement.Type == "text")
+                            content.Property[propDef.Name].Value =
+                                GcEpiContentParser.TextParser(gcElement.Value, propDef.Type.Name);
+                        else if (gcElement.Type == "section")
+                            content.Property[propDef.Name].Value =
+                                GcEpiContentParser.TextParser(gcElement.Subtitle, propDef.Type.Name);
+                        else if (gcElement.Type == "choice_radio" || gcElement.Type == "choice_checkbox")
+                            content.Property[propDef.Name].Value =
+                                GcEpiContentParser.ChoiceParser(gcElement.Options, gcElement.Type, propDef);
+                    }
+                }
             }
+
+            // Return all the files if the selected value of that
+            // field is 'Import-Attachments' and is in 'mediaFieldsToImport' list.
+            return gcFiles.Where(i => mediaFieldsToImport.Contains(i.Field)).ToList();
         }
 
         // This method saves the content in accordance with the save action selected by the user for the item.
@@ -520,11 +543,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 // naming convention. So, we just get the key that contains the value of that drop down's selected value.
                 var parentId = Request.Form[key.ToString().Replace("chkImport", "ddl")];
 
-                // fetch all the GcFile collection for this item.
-                var gcFiles = Client.GetFilesByItemId(item.Id).ToList();
-
-                // This list contains the fields of the attachments for which the media has to be imported.
-                var mediaFieldsToImport = new List<string>();
+                // Filtered files list contains only files that user wants to import.
+                List<GcFile> filteredFiles;
 
                 // Since the post type of the item is known beforehand, we can separate the import process for different post types.
                 switch (currentMapping.PostType)
@@ -553,14 +573,10 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 }
                             }
                             newPage.PageName = item.Name;
-                            MapValuesFromGcToEpi(newPage, pageType, currentMapping, item, gcFiles, mediaFieldsToImport);
+                            filteredFiles = MapValuesFromGcToEpi(newPage, pageType, currentMapping, item);
                             if (!importItemFlag) continue;
                             {
                                 var saveAction = SaveContent(newPage, item, currentMapping);
-
-                                // Import all the attachments in the GatherContent with their appropriate media types
-                                // if the selected value of that field is 'Import-Attachments' and is in 'mediaFieldsToImport' list.
-                                var filteredFiles = gcFiles.Where(i => mediaFieldsToImport.Contains(i.Field)).ToList();
                                 filteredFiles.ForEach(async i =>
                                 {
                                     await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "PageType", newPage.ContentLink, saveAction);
@@ -597,14 +613,11 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             var content = newBlock as IContent;
                             // ReSharper disable once PossibleNullReferenceException
                             content.Name = item.Name;
-                            MapValuesFromGcToEpi(content, blockType, currentMapping, item, gcFiles, mediaFieldsToImport);
+                            filteredFiles = MapValuesFromGcToEpi(content, blockType, currentMapping, item);
                             if (!importItemFlag) continue;
                             {
                                 var saveAction = SaveContent(content, item, currentMapping);
-
-                                // Import all the attachments in the GatherContent with their appropriate media types
-                                // if the selected value of that field is import.
-                                gcFiles.ForEach(async i =>
+                                filteredFiles.ForEach(async i =>
                                 {
                                     await GcEpiContentParser.FileParserAsync(i.Url, i.FileName, "BlockType", blockParent, saveAction);
                                 });
@@ -636,7 +649,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
         protected void BtnUpdateItem_OnClick(object sender, EventArgs e)
         {
-            var updateCount = 0;
+            var updateCounter = 0;
             _saveActions.RemoveAt(1);
             Client = new GcConnectClient(_credentialsStore.First().ApiKey, _credentialsStore.First().Email);
             _mappingsStore = GcDynamicUtilities.RetrieveStore<GcDynamicTemplateMappings>().
@@ -649,9 +662,9 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 var gcItem = Client.GetItemById(itemId);
                 var importedItem = _contentStore.Find(x => x.ItemId.ToString() == itemId);
                 var currentMapping = _mappingsStore.First(i => i.TemplateId == gcItem.TemplateId.ToString());
+
                 // fetch all the GcFile collection for this item.
-                var gcFiles = Client.GetFilesByItemId(gcItem.Id).ToList();
-                var mediaFieldsToImport = new List<string>();
+                List<GcFile> filteredFiles;
                 switch (currentMapping.PostType)
                 {
                     case "PageType":
@@ -659,10 +672,10 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var pageClone = pageToUpdate.CreateWritableClone();
                         var pageType = _contentTypeRepository.List().ToList()
                             .Find(i => i.ID == pageClone.ContentTypeID);
-                        MapValuesFromGcToEpi(pageClone, pageType, currentMapping, gcItem, gcFiles, mediaFieldsToImport);
+                        filteredFiles = MapValuesFromGcToEpi(pageClone, pageType, currentMapping, gcItem);
                         GcDynamicUtilities.DeleteItem<GcDynamicImports>(_contentStore[_contentStore.FindIndex(i => i.ItemId.ToString() == itemId)].Id);
                         SaveContent(pageClone, gcItem, currentMapping);
-                        updateCount++;
+                        updateCounter++;
                         break;
 
                     case "BlockType":
@@ -673,21 +686,21 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var cloneContent = blockClone as IContent;
                         var blockType = _contentTypeRepository.List().ToList()
                             .Find(i => i.ID == cloneContent.ContentTypeID);
-                        MapValuesFromGcToEpi(cloneContent, blockType, currentMapping, gcItem, gcFiles, mediaFieldsToImport);
+                        filteredFiles = MapValuesFromGcToEpi(cloneContent, blockType, currentMapping, gcItem);
                         GcDynamicUtilities.DeleteItem<GcDynamicImports>(_contentStore[_contentStore.FindIndex(i => i.ItemId.ToString() == itemId)].Id);
                         SaveContent(cloneContent, gcItem, currentMapping);
-                        updateCount++;
+                        updateCounter++;
                         break;
                 }
                 string responseMessage;
-                if (updateCount == 1)
+                if (updateCounter == 1)
                 {
                     responseMessage = $"alert('{gcItem.Name} successfully updated!');";
                 }
 
-                else if (updateCount > 1)
+                else if (updateCounter > 1)
                 {
-                    responseMessage = $"alert('{gcItem.Name} and {updateCount - 1} other items successfully updated!');";
+                    responseMessage = $"alert('{gcItem.Name} and {updateCounter - 1} other items successfully updated!');";
                 }
 
                 else
