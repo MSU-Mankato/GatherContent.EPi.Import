@@ -252,7 +252,6 @@
     <Compile Include="Models\Media\GcEpiVideoFile.cs" />
     <Compile Include="GcEpiObjects\GcEpiStatusMap.cs" />
     <Compile Include="GcEpiUtilities\GcEpiContentParser.cs" />
-    <Compile Include="GcEpiUtilities\GcEpiImageExtractor.cs" />
     <Compile Include="GcEpiUtilities\GcEpiMiscUtility.cs" />
     <Compile Include="Models\Blocks\TestBlock.cs" />
     <Compile Include="Models\Media\MediaTestPage.cs" />
