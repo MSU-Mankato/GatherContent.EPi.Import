@@ -35,16 +35,13 @@ namespace GatherContentImport.GcEpiUtilities
             switch (propertyType)
             {
                 case "Date":
-                    DateTime date;
-                    success = DateTime.TryParse(regexResult, out date);
+                    success = DateTime.TryParse(regexResult, out var date);
                     return !success ? (object) string.Empty : date;
                 case "Number":
-                    int number;
-                    success = int.TryParse(regexResult, out number);
+                    success = int.TryParse(regexResult, out var number);
                     return !success ? (object) string.Empty : number;
                 case "FloatNumber":
-                    double floatNumber;
-                    success = double.TryParse(regexResult, out floatNumber);
+                    success = double.TryParse(regexResult, out var floatNumber);
                     return !success ? (object)string.Empty : floatNumber;
                 case "Url":
                 case "String":
@@ -71,7 +68,7 @@ namespace GatherContentImport.GcEpiUtilities
             if (gcType != "choice_checkbox") return new object();
             var radioButtons = new List<SelectListItem>();
             options.ToList().ForEach(i => radioButtons.Add(new SelectListItem{ Value = i.Name, Text = i.Label })); 
-            return new SelectList(radioButtons, "Value", "Text", null);
+            return radioButtons;
         }
 
         public static async Task<bool> FileParserAsync(GcFile gcFile, string postType, ContentReference contentLink, SaveAction saveAction, string action)
@@ -83,16 +80,12 @@ namespace GatherContentImport.GcEpiUtilities
                 {"Image", new List<string>{"jpg","jpeg","jpe","ico","gif","bmp","png","tga","tiff","eps","svg","webp"}},
                 {"Generic", new List<string>{"pdf","doc","docx","txt","xsl","xslx","html","css","zip","rtf","rar","csv","xml", "log"}}
             };
+            
+            // Get an instance of ContentAssetHelper class.
+            var contentAssetHelper = ServiceLocator.Current.GetInstance<ContentAssetHelper>();
 
-            // If the item is a page, then create a content link for 'For this Page'. Else, use the provided contentLink.
-            if (postType == "PageType")
-            {
-                // Get an instance of ContentAssetHelper class.
-                var contentAssetHelper = ServiceLocator.Current.GetInstance<ContentAssetHelper>();
-
-                // Get an existing content asset folder or create a new one
-                contentLink = contentAssetHelper.GetOrCreateAssetFolder(contentLink).ContentLink;
-            }
+            // Get an existing content asset folder or create a new one
+            contentLink = contentAssetHelper.GetOrCreateAssetFolder(contentLink).ContentLink;
             
             // Get an instance of IContentRepository.
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();

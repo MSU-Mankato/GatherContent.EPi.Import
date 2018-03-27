@@ -452,9 +452,9 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         else if (gcElement.Type == "section")
                             content.Property[propDef.Name].Value =
                                 GcEpiContentParser.TextParser(gcElement.Subtitle, propDef.Type.Name);
-                        else if (gcElement.Type == "choice_radio" || gcElement.Type == "choice_checkbox")
+                        /*else if (gcElement.Type == "choice_radio" || gcElement.Type == "choice_checkbox")
                             content.Property[propDef.Name].Value =
-                                GcEpiContentParser.ChoiceParser(gcElement.Options, gcElement.Type, propDef);
+                                GcEpiContentParser.ChoiceParser(gcElement.Options, gcElement.Type, propDef);*/
                     }
                 }
             }
@@ -499,7 +499,6 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
         protected void BtnImportItem_OnClick(object sender, EventArgs e)
         {
-            // 
             var importCounter = 0;
             var itemName = string.Empty;
             Client = new GcConnectClient(_credentialsStore.First().ApiKey, _credentialsStore.First().Email);
@@ -619,7 +618,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 var saveAction = SaveContent(content, item, currentMapping);
                                 filteredFiles.ForEach(async i =>
                                 {
-                                    await GcEpiContentParser.FileParserAsync(i, "BlockType", blockParent, saveAction, "Import");
+                                    await GcEpiContentParser.FileParserAsync(i, "BlockType", content.ContentLink, saveAction, "Import");
                                 });
                                 var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now.ToLocalTime());
                                 GcDynamicUtilities.SaveStore(dds);
