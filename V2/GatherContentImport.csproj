@@ -253,8 +253,6 @@
     <Compile Include="GcEpiObjects\GcEpiStatusMap.cs" />
     <Compile Include="GcEpiUtilities\GcEpiContentParser.cs" />
     <Compile Include="GcEpiUtilities\GcEpiMiscUtility.cs" />
-    <Compile Include="Models\Blocks\TestBlock.cs" />
-    <Compile Include="Models\Media\MediaTestPage.cs" />
     <Compile Include="modules\GcEpiPlugin\GatherContentConfigSetup.aspx.cs">
       <DependentUpon>GatherContentConfigSetup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -306,7 +304,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\Blocks\" />
+    <Folder Include="Models\Pages\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
