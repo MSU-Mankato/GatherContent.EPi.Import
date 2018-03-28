@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GcEPiPlugin", "GcEPiPlugin\GcEPiPlugin.csproj", "{5E26BEB9-F538-4CEA-9BC9-EAB53A10939E}"
 EndProject
@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatherContentImport", "V2\GatherContentImport.csproj", "{4BE3FB45-63D6-4455-86FF-54DBA3D064FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,18 +21,8 @@ Global
 		{5E26BEB9-F538-4CEA-9BC9-EAB53A10939E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E26BEB9-F538-4CEA-9BC9-EAB53A10939E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E26BEB9-F538-4CEA-9BC9-EAB53A10939E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BE3FB45-63D6-4455-86FF-54DBA3D064FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BE3FB45-63D6-4455-86FF-54DBA3D064FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BE3FB45-63D6-4455-86FF-54DBA3D064FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BE3FB45-63D6-4455-86FF-54DBA3D064FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{4BE3FB45-63D6-4455-86FF-54DBA3D064FC} = {50F9C036-6D9F-4E10-B326-A98684A7A7A1}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B042D255-4674-4E18-B8C8-C80D366FB585}
 	EndGlobalSection
 EndGlobal
