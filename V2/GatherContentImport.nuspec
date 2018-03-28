@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>GatherContent.EPi.Import</id>
+        <version>1.0-beta</version>
+        <title>GatherContent.EPi.Import</title>
+        <authors>Minnesota State University,Mankato</authors>
+        <owners>Minnesota State University,Mankato</owners>
+        <licenseUrl>https://github.com/MSU-Mankato/GatherContent.EPi.Import/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/MSU-Mankato/GatherContent.EPi.Import</projectUrl>
+        <iconUrl>http://www.mnsu.edu/images/default-purple2x.jpg</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>GatherContent EPiServer Connector</description>
+        <summary>GatherContent EPiServer connector for importing your GatherContent items into EPiServer.</summary>
+        <releaseNotes>Pre-Release.1.0: Features- Update Content, Media Import</releaseNotes>
+        <copyright>Copyright © 2018 Minnesota State University,Mankato</copyright>
+        <language>en-US</language>
+        <tags>Episerver, GatherContent, CMS</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.6.2">
+                <dependency id="GatherContentConnect" version="0.7.1-ci-20171115-163745" />
+                <dependency id="EPiServer.CMS" version="11.3.1" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="modules\GcEpiPlugin\GatherContentConfigSetup.aspx" target="content\modules\GcEpiPlugin\GatherContentConfigSetup.aspx" />
+        <file src="modules\GcEpiPlugin\GcEpiTemplateMappings.aspx" target="content\modules\GcEpiPlugin\GcEpiTemplateMappings.aspx" />
+        <file src="modules\GcEpiPlugin\NewGcMappingStep1.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep1.aspx" />
+        <file src="modules\GcEpiPlugin\NewGcMappingStep2.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep2.aspx" />
+        <file src="modules\GcEpiPlugin\NewGcMappingStep3.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep3.aspx" />
+        <file src="modules\GcEpiPlugin\NewGcMappingStep4.aspx" target="content\modules\GcEpiPlugin\NewGcMappingStep4.aspx" />
+        <file src="modules\GcEpiPlugin\ReviewItemsForImport.aspx" target="content\modules\GcEpiPlugin\ReviewItemsForImport.aspx" />
+        <file src="modules\GcEpiPlugin\ClientResources\css\chosen.css" target="content\modules\GcEpiPlugin\ClientResources\css\chosen.css"/>
+        <file src="modules\GcEpiPlugin\ClientResources\css\loading.css" target="content\modules\GcEpiPlugin\ClientResources\css\loading.css"/>
+        <file src="modules\GcEpiPlugin\ClientResources\css\style.css" target="content\modules\GcEpiPlugin\ClientResources\css\style.css"/>
+        <file src="modules\GcEpiPlugin\ClientResources\img\chosen-sprite.png" target="content\modules\GcEpiPlugin\ClientResources\img\chosen-sprite.png"/>
+        <file src="modules\GcEpiPlugin\ClientResources\img\chosen-sprite@2x.png" target="content\modules\GcEpiPlugin\ClientResources\img\chosen-sprite@2x.png"/>
+        <file src="modules\GcEpiPlugin\ClientResources\img\loading-icon.png" target="content\modules\GcEpiPlugin\ClientResources\img\loading-icon.png"/>
+        <file src="modules\GcEpiPlugin\ClientResources\js\chosen.jquery.js" target="content\modules\GcEpiPlugin\ClientResources\js\chosen.jquery.js"/>
+        <file src="modules\GcEpiPlugin\ClientResources\js\chosen.proto.js" target="content\modules\GcEpiPlugin\ClientResources\js\chosen.proto.js"/>
+        <file src="modules\GcEpiPlugin\ClientResources\js\init.js" target="content\modules\GcEpiPlugin\ClientResources\js\init.js"/>
+        <file src="modules\GcEpiPlugin\ClientResources\js\init.proto.js" target="content\modules\GcEpiPlugin\ClientResources\js\init.proto.js"/>
+        <file src="modules\GcEpiPlugin\ClientResources\js\loading.js" target="content\modules\GcEpiPlugin\ClientResources\js\loading.js"/>
+        <file src="bin\GatherContentImport.dll" target="lib\net462"/>
+        <!-- <file src="MIT-license.txt" target="MIT-license.txt" /> -->
+    </files>
+</package>

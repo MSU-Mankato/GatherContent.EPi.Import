@@ -2,9 +2,8 @@
 <html>
 <head id="Head1" runat="server">
     <title>New GatherContent Mapping</title>
-    <link rel="stylesheet" href="/ClientResources/css/prism.css">
-    <link rel="stylesheet" href="/ClientResources/css/chosen.css">
-    <link rel="stylesheet" href="/ClientResources/css/loading.css">
+      <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/chosen.css">
+    <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/loading.css">
     <style type="text/css">
         .LinkNoUnderline
         {
@@ -96,8 +95,7 @@
     </p>
 </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js" type="text/javascript"></script>
-<script src="/ClientResources/js/chosen.jquery.js" type="text/javascript"></script>
-<script src="/ClientResources/js/prism.js" type="text/javascript" charset="utf-8"></script>
-<script src="/ClientResources/js/loading.js" type="text/javascript"></script>
+<script src="/modules/GcEpiPlugin/ClientResources/js/chosen.jquery.js" type="text/javascript"></script>
+<script src="/modules/GcEpiPlugin/ClientResources/js/loading.js" type="text/javascript"></script>
 </body>
 </html>

@@ -126,8 +126,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\sunny\Source\Repos\GatherContentConnect\GatherContentConnect\bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.5.2\lib\net45\StructureMap.dll</HintPath>
@@ -205,6 +206,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="modules\GcEpiPlugin\ClientResources\css\style.css" />
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\web.config" />
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\EPiServer.Cms.TinyMce.zip" />
     <Content Include="modules\_protected\Shell\web.config" />
@@ -221,31 +223,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClientResources\css\chosen.css" />
-    <Content Include="ClientResources\css\chosen.min.css" />
-    <Content Include="ClientResources\css\loading.css" />
-    <Content Include="ClientResources\css\prism.css" />
-    <Content Include="ClientResources\css\style.css" />
-    <Content Include="ClientResources\img\chosen-sprite%402x.png" />
-    <Content Include="ClientResources\img\chosen-sprite.png" />
-    <Content Include="ClientResources\img\chosen.png" />
-    <Content Include="ClientResources\img\loading-icon.png" />
-    <Content Include="ClientResources\img\loading.png" />
-    <Content Include="ClientResources\img\oss-credit.png" />
-    <Content Include="ClientResources\js\chosen.jquery.js" />
-    <Content Include="ClientResources\js\chosen.jquery.min.js" />
-    <Content Include="ClientResources\js\chosen.proto.js" />
-    <Content Include="ClientResources\js\chosen.proto.min.js" />
-    <Content Include="ClientResources\js\init.js" />
-    <Content Include="ClientResources\js\init.proto.js" />
-    <Content Include="ClientResources\js\jquery-1.12.4.min.js" />
-    <None Include="ClientResources\js\jquery-1.4.1-vsdoc.js" />
-    <Content Include="ClientResources\js\jquery-1.4.1.js" />
-    <Content Include="ClientResources\js\jquery-1.4.1.min.js" />
-    <Content Include="ClientResources\js\jquery-3.2.1.min.js" />
-    <Content Include="ClientResources\js\loading.js" />
-    <Content Include="ClientResources\js\prism.js" />
-    <Content Include="ClientResources\js\prototype-1.7.0.0.js" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\css\chosen.css" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\css\loading.css" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\img\chosen-sprite%402x.png" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\img\chosen-sprite.png" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\img\loading-icon.png" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\js\chosen.jquery.js" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\js\chosen.proto.js" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\js\init.js" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\js\init.proto.js" />
+    <Content Include="modules\GcEpiPlugin\ClientResources\js\loading.js" />
     <Content Include="modules\GcEpiPlugin\GatherContentConfigSetup.aspx" />
     <Content Include="modules\GcEpiPlugin\GcEpiTemplateMappings.aspx" />
     <Content Include="modules\GcEpiPlugin\NewGcMappingStep1.aspx" />
@@ -260,12 +247,12 @@
     <Compile Include="GcDynamicClasses\GcDynamicImports.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicTemplateMappings.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicUtilities.cs" />
-    <Compile Include="GcEpiMediaModels\ImageFile.cs" />
+    <Compile Include="Models\Media\GcEpiGenericFile.cs" />
+    <Compile Include="Models\Media\GcEpiImageFile.cs" />
+    <Compile Include="Models\Media\GcEpiVideoFile.cs" />
     <Compile Include="GcEpiObjects\GcEpiStatusMap.cs" />
     <Compile Include="GcEpiUtilities\GcEpiContentParser.cs" />
-    <Compile Include="GcEpiUtilities\GcEpiImageExtractor.cs" />
     <Compile Include="GcEpiUtilities\GcEpiMiscUtility.cs" />
-    <Compile Include="Models\MediaTestPage.cs" />
     <Compile Include="modules\GcEpiPlugin\GatherContentConfigSetup.aspx.cs">
       <DependentUpon>GatherContentConfigSetup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -317,7 +304,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\Blocks\" />
+    <Folder Include="Models\Pages\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -329,7 +319,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3036</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
