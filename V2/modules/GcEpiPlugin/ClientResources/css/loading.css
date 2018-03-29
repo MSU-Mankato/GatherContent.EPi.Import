@@ -22,7 +22,7 @@
        left: 0;
        width: 100px;
        height: 100px;
-       animation: loading 2000ms infinite linear;
+       animation: loading 1000ms infinite linear;
    }
    @keyframes loading {
        from {
