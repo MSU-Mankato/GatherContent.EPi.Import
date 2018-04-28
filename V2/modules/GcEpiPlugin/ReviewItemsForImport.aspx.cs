@@ -478,11 +478,13 @@ namespace GatherContentImport.modules.GcEpiPlugin
             var gcStatusIdForThisItem = item.CurrentStatus.Data.Id;
             SaveAction saveAction;
 
-            var statusFromMapping = currentMapping.StatusMaps
-                .Find(i => i.MappedEpiserverStatus.Split('~')[1] == gcStatusIdForThisItem)
-                .MappedEpiserverStatus.Split('~')[0];
+            var statusMapsForThisItem = currentMapping.StatusMaps
+                .Find(i => i.MappedEpiserverStatus.Split('~')[1] == gcStatusIdForThisItem);
 
-            if (statusFromMapping == "Use Default Status")
+            var epiStatusFromMapping = statusMapsForThisItem.MappedEpiserverStatus.Split('~')[0];
+            var onImportGcStatusFromMapping = statusMapsForThisItem.OnImportChangeGcStatus.Split('~')[0];
+
+            if (epiStatusFromMapping == "Use Default Status")
             {
                 saveAction = _saveActions.Find(i => i.ToString() == currentMapping.DefaultStatus);
                 _contentRepository.Save(content, saveAction, AccessLevel.Administer);
@@ -490,9 +492,11 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             else
             {
-                saveAction = _saveActions.Find(i => i.ToString() == statusFromMapping);
+                saveAction = _saveActions.Find(i => i.ToString() == epiStatusFromMapping);
                 _contentRepository.Save(content, saveAction, AccessLevel.Administer);
             }
+
+            Client.ChooseStatus(item.Id, Convert.ToInt32(onImportGcStatusFromMapping));
 
             return saveAction;
         }

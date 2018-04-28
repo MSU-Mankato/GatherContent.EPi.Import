@@ -80,7 +80,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             templateName.Text = _client.GetTemplateById(templateId).Name;
             templateDescription.Text = _client.GetTemplateById(templateId).Description;
             var userProvider = ServiceLocator.Current.GetInstance<UIUserProvider>();
-            var epiUsers = userProvider.GetAllUsers(0, 200, out int _);
+            var epiUsers = userProvider.GetAllUsers(0, 200, out _);
             epiUsers.ToList().ForEach(epiUser => ddlAuthors.Items.Add(new ListItem(epiUser.Username, epiUser.Username)));
             var saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
             saveActions.RemoveAt(1);
@@ -139,37 +139,38 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 }
             }
             var gcStatuses = _client.GetStatusesByProjectId(projectId);
-            var tHeadRow = new TableRow { Height = 42 };
-            tHeadRow.Cells.Add(new TableCell { Text = "GatherContent Status" });
-            tHeadRow.Cells.Add(new TableCell { Text = "Mapped EPiServer Status" });
-            //tHeadRow.Cells.Add(new TableCell { Text = "On Import, Change GatherContent Status" });
+            var tHeadRow = new TableRow { CssClass = "line-spacing"};
+            tHeadRow.Cells.Add(new TableCell { Text = "GatherContent Status", Font = { Bold = true} });
+            tHeadRow.Cells.Add(new TableCell { Text = "Mapped EPiServer Status", Font = { Bold = true} });
+            tHeadRow.Cells.Add(new TableCell { Text = "On Import, Change GatherContent Status", Font = { Bold = true} });
             tableGcStatusesMap.Rows.Add(tHeadRow);
             foreach (var status in gcStatuses)
             {
-                var tRow = new TableRow();
+                var tRow = new TableRow { CssClass = "line-spacing"};
                 tableGcStatusesMap.Rows.Add(tRow);
-                for (var cellIndex = 1; cellIndex <= 2; cellIndex++)//Need to make it the highest index, 3 in the next version.
+                for (var cellIndex = 1; cellIndex <= 3; cellIndex++)
                 {
                     var tCell = new TableCell();
-                    if (cellIndex is 3)
+                    switch (cellIndex)
                     {
-                        var ddlOnImportGcStatuses = new DropDownList { Height = 30, Width = 250, CssClass = "chosen-select" };
-                        ddlOnImportGcStatuses.Items.Add(new ListItem("Do Not Change", "1"));
-                        gcStatuses.ToList().ForEach(i => ddlOnImportGcStatuses.Items.Add(new ListItem(i.Name, i.Id)));
-                        ddlOnImportGcStatuses.ID = "onImportGc-" + status.Id;
-                        tCell.Controls.Add(ddlOnImportGcStatuses);
-                    }
-                    else if (cellIndex is 2)
-                    {
-                        var ddlEpiStatuses = new DropDownList { Height = 30, Width = 250, CssClass = "chosen-select" };
-                        ddlEpiStatuses.Items.Add(new ListItem("Use Default Status", "Use Default Status"));
-                        saveActions.ToList().ForEach(i => ddlEpiStatuses.Items.Add(new ListItem(i.ToString(), i.ToString())));
-                        ddlEpiStatuses.ID = "mappedEPi-" + status.Id;
-                        tCell.Controls.Add(ddlEpiStatuses);
-                    }
-                    else if (cellIndex is 1)
-                    {
-                        tCell.Text = status.Name;
+                        case 1:
+                            tCell.Text = status.Name;
+                            break;
+                        case 2:
+                            var ddlEpiStatuses = new DropDownList { Height = 30, Width = 250, CssClass = "chosen-select" };
+                            ddlEpiStatuses.Items.Add(new ListItem("Use Default Status", "Use Default Status"));
+                            saveActions.ToList().ForEach(i => ddlEpiStatuses.Items.Add(new ListItem(i.ToString(), i.ToString())));
+                            ddlEpiStatuses.ID = "mappedEPi-" + status.Id;
+                            tCell.Controls.Add(ddlEpiStatuses);
+                            break;
+                        default:
+                            var ddlOnImportGcStatuses = new DropDownList { Height = 30, Width = 250, CssClass = "chosen-select" };
+                            ddlOnImportGcStatuses.Items.Add(new ListItem("Do Not Change", "-1"));
+                            gcStatuses.ToList().ForEach(i => ddlOnImportGcStatuses.Items.Add(new ListItem(i.Name, i.Id)));
+                            ddlOnImportGcStatuses.Items.Remove(new ListItem(status.Name, status.Id));
+                            ddlOnImportGcStatuses.ID = "onImportGc-" + status.Id;
+                            tCell.Controls.Add(ddlOnImportGcStatuses);
+                            break;
                     }
                     tRow.Cells.Add(tCell);
                 }
