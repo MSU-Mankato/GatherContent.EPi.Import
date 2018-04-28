@@ -496,7 +496,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 _contentRepository.Save(content, saveAction, AccessLevel.Administer);
             }
 
-            Client.ChooseStatus(item.Id, Convert.ToInt32(onImportGcStatusFromMapping));
+            if (onImportGcStatusFromMapping != "-1") 
+                Client.ChooseStatus(item.Id, Convert.ToInt32(onImportGcStatusFromMapping));
 
             return saveAction;
         }
