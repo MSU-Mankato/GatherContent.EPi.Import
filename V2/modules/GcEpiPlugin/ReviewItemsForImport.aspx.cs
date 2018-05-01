@@ -496,16 +496,16 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (epiStatusFromMapping == "Use Default Status")
             {
                 saveAction = _saveActions.Find(i => i.ToString() == currentMapping.DefaultStatus);
-                _contentRepository.Save(content, saveAction, AccessLevel.Administer);
+                _contentRepository.Save(content, saveAction);
             }
 
             else
             {
                 saveAction = _saveActions.Find(i => i.ToString() == epiStatusFromMapping);
-                _contentRepository.Save(content, saveAction, AccessLevel.Administer);
+                _contentRepository.Save(content, saveAction);
             }
 
-            if (onImportGcStatusFromMapping != "-1") 
+            if (onImportGcStatusFromMapping != "-1" && !onImportGcStatusFromMapping.IsNullOrEmpty()) 
                 Client.ChooseStatus(item.Id, Convert.ToInt32(onImportGcStatusFromMapping));
 
             return saveAction;
