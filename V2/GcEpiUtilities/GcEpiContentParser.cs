@@ -132,7 +132,7 @@ namespace GatherContentImport.GcEpiUtilities
                         importedFileGcFileItemId != gcFile.ItemId) continue;
                     if (importedFileGcFileId == gcFile.Id)
                         return false;
-                    contentRepository.Delete(importedFile.ContentLink, true, AccessLevel.Administer);
+                    contentRepository.Delete(importedFile.ContentLink, true);
                 }
             }
 
@@ -150,7 +150,7 @@ namespace GatherContentImport.GcEpiUtilities
                     w.Flush();
                 }
                 file.BinaryData = blob;
-                contentRepository.Save(file, saveAction, AccessLevel.Administer);
+                contentRepository.Save(file, saveAction);
                 return true;
             }
             catch (Exception e)

@@ -117,7 +117,8 @@
       <HintPath>..\packages\EPiServer.CMS.AspNet.11.3.1\lib\net461\EPiServer.Web.WebControls.dll</HintPath>
     </Reference>
     <Reference Include="GatherContentConnect, Version=0.7.1.19117, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GatherContentConnect.0.7.1-ci-20171115-163745\lib\net452\GatherContentConnect.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\sunny\Source\Repos\GatherContentConnect\GatherContentConnect\bin\Debug\GatherContentConnect.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>

@@ -10,7 +10,8 @@ namespace GatherContentImport.GcDynamicClasses
         public Identity Id { get; set; }
         public Guid ContentGuid { get; set; }
         public int ItemId { get; set; }
-        public DateTime ImportedAt { get; set; }
+        public DateTime LastImportFromGc { get; set; }
+        public string GcStatusId { get; set; }
 
         //Parameter-less constructor required for the dynamic data store.
         public GcDynamicImports()
@@ -19,16 +20,18 @@ namespace GatherContentImport.GcDynamicClasses
             Id = Identity.NewIdentity(Guid.NewGuid());
             ContentGuid = new Guid();
             ItemId = 0;
-            ImportedAt = new DateTime();
+            LastImportFromGc = new DateTime();
+            GcStatusId = string.Empty;
         }
 
-        public GcDynamicImports(Guid contentGuid, int itemId, DateTime importedAt)
+        public GcDynamicImports(Guid contentGuid, int itemId, DateTime lastImportFromGc, string gcStatusId)
         {
             //Assign the properties with actual values.
             Id = Identity.NewIdentity(Guid.NewGuid());
             ContentGuid = contentGuid;
             ItemId = itemId;
-            ImportedAt = importedAt;
+            LastImportFromGc = lastImportFromGc;
+            GcStatusId = gcStatusId;
         }
     }
 }

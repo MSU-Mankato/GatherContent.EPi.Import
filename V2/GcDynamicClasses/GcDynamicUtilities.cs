@@ -5,7 +5,6 @@ using EPiServer.Data.Dynamic;
 
 namespace GatherContentImport.GcDynamicClasses
 {
-    [EPiServerDataStore(AutomaticallyRemapStore = true)]
     public static class GcDynamicUtilities
     {
         //Save the Data Store.

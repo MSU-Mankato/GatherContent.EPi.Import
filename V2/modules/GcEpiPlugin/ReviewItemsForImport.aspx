@@ -62,12 +62,12 @@
                     <tr>
                         <td></td>
                         <td><h4>Item</h4></td>
-                        <td><h4>Status</h4></td>
+                        <td><h4>GC Status</h4></td>
                         <td><h4>Updated in GC</h4></td>
                         <td><h4>Parent Page/Block</h4></td>
-                        <td><h4>Import Status</h4></td>
+                        <td><h4>EPi Import Status</h4></td>
                         <td><h4>Imported on</h4></td>
-                        <td><h4>Update Content</h4></td>
+                        <td><h4>Pull from GC</h4></td>
                     </tr>
                     </thead>
                 </HeaderTemplate>
