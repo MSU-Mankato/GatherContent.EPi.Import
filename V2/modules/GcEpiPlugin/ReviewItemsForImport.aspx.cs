@@ -14,6 +14,7 @@ using System.Web.UI.WebControls;
 using System.Web.WebPages;
 using Castle.Components.DictionaryAdapter;
 using Castle.Core.Internal;
+using EPiServer.Data.Dynamic;
 using EPiServer.Security;
 using GatherContentConnect.Interface;
 using GatherContentConnect.Objects;
@@ -182,6 +183,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             // Initializing the local variables.
             Client = new GcConnectClient(_credentialsStore.First().ApiKey, _credentialsStore.First().Email);
             var gcItem = e.Item.DataItem as GcItem;
+
             var defaultParentIdFromQuery = Server.UrlDecode(Request.QueryString["DefaultParentId"]);
             var enableItemFlag = true;
             var parentId = string.Empty;
@@ -196,8 +198,6 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (gcItem == null) return;
 
             // Set the values of form components.
-            if (e.Item.FindControl("statusName") is Label statusNameLabel)
-                statusNameLabel.Text = gcItem.CurrentStatus.Data.Name;
             if (e.Item.FindControl("updatedAt") is Label updatedAtLabel)
                 updatedAtLabel.Text = gcItem.UpdatedAt.Date?.ToLocalTime().ToShortDateString();
             if (e.Item.FindControl("lnkIsImported") is HyperLink linkIsImported)
@@ -254,6 +254,9 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
                             // This is in case the user moved the page to trash and deleted it permanently.
                             if (!(ex is ContentNotFoundException)) continue;
+
+                            // Before deleting the record from DDS, change the status of the item on GC back to its previous state.
+                            Client.ChooseStatus(gcItem.Id, Convert.ToInt32(_contentStore.Find(i => i.Id.Equals(cs.Id)).GcStatusId));
                             GcDynamicUtilities.DeleteItem<GcDynamicImports>(cs.Id);
                             enableItemFlag = true;
                         }
@@ -288,6 +291,9 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
                             // This is in case the user moved the page to trash and deleted it permanently.
                             if (!(ex is ContentNotFoundException)) continue;
+
+                            // Before deleting the record from DDS, change the status of the item on GC back to its previous state.
+                            Client.ChooseStatus(gcItem.Id, Convert.ToInt32(_contentStore.Find(i => i.Id.Equals(cs.Id)).GcStatusId));
                             GcDynamicUtilities.DeleteItem<GcDynamicImports>(cs.Id);
                             enableItemFlag = true;
                         }
@@ -377,7 +383,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     checkBoxItemUpdate.ID = $"chkUpdate{gcItem.Id}";
                     // ReSharper disable once PossibleInvalidOperationException
                     if (_contentStore.Any(i => i.ItemId == gcItem.Id &&
-                                               gcItem.UpdatedAt.Date.Value.ToLocalTime() > i.ImportedAt))
+                                               gcItem.UpdatedAt.Date.Value.ToLocalTime() > i.LastImportFromGc))
                     {
                         var importedItem = _contentStore.Find(x => x.ItemId == gcItem.Id);
                         var content = currentMapping.PostType == "PageType"
@@ -399,8 +405,11 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (e.Item.FindControl("importedOn") is Label importedOnLabel)
             {
                 importedOnLabel.Text = enableItemFlag ? "---------"
-                    : _contentStore.Find(x => x.ItemId == gcItem.Id).ImportedAt.ToShortDateString();
+                    : _contentStore.Find(x => x.ItemId == gcItem.Id).LastImportFromGc.ToShortDateString();
             }
+            
+            if (e.Item.FindControl("statusName") is Label statusNameLabel)
+                statusNameLabel.Text = Client.GetItemById(gcItem.Id.ToString()).CurrentStatus.Data.Name;
 
             if (!(e.Item.FindControl("lnkItemName") is HyperLink linkItemName)) return;
             linkItemName.Text = gcItem.Name;
@@ -548,6 +557,9 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 // Filtered files list contains only files that user wants to import.
                 List<GcFile> filteredFiles;
 
+                // Save the initial status of the item.
+                var intitalStatusId = item.CurrentStatus.Data.Id;
+
                 // Since the post type of the item is known beforehand, we can separate the import process for different post types.
                 switch (currentMapping.PostType)
                 {
@@ -583,7 +595,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 {
                                     await GcEpiContentParser.FileParserAsync(i, "PageType", newPage.ContentLink, saveAction, "Import");
                                 });
-                                var dds = new GcDynamicImports(newPage.ContentGuid, item.Id, DateTime.Now.ToLocalTime());
+                                var dds = new GcDynamicImports(newPage.ContentGuid, item.Id, DateTime.Now.ToLocalTime(), intitalStatusId);
                                 GcDynamicUtilities.SaveStore(dds);
                                 importCounter++;
                             }
@@ -625,7 +637,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 {
                                     await GcEpiContentParser.FileParserAsync(i, "BlockType", content.ContentLink, saveAction, "Import");
                                 });
-                                var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now.ToLocalTime());
+                                var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now.ToLocalTime(), intitalStatusId);
                                 GcDynamicUtilities.SaveStore(dds);
                                 importCounter++;
                             }
@@ -669,7 +681,6 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 var importedItem = _contentStore.Find(x => x.ItemId.ToString() == itemId);
                 var currentMapping = _mappingsStore.First(i => i.TemplateId == gcItem.TemplateId.ToString());
                 SaveAction saveAction;
-                GcDynamicImports dds;
 
                 // fetch all the GcFile collection for this item.
                 List<GcFile> filteredFiles;
@@ -681,14 +692,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var pageType = _contentTypeRepository.List().ToList()
                             .Find(i => i.ID == pageClone.ContentTypeID);
                         filteredFiles = MapValuesFromGcToEpi(pageClone, pageType, currentMapping, gcItem);
-                        GcDynamicUtilities.DeleteItem<GcDynamicImports>(_contentStore[_contentStore.FindIndex(i => i.ItemId.ToString() == itemId)].Id);
                         saveAction = SaveContent(pageClone, gcItem, currentMapping);
                         filteredFiles.ForEach(async i =>
                         {
                             await GcEpiContentParser.FileParserAsync(i, "PageType", pageClone.ContentLink, saveAction, "Update");
                         });
-                        dds = new GcDynamicImports(pageClone.ContentGuid, gcItem.Id, DateTime.Now.ToLocalTime());
-                        GcDynamicUtilities.SaveStore(dds);
+                        UpdateItem(pageClone.ContentGuid);
                         updateCounter++;
                         break;
 
@@ -701,15 +710,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var blockType = _contentTypeRepository.List().ToList()
                             .Find(i => i.ID == cloneContent.ContentTypeID);
                         filteredFiles = MapValuesFromGcToEpi(cloneContent, blockType, currentMapping, gcItem);
-                        GcDynamicUtilities.DeleteItem<GcDynamicImports>(_contentStore[_contentStore.FindIndex(i => i.ItemId.ToString() == itemId)].Id);
                         saveAction = SaveContent(cloneContent, gcItem, currentMapping);
                         filteredFiles.ForEach(async i =>
                         {
                             await GcEpiContentParser.FileParserAsync(i, "BlockType", cloneContent.ContentLink, saveAction, "Update");
                         });
-                        dds = new GcDynamicImports(cloneContent.ContentGuid, gcItem.Id, DateTime.Now.ToLocalTime());
-                        GcDynamicUtilities.SaveStore(dds);
-                        
+                        UpdateItem(cloneContent.ContentGuid);
                         updateCounter++;
                         break;
                 }
@@ -732,6 +738,19 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 Response.Write($"<script> {responseMessage} window.location = '/modules/GcEpiPlugin/ReviewItemsForImport.aspx?" +
                                $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
             }
+        }
+        
+        // A method to update an item on Dynamic Data Store.
+        public void UpdateItem(Guid contentGuid)
+        {
+            // Fetch the current time.
+            var now = DateTime.Now.ToLocalTime();
+            // Fetch the DDS of type GcDynamicImports
+            var store = DynamicDataStoreFactory.Instance.CreateStore(typeof(GcDynamicImports));
+            // Update the item which has the same contentGuid as the one in the parameters.
+            store.Update<GcDynamicImports>().Where(i => i.ContentGuid.Equals(contentGuid))
+                .Set(i => i.LastImportFromGc, now)
+                .Execute();
         }
     }
 }
