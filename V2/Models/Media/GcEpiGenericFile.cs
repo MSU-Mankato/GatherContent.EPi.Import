@@ -28,6 +28,7 @@ namespace GatherContentImport.Models.Media
             Order = 2)]
         public virtual string Description { get; set; }
 
+        [HiddenInput(DisplayValue = false)]
         public virtual string GcFileInfo { get; set; }
     }
 }

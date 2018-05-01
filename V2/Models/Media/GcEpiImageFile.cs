@@ -2,6 +2,7 @@
 using EPiServer.DataAnnotations;
 using EPiServer.Framework.DataAnnotations;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using EPiServer.DataAbstraction;
 
 namespace GatherContentImport.Models.Media
@@ -26,6 +27,7 @@ namespace GatherContentImport.Models.Media
             Order = 2)]
         public virtual string Description { get; set; }
 
+        [HiddenInput(DisplayValue = false)]
         public virtual string GcFileInfo { get; set; }
     }
 }

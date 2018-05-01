@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
@@ -21,6 +22,7 @@ namespace GatherContentImport.Models.Media
         
         public virtual ContentReference PreviewImage { get; set; }
         
+        [HiddenInput(DisplayValue = false)]
         public virtual string GcFileInfo { get; set; }
     }
 }
