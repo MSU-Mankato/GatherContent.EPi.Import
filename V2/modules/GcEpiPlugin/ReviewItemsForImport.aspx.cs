@@ -333,7 +333,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 }
                 else if (currentMapping.PostType == "BlockType")
                 {
-                    // Get the parent page data.
+                    // Get the parent folder data.
                     var parentData = _contentRepository.Get<ContentFolder>(ContentReference.Parse(_defaultParentId));
                     dropDownListParentId.Items.Add(new ListItem(parentData.Name, parentData.ContentLink.ID.ToString()));
 
