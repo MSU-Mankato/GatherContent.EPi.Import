@@ -139,6 +139,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
                         // Fetch the block data of its immediate parent.
                         var parentFolder = _contentRepository.Get<ContentFolder>(contentFolder.ParentLink);
+
                         // Add the parent's name along with the block name to avoid the confusion between the same block names.
                         ddlDefaultParent.Items.Add(new ListItem(parentFolder.Name + " => " + contentFolder.Name,
                             contentFolder.ContentLink.ID.ToString()));
@@ -201,6 +202,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             // Set the values of form components.
             if (e.Item.FindControl("updatedAt") is Label updatedAtLabel)
+
+                // Set the last updated date of content on GC.
                 updatedAtLabel.Text = gcItem.UpdatedAt.Date?.ToLocalTime().ToShortDateString();
             if (e.Item.FindControl("lnkIsImported") is HyperLink linkIsImported)
             {
