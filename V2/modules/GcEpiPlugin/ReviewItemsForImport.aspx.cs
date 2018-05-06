@@ -235,7 +235,16 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         {
                             var pageData = _contentRepository.Get<PageData>(cs.ContentGuid);
 
-                            // Setting the parentId and making sure the drop down loads from Root Page.
+                            /*
+                                <summary>
+                                    Setting the parentId and making sure the drop down loads from Root Page.
+                                    This is necessary since the page is already imported.
+                                    Eg: Let's say, there was a page which was imported under root. Now, the user sets some other page
+                                    in the path tree as default parent. The code will break now because, the ddlParent will try to set
+                                    its parent which does not exist in its options.
+                                    To avoid this, we add all the pages in to the options.
+                                </summary>
+                            */
                             _defaultParentId = "1";
                             parentId = pageData.ParentLink.ID.ToString();
 
@@ -261,7 +270,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             if (!(ex is ContentNotFoundException)) continue;
 
                             // Before deleting the record from DDS, change the status of the item on GC back to its previous state.
-                            // (Only if the user had changed it.)
+                            // (Only if the user had changed it while importing it.)
                             var initialStatusId = _contentStore.Find(i => i.Id.Equals(cs.Id)).GcStatusId;
                             if (!initialStatusId.IsNullOrEmpty())
                                 Client.ChooseStatus(gcItem.Id, Convert.ToInt32(initialStatusId));
@@ -274,7 +283,17 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         try
                         {
                             var blockData = _contentRepository.Get<BlockData>(cs.ContentGuid) as IContent;
-                            // Setting the parentId and making sure the drop down loads from Root Folder.
+
+                            /*
+                                <summary>
+                                    Setting the parentId and making sure the drop down loads from Root Folder.
+                                    This is necessary since the block is already imported.
+                                    Eg: Let's say, there was a block which was imported under root folder. Now, the user sets some other folder
+                                    in the path tree as default parent. The code will break now because, the ddlParent will try to set
+                                    its parent which does not exist in its options.
+                                    To avoid this, we add all the content folders in to the options.
+                                </summary>
+                            */
                             parentId = blockData.ParentLink.ID.ToString();
                             _defaultParentId = "3";
 
@@ -299,7 +318,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             if (!(ex is ContentNotFoundException)) continue;
 
                             // Before deleting the record from DDS, change the status of the item on GC back to its previous state.
-                            // (Only if the user had changed it.)
+                            // (Only if the user had changed it while importing it.)
                             var initialStatusId = _contentStore.Find(i => i.Id.Equals(cs.Id)).GcStatusId;
                             if (!initialStatusId.IsNullOrEmpty())
                                 Client.ChooseStatus(gcItem.Id, Convert.ToInt32(initialStatusId));
@@ -320,6 +339,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     dropDownListParentId.Items.Add(new ListItem(parentData.PageName, parentData.ContentLink.ID.ToString()));
 
                     // To reduce the recursion-overhead, we only sort the content once and store it in a global variable instead.
+                    // The list will be empty if the previous item in the repeater was imported.
                     if (_sortedContent.IsNullOrEmpty())
                         SortContent<PageData>(_contentRepository.Get<PageData>(ContentReference.Parse(_defaultParentId)), _sortedContent);
 
