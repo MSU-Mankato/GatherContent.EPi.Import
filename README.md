@@ -75,7 +75,7 @@ Once the mapping defaults are set, click &#39;Next Step&#39;. This will take you
 
 Here you can map each individual GatherContent field to an EPiServer field. By default, all the content fields are set to &#39;Do not import&#39;. You may import just some fields or all the fields or none at all, it is totally upto you.
 
-Note: This is a one-to-one mapping. So, using the same EPiServer field for multiple GatherContent fields will override the previously mapped field.
+Note: This is a one-to-one mapping. So, using the same EPiServer field for multiple GatherContent fields will override the previously mapped fields.
 
 Once the  fields are mapped, click &#39;Save mapping&#39;. This will save your mapping and your items will be ready for import.
 
