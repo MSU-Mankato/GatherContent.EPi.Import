@@ -7,13 +7,11 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Castle.Components.DictionaryAdapter;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAccess;
 using EPiServer.Framework.Blobs;
-using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using GatherContentConnect.Objects;
 using GatherContentImport.Models.Media;
@@ -91,7 +89,7 @@ namespace GatherContentImport.GcEpiUtilities
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
 
             // Extract the file extension of the file by its name.
-            var fileExtension = Path.GetExtension(gcFile.FileName).Replace(".","");
+            var fileExtension = Path.GetExtension(gcFile.FileName).Replace(".", "");
 
             // Initialize a new MediaData object.
             MediaData file;

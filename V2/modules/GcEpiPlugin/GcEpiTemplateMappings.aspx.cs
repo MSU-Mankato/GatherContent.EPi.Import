@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace GatherContentImport.modules.GcEpiPlugin
 {
-    [GuiPlugIn(DisplayName = "Gc Epi Template Mappings", Description = "This is where the user sees all the template mappings", Area = PlugInArea.AdminMenu, Url = "~/modules/GcEpiPlugin/GcEpiTemplateMappings.aspx")]
+    [GuiPlugIn(DisplayName = "Gc-Epi Template Mappings", Description = "This is where the user sees all the template mappings", Area = PlugInArea.AdminMenu, Url = "~/modules/GcEpiPlugin/GcEpiTemplateMappings.aspx")]
     public partial class GcEpiTemplateMappings : SimplePage
     {
 
@@ -79,13 +79,24 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
         protected void RptTableMappings_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
+            // Return if the data item isn't Template mapping.
             if (!(e.Item.DataItem is GcDynamicTemplateMappings map)) return;
+
+            // Make all the Rest calls before performing actions on the item.
             Client = new GcConnectClient(_credentialsStore.ToList().First().ApiKey, _credentialsStore.ToList().First().Email);
             var slug = Client.GetAccountById(Convert.ToInt32(map.AccountId)).Slug;
+            var thisProject = Client.GetProjectById(Convert.ToInt32(map.ProjectId));
+            var thisTemplate = Client.GetTemplateById(Convert.ToInt32(map.TemplateId));
+
+            // Perform actions on each control element.
             if (e.Item.FindControl("btnEditTemplateMap") is Button buttonEditTemplateMap)
             {
+                // Serialize the status maps and field maps to make them query string compatible.
                 var serializedStatusMaps = JsonConvert.SerializeObject(map.StatusMaps);
                 var serializedEpiFieldMaps = JsonConvert.SerializeObject(map.EpiFieldMaps);
+
+                // Add the query string on the post back url of Edit Template button.
+                // (This is a get around for bug that does not fire event handlers on dynamically created controls.)
                 buttonEditTemplateMap.PostBackUrl =
                     $"~/modules/GcEpiPlugin/NewGcMappingStep4.aspx?AccountId={map.AccountId}" +
                     $"&ProjectId={map.ProjectId}&TemplateId={map.TemplateId}&PostType={map.PostType}&Author={map.Author}" +
@@ -96,9 +107,9 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 linkAccountSlug.NavigateUrl = $"https://{slug}.gathercontent.com/";
             if (e.Item.FindControl("lnkProject") is HyperLink linkProject)
             {
-                if (Client.GetProjectById(Convert.ToInt32(map.ProjectId)).Name != null)
+                if (thisProject.Name != null)
                 {
-                    linkProject.Text = Client.GetProjectById(Convert.ToInt32(map.ProjectId)).Name;
+                    linkProject.Text = thisProject.Name;
                     linkProject.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.ProjectId}";
                 }
                 else
@@ -108,9 +119,9 @@ namespace GatherContentImport.modules.GcEpiPlugin
             }
             if (e.Item.FindControl("lnkTemplate") is HyperLink linkTemplate)
             {
-                if (Client.GetTemplateById(Convert.ToInt32(map.TemplateId)).Name != null)
+                if (thisTemplate.Name != null)
                 {
-                    linkTemplate.Text = Client.GetTemplateById(Convert.ToInt32(map.TemplateId)).Name;
+                    linkTemplate.Text = thisTemplate.Name;
                     linkTemplate.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";
                 }
                 else
@@ -121,6 +132,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (e.Item.FindControl("chkTemplate") is CheckBox checkBoxTemplate)
                 checkBoxTemplate.ID = $"{map.TemplateId}";
             if (e.Item.FindControl("btnItemsReview") is Button buttonItemsReview)
+                // Add the query string on the post back url of Review Items for Import button.
+                // (This is a get around for bug that does not fire event handlers on dynamically created controls.)
                 buttonItemsReview.PostBackUrl = "~/modules/GcEpiPlugin/ReviewItemsForImport.aspx?" +
                                                 $"TemplateId={map.TemplateId}&ProjectId={map.ProjectId}";
             if (e.Item.FindControl("publishedOn") is Label publishedOnLabel)

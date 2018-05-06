@@ -180,12 +180,15 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
         protected void RptGcItems_OnItemCreated(object sender, RepeaterItemEventArgs e)
         {
+            // Return if the data item is not a GcItem.
+            if (!(e.Item.DataItem is GcItem gcItem)) return;
+
             // Initializing the local variables.
             Client = new GcConnectClient(_credentialsStore.First().ApiKey, _credentialsStore.First().Email);
-            var gcItem = e.Item.DataItem as GcItem;
+            var accountSlug = Client.GetAccountById(Convert.ToInt32(_credentialsStore.First().AccountId)).Slug;
 
-            var defaultParentIdFromQuery = Server.UrlDecode(Request.QueryString["DefaultParentId"]);
-            var enableItemFlag = true;
+            var defaultParentIdSetByUser = Server.UrlDecode(Request.QueryString["DefaultParentId"]);
+            var enableItemForImportFlag = true;
             var parentId = string.Empty;
 
             // This is to make sure we only fetch mappings associated with this GcAccount.
@@ -195,7 +198,6 @@ namespace GatherContentImport.modules.GcEpiPlugin
             // Fetch the mapping for current template.
             var currentMapping = _mappingsStore.First(i => i.TemplateId == Session["TemplateId"].ToString());
             var recycleBin = _contentRepository.GetDescendents(ContentReference.WasteBasket).ToList();
-            if (gcItem == null) return;
 
             // Set the values of form components.
             if (e.Item.FindControl("updatedAt") is Label updatedAtLabel)
@@ -203,9 +205,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (e.Item.FindControl("lnkIsImported") is HyperLink linkIsImported)
             {
                 linkIsImported.Text = "---------";
+                
+                // Set the (global) default parent Id to parent selected by the user if he set it.
+                // Else, set it to '1' for page type and '3' for block type.
                 _defaultParentId = currentMapping.PostType == "PageType"
-                    ? (defaultParentIdFromQuery ?? "1")
-                    : (defaultParentIdFromQuery ?? "3");
+                    ? (defaultParentIdSetByUser ?? "1")
+                    : (defaultParentIdSetByUser ?? "3");
                 foreach (var cs in _contentStore)
                 {
                     // Check if the item in the Gather Content items list is in the content store.
@@ -223,7 +228,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     }
 
                     // Item is already imported, so set the flag to false.
-                    enableItemFlag = false;
+                    enableItemForImportFlag = false;
                     if (currentMapping.PostType == "PageType")
                     {
                         try
@@ -256,18 +261,19 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             if (!(ex is ContentNotFoundException)) continue;
 
                             // Before deleting the record from DDS, change the status of the item on GC back to its previous state.
-                            Client.ChooseStatus(gcItem.Id, Convert.ToInt32(_contentStore.Find(i => i.Id.Equals(cs.Id)).GcStatusId));
+                            // (Only if the user had changed it.)
+                            var initialStatusId = _contentStore.Find(i => i.Id.Equals(cs.Id)).GcStatusId;
+                            if (!initialStatusId.IsNullOrEmpty())
+                                Client.ChooseStatus(gcItem.Id, Convert.ToInt32(initialStatusId));
                             GcDynamicUtilities.DeleteItem<GcDynamicImports>(cs.Id);
-                            enableItemFlag = true;
+                            enableItemForImportFlag = true;
                         }
                     }
                     else
                     {
                         try
                         {
-                            // ReSharper disable once SuspiciousTypeConversion.Global
                             var blockData = _contentRepository.Get<BlockData>(cs.ContentGuid) as IContent;
-                            // ReSharper disable once PossibleNullReferenceException
                             // Setting the parentId and making sure the drop down loads from Root Folder.
                             parentId = blockData.ParentLink.ID.ToString();
                             _defaultParentId = "3";
@@ -293,9 +299,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             if (!(ex is ContentNotFoundException)) continue;
 
                             // Before deleting the record from DDS, change the status of the item on GC back to its previous state.
-                            Client.ChooseStatus(gcItem.Id, Convert.ToInt32(_contentStore.Find(i => i.Id.Equals(cs.Id)).GcStatusId));
+                            // (Only if the user had changed it.)
+                            var initialStatusId = _contentStore.Find(i => i.Id.Equals(cs.Id)).GcStatusId;
+                            if (!initialStatusId.IsNullOrEmpty())
+                                Client.ChooseStatus(gcItem.Id, Convert.ToInt32(initialStatusId));
                             GcDynamicUtilities.DeleteItem<GcDynamicImports>(cs.Id);
-                            enableItemFlag = true;
+                            enableItemForImportFlag = true;
                         }
                     }
                 }
@@ -356,7 +365,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 }
 
                 // If item is enabled, then enable the drop down containing the parents. Else, set the drop down to the content's parent value.
-                if (enableItemFlag)
+                if (enableItemForImportFlag)
                 {
                     dropDownListParentId.Enabled = true;
                 }
@@ -368,7 +377,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (e.Item.FindControl("chkItem") is CheckBox checkBoxItemImport)
             {
                 checkBoxItemImport.ID = $"chkImport{gcItem.Id}";
-                if (enableItemFlag)
+                if (enableItemForImportFlag)
                 {
                     checkBoxItemImport.Enabled = true;
                     checkBoxItemImport.Visible = true;
@@ -378,19 +387,16 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             if (e.Item.FindControl("chkUpdateContent") is CheckBox checkBoxItemUpdate)
             {
-                if (!enableItemFlag)
+                if (!enableItemForImportFlag)
                 {
                     checkBoxItemUpdate.ID = $"chkUpdate{gcItem.Id}";
-                    // ReSharper disable once PossibleInvalidOperationException
                     if (_contentStore.Any(i => i.ItemId == gcItem.Id &&
                                                gcItem.UpdatedAt.Date.Value.ToLocalTime() > i.LastImportFromGc))
                     {
                         var importedItem = _contentStore.Find(x => x.ItemId == gcItem.Id);
                         var content = currentMapping.PostType == "PageType"
                             ? _contentRepository.Get<PageData>(importedItem.ContentGuid)
-                            // ReSharper disable once SuspiciousTypeConversion.Global
                             : _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
-                        // ReSharper disable once PossibleNullReferenceException
                         if (!recycleBin.Contains(content.ContentLink))
                         {
                             checkBoxItemUpdate.Enabled = true;
@@ -404,17 +410,18 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             if (e.Item.FindControl("importedOn") is Label importedOnLabel)
             {
-                importedOnLabel.Text = enableItemFlag ? "---------"
+                importedOnLabel.Text = enableItemForImportFlag ? "---------"
                     : _contentStore.Find(x => x.ItemId == gcItem.Id).LastImportFromGc.ToShortDateString();
             }
             
             if (e.Item.FindControl("statusName") is Label statusNameLabel)
+                // Explicitly make a rest call to fetch the current status of the item
+                // as the gcItem object's state might've changed when the execution reaches this part of the code.
                 statusNameLabel.Text = Client.GetItemById(gcItem.Id.ToString()).CurrentStatus.Data.Name;
 
             if (!(e.Item.FindControl("lnkItemName") is HyperLink linkItemName)) return;
             linkItemName.Text = gcItem.Name;
-            linkItemName.NavigateUrl = $"https://{Client.GetAccountById(Convert.ToInt32(_credentialsStore.First().AccountId)).Slug}" +
-                                       $".gathercontent.com/item/{gcItem.Id}";
+            linkItemName.NavigateUrl = $"https://{accountSlug}.gathercontent.com/item/{gcItem.Id}";
         }
 
         private List<GcFile> MapValuesFromGcToEpi(IContentData content, ContentType contentType, GcDynamicTemplateMappings currentMapping,
@@ -474,7 +481,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
         }
 
         // This method saves the content in accordance with the save action selected by the user for the item.
-        private SaveAction SaveContent(IContent content, IGcItem item, GcDynamicTemplateMappings currentMapping)
+        private Tuple<SaveAction, string> SaveContent(IContent content, IGcItem item, GcDynamicTemplateMappings currentMapping)
         {
             /*
                 <summary>
@@ -493,7 +500,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             var epiStatusFromMapping = statusMapsForThisItem.MappedEpiserverStatus.Split('~')[0];
             var onImportGcStatusFromMapping = statusMapsForThisItem.OnImportChangeGcStatus.Split('~')[0];
 
-            if (epiStatusFromMapping == "Use Default Status")
+            if (epiStatusFromMapping is "Use Default Status")
             {
                 saveAction = _saveActions.Find(i => i.ToString() == currentMapping.DefaultStatus);
                 _contentRepository.Save(content, saveAction);
@@ -505,10 +512,11 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 _contentRepository.Save(content, saveAction);
             }
 
+            // Change the status on GatherContent if the user selected any option other than 'Do not change'.
             if (onImportGcStatusFromMapping != "-1" && !onImportGcStatusFromMapping.IsNullOrEmpty()) 
                 Client.ChooseStatus(item.Id, Convert.ToInt32(onImportGcStatusFromMapping));
 
-            return saveAction;
+            return new Tuple<SaveAction, string>(saveAction, onImportGcStatusFromMapping);
         }
 
         protected void BtnImportItem_OnClick(object sender, EventArgs e)
@@ -540,7 +548,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 // and it is after '$'. So, we split the string on '$'.
                 var itemSplitString = key.ToString().Split('$');
 
-                // ItemId is extracted from the checkbox Id. The first part of it is always 'chkImport'. So, the Id to be extracted
+                // ItemId is extracted from the checkbox Id. The first part of it is always 'chkImport'. So, the Id needs to be extracted
                 // from the 9th index.
                 var itemId = itemSplitString[2].Substring(9);
 
@@ -558,7 +566,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 List<GcFile> filteredFiles;
 
                 // Save the initial status of the item.
-                var intitalStatusId = item.CurrentStatus.Data.Id;
+                var initialStatusId = item.CurrentStatus.Data.Id;
 
                 // Since the post type of the item is known beforehand, we can separate the import process for different post types.
                 switch (currentMapping.PostType)
@@ -569,6 +577,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var pageTypes = _contentTypeRepository.List().OfType<PageType>().ToList();
                         foreach (var pageType in pageTypes)
                         {
+                            // selectedPageType will have 'page-' as the prefix for the EpiContentType if it is a page type.
+                            // And the prefix needs to be removed before it can be processed.
                             if (selectedPageType.Substring(5) != pageType.Name) continue;
                             var newPage = _contentRepository.GetDefault<PageData>(pageParent, pageType.ID);
                             foreach (var cs in _contentStore)
@@ -591,11 +601,14 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             if (!importItemFlag) continue;
                             {
                                 var saveAction = SaveContent(newPage, item, currentMapping);
+
+                                // Call File Parser method asynchronously to import all the files that user wants to import.
                                 filteredFiles.ForEach(async i =>
                                 {
-                                    await GcEpiContentParser.FileParserAsync(i, "PageType", newPage.ContentLink, saveAction, "Import");
+                                    await GcEpiContentParser.FileParserAsync(i, "PageType", newPage.ContentLink, saveAction.Item1, "Import");
                                 });
-                                var dds = new GcDynamicImports(newPage.ContentGuid, item.Id, DateTime.Now.ToLocalTime(), intitalStatusId);
+                                initialStatusId = saveAction.Item2.Equals("-1") ? null : initialStatusId;
+                                var dds = new GcDynamicImports(newPage.ContentGuid, item.Id, DateTime.Now.ToLocalTime(), initialStatusId);
                                 GcDynamicUtilities.SaveStore(dds);
                                 importCounter++;
                             }
@@ -608,6 +621,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var blockTypes = _contentTypeRepository.List().OfType<BlockType>().ToList();
                         foreach (var blockType in blockTypes)
                         {
+                            // selectedPageType will have 'block-' as the prefix for the EpiContentType if it is a block type.
+                            // And the prefix needs to be removed before it can be processed.
                             if (selectedBlockType.Substring(6) != blockType.Name) continue;
                             var newBlock = _contentRepository.GetDefault<BlockData>(blockParent, blockType.ID);
                             foreach (var cs in _contentStore)
@@ -625,9 +640,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                     Console.WriteLine(ex);
                                 }
                             }
-                            // ReSharper disable once SuspiciousTypeConversion.Global
                             var content = newBlock as IContent;
-                            // ReSharper disable once PossibleNullReferenceException
                             content.Name = item.Name;
                             filteredFiles = MapValuesFromGcToEpi(content, blockType, currentMapping, item);
                             if (!importItemFlag) continue;
@@ -635,9 +648,10 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 var saveAction = SaveContent(content, item, currentMapping);
                                 filteredFiles.ForEach(async i =>
                                 {
-                                    await GcEpiContentParser.FileParserAsync(i, "BlockType", content.ContentLink, saveAction, "Import");
+                                    await GcEpiContentParser.FileParserAsync(i, "BlockType", content.ContentLink, saveAction.Item1, "Import");
                                 });
-                                var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now.ToLocalTime(), intitalStatusId);
+                                initialStatusId = saveAction.Item2.Equals("-1") ? null : initialStatusId;
+                                var dds = new GcDynamicImports(content.ContentGuid, item.Id, DateTime.Now.ToLocalTime(), initialStatusId);
                                 GcDynamicUtilities.SaveStore(dds);
                                 importCounter++;
                             }
@@ -676,11 +690,14 @@ namespace GatherContentImport.modules.GcEpiPlugin
             {
                 if (!key.ToString().Contains("chkUpdate")) continue;
                 var itemSplitString = key.ToString().Split('$');
+
+                // ItemId is extracted from the checkbox Id. The first part of it is always 'chkImport'. So, the Id needs to be extracted
+                // from the 9th index.
                 var itemId = itemSplitString[2].Substring(9);
                 var gcItem = Client.GetItemById(itemId);
                 var importedItem = _contentStore.Find(x => x.ItemId.ToString() == itemId);
                 var currentMapping = _mappingsStore.First(i => i.TemplateId == gcItem.TemplateId.ToString());
-                SaveAction saveAction;
+                Tuple<SaveAction, string> saveAction;
 
                 // fetch all the GcFile collection for this item.
                 List<GcFile> filteredFiles;
@@ -689,13 +706,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     case "PageType":
                         var pageToUpdate = _contentRepository.Get<PageData>(importedItem.ContentGuid);
                         var pageClone = pageToUpdate.CreateWritableClone();
-                        var pageType = _contentTypeRepository.List().ToList()
-                            .Find(i => i.ID == pageClone.ContentTypeID);
+                        var pageType = _contentTypeRepository.List().ToList().Find(i => i.ID == pageClone.ContentTypeID);
                         filteredFiles = MapValuesFromGcToEpi(pageClone, pageType, currentMapping, gcItem);
                         saveAction = SaveContent(pageClone, gcItem, currentMapping);
                         filteredFiles.ForEach(async i =>
                         {
-                            await GcEpiContentParser.FileParserAsync(i, "PageType", pageClone.ContentLink, saveAction, "Update");
+                            await GcEpiContentParser.FileParserAsync(i, "PageType", pageClone.ContentLink, saveAction.Item1, "Update");
                         });
                         UpdateItem(pageClone.ContentGuid);
                         updateCounter++;
@@ -703,17 +719,14 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
                     case "BlockType":
                         var blockToUpdate = _contentRepository.Get<BlockData>(importedItem.ContentGuid);
-                        // ReSharper disable once PossibleNullReferenceException
                         var blockClone = blockToUpdate.CreateWritableClone();
-                        // ReSharper disable once SuspiciousTypeConversion.Global
                         var cloneContent = blockClone as IContent;
-                        var blockType = _contentTypeRepository.List().ToList()
-                            .Find(i => i.ID == cloneContent.ContentTypeID);
+                        var blockType = _contentTypeRepository.List().ToList().Find(i => i.ID == cloneContent.ContentTypeID);
                         filteredFiles = MapValuesFromGcToEpi(cloneContent, blockType, currentMapping, gcItem);
                         saveAction = SaveContent(cloneContent, gcItem, currentMapping);
                         filteredFiles.ForEach(async i =>
                         {
-                            await GcEpiContentParser.FileParserAsync(i, "BlockType", cloneContent.ContentLink, saveAction, "Update");
+                            await GcEpiContentParser.FileParserAsync(i, "BlockType", cloneContent.ContentLink, saveAction.Item1, "Update");
                         });
                         UpdateItem(cloneContent.ContentGuid);
                         updateCounter++;
