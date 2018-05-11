@@ -420,6 +420,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var content = currentMapping.PostType == "PageType"
                             ? _contentRepository.Get<PageData>(importedItem.ContentGuid)
                             : _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
+
+
+                        // WARNING! Work in Progress.
+                        var contentCache = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+                        var updatedContentList = contentCache.List(content.ContentLink);
+
                         if (!recycleBin.Contains(content.ContentLink))
                         {
                             checkBoxItemUpdate.Enabled = true;
@@ -515,7 +521,6 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 </summary>
             */
             var gcStatusIdForThisItem = item.CurrentStatus.Data.Id;
-            SaveAction saveAction;
 
             var statusMapsForThisItem = currentMapping.StatusMaps
                 .Find(i => i.MappedEpiserverStatus.Split('~')[1] == gcStatusIdForThisItem);
@@ -523,17 +528,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
             var epiStatusFromMapping = statusMapsForThisItem.MappedEpiserverStatus.Split('~')[0];
             var onImportGcStatusFromMapping = statusMapsForThisItem.OnImportChangeGcStatus.Split('~')[0];
 
-            if (epiStatusFromMapping is "Use Default Status")
-            {
-                saveAction = _saveActions.Find(i => i.ToString() == currentMapping.DefaultStatus);
-                _contentRepository.Save(content, saveAction);
-            }
-
-            else
-            {
-                saveAction = _saveActions.Find(i => i.ToString() == epiStatusFromMapping);
-                _contentRepository.Save(content, saveAction);
-            }
+            var saveAction = epiStatusFromMapping is "Use Default Status" 
+                ? _saveActions.Find(i => i.ToString() == currentMapping.DefaultStatus) 
+                : _saveActions.Find(i => i.ToString() == epiStatusFromMapping);
+            
+            // Save the content with appropriate save action.
+            _contentRepository.Save(content, saveAction);
 
             // Change the status on GatherContent if the user selected any option other than 'Do not change'.
             if (onImportGcStatusFromMapping != "-1" && !onImportGcStatusFromMapping.IsNullOrEmpty()) 
