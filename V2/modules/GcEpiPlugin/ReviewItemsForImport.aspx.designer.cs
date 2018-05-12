@@ -103,12 +103,21 @@ namespace GatherContentImport.modules.GcEpiPlugin {
         protected global::System.Web.UI.WebControls.Button btnImportItem;
         
         /// <summary>
-        /// btnUpdateItem control.
+        /// btnUpdateEpiItem control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpdateItem;
+        protected global::System.Web.UI.WebControls.Button btnUpdateEpiItem;
+        
+        /// <summary>
+        /// btnUpdateGcItem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUpdateGcItem;
     }
 }

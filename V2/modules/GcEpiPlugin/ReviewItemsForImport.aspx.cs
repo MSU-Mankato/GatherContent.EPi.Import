@@ -71,7 +71,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 Response.Write("<script>alert('This page is not directly accessible! Review your GatherContent items from Template Mappings page!');" +
                                "window.location='/modules/GcEpiPlugin/GcEpiTemplateMappings.aspx'</script>");
                 Visible = false;
-                return;
+              return;
             }
 
             // Local variables initialization and setting the values for some of the form components.
@@ -382,7 +382,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
                     foreach (var contentFolder in _sortedContent)
                     {
-                        var parentFolder = _contentRepository.Get<ContentFolder>(contentFolder.ParentLink);
+                        var parentFolder = _contentRepository.Get<ContentFolder>(contentFolder. ParentLink);
                         dropDownListParentId.Items.Add(new ListItem(parentFolder.Name + " => " + contentFolder.Name, contentFolder.ContentLink.ID.ToString()));
                     }
                 }
@@ -408,11 +408,11 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 }
             }
 
-            if (e.Item.FindControl("chkUpdateContent") is CheckBox checkBoxItemUpdate)
+            if (e.Item.FindControl("chkUpdateEpiContent") is CheckBox checkBoxEpiItemUpdate)
             {
                 if (!enableItemForImportFlag)
                 {
-                    checkBoxItemUpdate.ID = $"chkUpdate{gcItem.Id}";
+                    checkBoxEpiItemUpdate.ID = $"chkEpiUpdate{gcItem.Id}";
                     if (_contentStore.Any(i => i.ItemId == gcItem.Id &&
                                                gcItem.UpdatedAt.Date.Value.ToLocalTime() > i.LastImportFromGc))
                     {
@@ -422,12 +422,47 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             : _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
                         if (!recycleBin.Contains(content.ContentLink))
                         {
-                            checkBoxItemUpdate.Enabled = true;
-                            checkBoxItemUpdate.Visible = true;
-                            btnUpdateItem.Enabled = true;
-                            btnUpdateItem.Visible = true;
+                            checkBoxEpiItemUpdate.Enabled = true;
+                            checkBoxEpiItemUpdate.Visible = true;
+                            btnUpdateEpiItem.Enabled = true;
+                            btnUpdateEpiItem.Visible = true;
                         }
                     }
+                }
+            }
+
+            if (e.Item.FindControl("chkUpdateGcContent") is CheckBox checkBoxGcItemUpdate)
+            {
+                if (!enableItemForImportFlag)
+                {
+                    checkBoxGcItemUpdate.ID = $"chkGcUpdate{gcItem.Id}";
+                    var importedItem = _contentStore.Find(x => x.ItemId == gcItem.Id);
+                   
+                    // a way to retrive changed date from episerver content
+                    var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+                    var updatedContentList = contentVersionRepository.List(_contentRepository.Get<PageData>(importedItem.ContentGuid).ContentLink).OrderBy(v => v.Saved);
+
+                    //var epiUpdateDate = updatedContentList.Saved;
+                    //var changedDate = _contentRepository.Get<PageData>(importedItem.ContentGuid).Changed;
+                  /*  var name = _contentRepository.Get<PageData>(importedItem.ContentGuid).Name;
+
+                    if (_contentStore.Any(i => i.ItemId == gcItem.Id &&
+                                             epiUpdateDate > i.LastImportFromGc))
+                    {
+                        var content = currentMapping.PostType == "PageType"
+                            ? _contentRepository.Get<PageData>(importedItem.ContentGuid)
+                            : _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
+
+                        if (!recycleBin.Contains(content.ContentLink))
+                        {
+                            checkBoxGcItemUpdate.Enabled = true;
+                            checkBoxGcItemUpdate.Visible = true;
+                            btnUpdateGcItem.Enabled = true;
+                            btnUpdateGcItem.Visible = true;
+                        }
+
+                    }*/
+
                 }
             }
 
@@ -515,25 +550,17 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 </summary>
             */
             var gcStatusIdForThisItem = item.CurrentStatus.Data.Id;
-            SaveAction saveAction;
-
+          
             var statusMapsForThisItem = currentMapping.StatusMaps
                 .Find(i => i.MappedEpiserverStatus.Split('~')[1] == gcStatusIdForThisItem);
 
             var epiStatusFromMapping = statusMapsForThisItem.MappedEpiserverStatus.Split('~')[0];
             var onImportGcStatusFromMapping = statusMapsForThisItem.OnImportChangeGcStatus.Split('~')[0];
 
-            if (epiStatusFromMapping is "Use Default Status")
-            {
-                saveAction = _saveActions.Find(i => i.ToString() == currentMapping.DefaultStatus);
+            var saveAction = epiStatusFromMapping is "Use Default Status"
+                ? _saveActions.Find(i => i.ToString() == currentMapping.DefaultStatus)
+                : _saveActions.Find(i => i.ToString() == epiStatusFromMapping);
                 _contentRepository.Save(content, saveAction);
-            }
-
-            else
-            {
-                saveAction = _saveActions.Find(i => i.ToString() == epiStatusFromMapping);
-                _contentRepository.Save(content, saveAction);
-            }
 
             // Change the status on GatherContent if the user selected any option other than 'Do not change'.
             if (onImportGcStatusFromMapping != "-1" && !onImportGcStatusFromMapping.IsNullOrEmpty()) 
@@ -628,6 +655,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 // Call File Parser method asynchronously to import all the files that user wants to import.
                                 filteredFiles.ForEach(async i =>
                                 {
+                                    //HERE
                                     await GcEpiContentParser.FileParserAsync(i, "PageType", newPage.ContentLink, saveAction.Item1, "Import");
                                 });
                                 initialStatusId = saveAction.Item2.Equals("-1") ? null : initialStatusId;
@@ -702,7 +730,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                            $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
         }
 
-        protected void BtnUpdateItem_OnClick(object sender, EventArgs e)
+        protected void BtnUpdateEpiItem_OnClick(object sender, EventArgs e)
         {
             var updateCounter = 0;
             _saveActions.RemoveAt(1);
@@ -711,12 +739,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 FindAll(i => i.AccountId == _credentialsStore.First().AccountId);
             foreach (var key in Request.Form)
             {
-                if (!key.ToString().Contains("chkUpdate")) continue;
+                if (!key.ToString().Contains("chkEpiUpdate")) continue;
                 var itemSplitString = key.ToString().Split('$');
 
                 // ItemId is extracted from the checkbox Id. The first part of it is always 'chkImport'. So, the Id needs to be extracted
                 // from the 9th index.
-                var itemId = itemSplitString[2].Substring(9);
+                var itemId = itemSplitString[2].Substring(12);
                 var gcItem = Client.GetItemById(itemId);
                 var importedItem = _contentStore.Find(x => x.ItemId.ToString() == itemId);
                 var currentMapping = _mappingsStore.First(i => i.TemplateId == gcItem.TemplateId.ToString());

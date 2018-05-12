@@ -67,7 +67,8 @@
                         <td><h4>Parent Page/Block</h4></td>
                         <td><h4>EPi Import Status</h4></td>
                         <td><h4>Imported on</h4></td>
-                        <td><h4>Pull from GC</h4></td>
+                        <td><h4>Update Episerver</h4></td>
+                        <td><h4>Update GC</h4></td>
                     </tr>
                     </thead>
                 </HeaderTemplate>
@@ -99,7 +100,10 @@
                             <asp:Label runat="server" ID="importedOn"></asp:Label>
                         </td>
                         <td>
-                            <asp:CheckBox runat="server" ID="chkUpdateContent" Text="Update Item" Visible="False" Enabled="False"/>
+                            <asp:CheckBox runat="server" ID="chkUpdateEpiContent" Text="Update Item" Visible="False" Enabled="False"/>
+                        </td>
+                        <td>
+                            <asp:CheckBox runat="server" ID="chkUpdateGcContent" Text="Push to GC" Visible="False" Enabled="False"/>
                         </td>
                     </tr>
                 </ItemTemplate>
@@ -112,9 +116,15 @@
             <asp:Button runat="server" ID="btnPrevious" Text="Back" PostBackUrl="GcEpiTemplateMappings.aspx" OnClientClick ="loadingAnimation()"/>
             <asp:Button runat="server" ID="btnImportItem" Text="Import Items" Enabled="False" OnClick="BtnImportItem_OnClick" 
                         OnClientClick="return confirmDialog('Are you sure you want to import these item(s)?');"/>
-            <span style="float: right; margin-right: 2%;"><asp:Button runat="server" ID="btnUpdateItem" Text="Update Items"
-                                                                      Visible="False" Enabled="False" OnClick="BtnUpdateItem_OnClick"
-                                                                      OnClientClick="return confirmDialog('Are you sure you want to update these item(s)?');"/></span>
+            <span style="float: right; margin-right: 1%;">
+                <asp:Button runat="server" ID="btnUpdateEpiItem" Text="Update EpiServer Items" Width="160px" 
+                                                                      Visible="False" Enabled="False"  OnClick="BtnUpdateEpiItem_OnClick"
+                                                                      OnClientClick="return confirmDialog('Are you sure you want to update these item(s)?');"/>
+                &nbsp;
+                <asp:Button runat="server" ID="btnUpdateGcItem" Text="Update GC Items" Width="120px" Visible="False" Enabled="False"
+                            OnClientClick="return confirmDialog('Are you sure you want to update these item(s)?');"/>
+
+            </span>
         </p>
     </fieldset>
 </form>
