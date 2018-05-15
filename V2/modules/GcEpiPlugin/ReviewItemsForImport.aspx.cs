@@ -440,29 +440,24 @@ namespace GatherContentImport.modules.GcEpiPlugin
                    
                     // a way to retrive changed date from episerver content
                     var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
-                    var updatedContentList = contentVersionRepository.List(_contentRepository.Get<PageData>(importedItem.ContentGuid).ContentLink).OrderBy(v => v.Saved);
-
-                    //var epiUpdateDate = updatedContentList.Saved;
-                    //var changedDate = _contentRepository.Get<PageData>(importedItem.ContentGuid).Changed;
-                  /*  var name = _contentRepository.Get<PageData>(importedItem.ContentGuid).Name;
+                    var updatedContentList = contentVersionRepository.List(_contentRepository.Get<PageData>(importedItem.ContentGuid).ContentLink).OrderByDescending(v => v.Saved);
+                    var epiUpdateDate = updatedContentList.FirstOrDefault().Saved;
 
                     if (_contentStore.Any(i => i.ItemId == gcItem.Id &&
-                                             epiUpdateDate > i.LastImportFromGc))
+                                               epiUpdateDate > i.LastImportFromGc))
                     {
-                        var content = currentMapping.PostType == "PageType"
-                            ? _contentRepository.Get<PageData>(importedItem.ContentGuid)
-                            : _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
-
-                        if (!recycleBin.Contains(content.ContentLink))
-                        {
-                            checkBoxGcItemUpdate.Enabled = true;
-                            checkBoxGcItemUpdate.Visible = true;
-                            btnUpdateGcItem.Enabled = true;
-                            btnUpdateGcItem.Visible = true;
-                        }
-
-                    }*/
-
+                          var content = currentMapping.PostType == "PageType"
+                              ? _contentRepository.Get<PageData>(importedItem.ContentGuid)
+                              : _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
+  
+                          if (!recycleBin.Contains(content.ContentLink))
+                          {
+                              checkBoxGcItemUpdate.Enabled = true;
+                              checkBoxGcItemUpdate.Visible = true;
+                              btnUpdateGcItem.Enabled = true;
+                              btnUpdateGcItem.Visible = true;
+                          }
+                    }
                 }
             }
 
@@ -511,7 +506,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 /* 
                     <summary>
                         For the field name that matches the field name of Epi content type, find the GcElement whose name is 
-                        the extracted gcFieldName. Call a parser based on the GcElement type. (Files gets imported differently.)
+                        the extracted gcFieldName. Assign updated value to the gcElements fields
                     </summary>
                  */
                 var propDef = contentType.PropertyDefinitions.ToList().Find(p => p.Name == epiFieldName);
@@ -647,7 +642,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 }
                             }
                             newPage.PageName = item.Name;
-                            filteredFiles = MapValuesFromGcToEpi(newPage, pageType, currentMapping, item);
+                            filteredFiles = MapValuesFromGcToEpi(newPage,  pageType, currentMapping, item);
                             if (!importItemFlag) continue;
                             {
                                 var saveAction = SaveContent(newPage, item, currentMapping);
@@ -655,7 +650,6 @@ namespace GatherContentImport.modules.GcEpiPlugin
                                 // Call File Parser method asynchronously to import all the files that user wants to import.
                                 filteredFiles.ForEach(async i =>
                                 {
-                                    //HERE
                                     await GcEpiContentParser.FileParserAsync(i, "PageType", newPage.ContentLink, saveAction.Item1, "Import");
                                 });
                                 initialStatusId = saveAction.Item2.Equals("-1") ? null : initialStatusId;
@@ -730,6 +724,104 @@ namespace GatherContentImport.modules.GcEpiPlugin
                            $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
         }
 
+        protected void BtnUpdateGcItem_OnClick(object sender, EventArgs e)
+        {
+            Client = new GcConnectClient(_credentialsStore.First().ApiKey, _credentialsStore.First().Email);
+            _mappingsStore = GcDynamicUtilities.RetrieveStore<GcDynamicTemplateMappings>()
+                .FindAll(i => i.AccountId == _credentialsStore.First().AccountId);
+            
+            foreach (var key in Request.Form)
+            {
+                if (!key.ToString().Contains("chkGcUpdate")) continue;
+                var itemSplitString = key.ToString().Split('$');
+                var itemId = itemSplitString[2].Substring(11);
+                var gcItem = Client.GetItemById(itemId);
+                var importedItem = _contentStore.Find(x => x.ItemId.ToString() == itemId);
+                var currentMapping = _mappingsStore.First(i => i.TemplateId == gcItem.TemplateId.ToString());
+                var gcConfigs = gcItem.Config.ToList();
+                ContentType contentType;
+
+                switch (currentMapping.PostType)
+                {
+                    case "PageType":
+                        var pageData = _contentRepository.Get<PageData>(importedItem.ContentGuid);
+                        contentType= _contentTypeRepository.List().ToList().Find(i => i.ID == pageData.ContentTypeID);
+                        gcConfigs = MapValuesFromEpiToGC(contentType, currentMapping, gcConfigs, pageData);
+                        //call to Gather Content item update method.
+                        Client.SaveItem(int.Parse(itemId), configs: gcConfigs);
+                        UpdateItem(pageData.ContentGuid);
+                        break;
+
+                    case "BlockType":
+                        var blockData = _contentRepository.Get<BlockData>(importedItem.ContentGuid);
+                        var blockClone = blockData.CreateWritableClone() as IContent;
+                        contentType = _contentTypeRepository.List().ToList().Find(i => i.ID == blockClone.ContentTypeID);
+                        gcConfigs = MapValuesFromEpiToGC(contentType, currentMapping, gcConfigs, blockData);
+                        //call to Gather Content item update method.
+                        Client.SaveItem(int.Parse(itemId), configs: gcConfigs);
+                        UpdateItem(blockClone.ContentGuid);
+                        break;
+                }
+
+                var response = $"alert('{gcItem.Name} successfully updated!');";
+                Response.Write($"<script> {response} window.location = '/modules/GcEpiPlugin/ReviewItemsForImport.aspx?" +
+                               $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
+
+            }
+        }
+
+        protected List<GcConfig> MapValuesFromEpiToGC(ContentType contentType, GcDynamicTemplateMappings currentMapping, 
+            List<GcConfig> gcConfigs, IContentData contentData)
+        {
+            foreach (var map in currentMapping.EpiFieldMaps)
+                {
+                    // First part of the string contains Epi field name and second part contains the Gc field name.
+                    var fieldSplitStrings = map.Split('~');
+                    var epiFieldName = fieldSplitStrings[0];
+                    var gcFieldName = fieldSplitStrings[1];
+
+                 /* 
+                        <summary>
+                            For the field name that matches the field name of Epi content type, find the GcElement whose name is 
+                            the extracted gcFieldName. Assign updated value from content repository to GcElement.
+                        </summary>
+                 */
+                  
+                    var propDef = contentType.PropertyDefinitions.ToList().Find(p => p.Name == epiFieldName);
+                    if (propDef == null) continue;
+                    
+                    foreach (var gcConfig in gcConfigs)
+                    {
+                        foreach (var gcElement in gcConfig.Elements.ToList())
+                        {
+                            if (gcElement.Name != gcFieldName) continue;
+                            var parseGcElement = (dynamic) null;
+
+                            switch (gcElement.Type)
+                                {
+                                    case "text":
+                                        parseGcElement = GcEpiContentParser.TextParser(gcElement.Value, propDef.Type.Name);
+                                        break;
+                                    case "section":
+                                        parseGcElement = GcEpiContentParser.TextParser(gcElement.Subtitle, propDef.Type.Name);
+                                        break;
+                                }
+                            var parseContentData = GcEpiContentParser.TextParser(contentData.Property[propDef.Name].Value.ToString(),
+                                    propDef.Type.Name);
+
+                        if (parseGcElement != null &&
+                                !parseGcElement.Equals(parseContentData))
+                            {
+                                gcElement.Value = parseContentData.ToString();
+                            }
+
+                        }
+                    }
+                }
+
+            return gcConfigs;
+        }
+
         protected void BtnUpdateEpiItem_OnClick(object sender, EventArgs e)
         {
             var updateCounter = 0;
@@ -742,8 +834,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 if (!key.ToString().Contains("chkEpiUpdate")) continue;
                 var itemSplitString = key.ToString().Split('$');
 
-                // ItemId is extracted from the checkbox Id. The first part of it is always 'chkImport'. So, the Id needs to be extracted
-                // from the 9th index.
+                // ItemId is extracted from the checkbox Id. The first part of it is always 'chkEpiUpdate'. So, the Id needs to be extracted
+                // from the 12th index.
                 var itemId = itemSplitString[2].Substring(12);
                 var gcItem = Client.GetItemById(itemId);
                 var importedItem = _contentStore.Find(x => x.ItemId.ToString() == itemId);
@@ -770,7 +862,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
                     case "BlockType":
                         var blockToUpdate = _contentRepository.Get<BlockData>(importedItem.ContentGuid);
-                        var blockClone = blockToUpdate.CreateWritableClone();
+                        var blockClone = blockToUpdate.CreateWritableClone() as IContent;
                         var cloneContent = blockClone as IContent;
                         var blockType = _contentTypeRepository.List().ToList().Find(i => i.ID == cloneContent.ContentTypeID);
                         filteredFiles = MapValuesFromGcToEpi(cloneContent, blockType, currentMapping, gcItem);

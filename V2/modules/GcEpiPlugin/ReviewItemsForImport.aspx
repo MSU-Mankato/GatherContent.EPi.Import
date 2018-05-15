@@ -121,7 +121,7 @@
                                                                       Visible="False" Enabled="False"  OnClick="BtnUpdateEpiItem_OnClick"
                                                                       OnClientClick="return confirmDialog('Are you sure you want to update these item(s)?');"/>
                 &nbsp;
-                <asp:Button runat="server" ID="btnUpdateGcItem" Text="Update GC Items" Width="120px" Visible="False" Enabled="False"
+                <asp:Button runat="server" ID="btnUpdateGcItem" Text="Update GC Items" Width="120px" Visible="False" Enabled="False" OnClick="BtnUpdateGcItem_OnClick"
                             OnClientClick="return confirmDialog('Are you sure you want to update these item(s)?');"/>
 
             </span>
