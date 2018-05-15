@@ -437,20 +437,19 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 {
                     checkBoxGcItemUpdate.ID = $"chkGcUpdate{gcItem.Id}";
                     var importedItem = _contentStore.Find(x => x.ItemId == gcItem.Id);
-                   
+                    var content = currentMapping.PostType == "PageType"
+                        ? _contentRepository.Get<PageData>(importedItem.ContentGuid)
+                        : _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
+
                     // a way to retrive changed date from episerver content
                     var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
-                    var updatedContentList = contentVersionRepository.List(_contentRepository.Get<PageData>(importedItem.ContentGuid).ContentLink).OrderByDescending(v => v.Saved);
+                    var updatedContentList = contentVersionRepository.List(content.ContentLink).OrderByDescending(v => v.Saved);
                     var epiUpdateDate = updatedContentList.FirstOrDefault().Saved;
 
                     if (_contentStore.Any(i => i.ItemId == gcItem.Id &&
                                                epiUpdateDate > i.LastImportFromGc))
                     {
-                          var content = currentMapping.PostType == "PageType"
-                              ? _contentRepository.Get<PageData>(importedItem.ContentGuid)
-                              : _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
-  
-                          if (!recycleBin.Contains(content.ContentLink))
+                       if (!recycleBin.Contains(content.ContentLink))
                           {
                               checkBoxGcItemUpdate.Enabled = true;
                               checkBoxGcItemUpdate.Visible = true;
@@ -780,13 +779,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     var epiFieldName = fieldSplitStrings[0];
                     var gcFieldName = fieldSplitStrings[1];
 
-                 /* 
-                        <summary>
-                            For the field name that matches the field name of Epi content type, find the GcElement whose name is 
-                            the extracted gcFieldName. Assign updated value from content repository to GcElement.
-                        </summary>
-                 */
-                  
+                     /* 
+                            <summary>
+                                For the field name that matches the field name of Epi content type, find the corresponding GcElement whose name is 
+                                the extracted gcFieldName. Assign updated value from content repository to GcElement.
+                            </summary>
+                     */
                     var propDef = contentType.PropertyDefinitions.ToList().Find(p => p.Name == epiFieldName);
                     if (propDef == null) continue;
                     

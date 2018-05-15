@@ -248,6 +248,7 @@
     <Compile Include="GcDynamicClasses\GcDynamicImports.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicTemplateMappings.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicUtilities.cs" />
+    <Compile Include="Models\Blocks\SampleBlock.cs" />
     <Compile Include="Models\Media\GcEpiGenericFile.cs" />
     <Compile Include="Models\Media\GcEpiImageFile.cs" />
     <Compile Include="Models\Media\GcEpiVideoFile.cs" />
@@ -306,7 +307,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Blocks\" />
     <Folder Include="Models\Pages\" />
   </ItemGroup>
   <PropertyGroup>
