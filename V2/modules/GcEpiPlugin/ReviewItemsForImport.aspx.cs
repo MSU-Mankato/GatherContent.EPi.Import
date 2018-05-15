@@ -739,6 +739,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 var currentMapping = _mappingsStore.First(i => i.TemplateId == gcItem.TemplateId.ToString());
                 var gcConfigs = gcItem.Config.ToList();
                 ContentType contentType;
+                var updateCount = 0;
 
                 switch (currentMapping.PostType)
                 {
@@ -748,7 +749,9 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         gcConfigs = MapValuesFromEpiToGC(contentType, currentMapping, gcConfigs, pageData);
                         //call to Gather Content item update method.
                         Client.SaveItem(int.Parse(itemId), configs: gcConfigs);
+                        //update imported date in GcDynamicImports
                         UpdateItem(pageData.ContentGuid);
+                        updateCount++;
                         break;
 
                     case "BlockType":
@@ -758,12 +761,29 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         gcConfigs = MapValuesFromEpiToGC(contentType, currentMapping, gcConfigs, blockData);
                         //call to Gather Content item update method.
                         Client.SaveItem(int.Parse(itemId), configs: gcConfigs);
+                        //update imported date in GcDynamicImports
                         UpdateItem(blockClone.ContentGuid);
+                        updateCount++;
                         break;
                 }
 
-                var response = $"alert('{gcItem.Name} successfully updated!');";
-                Response.Write($"<script> {response} window.location = '/modules/GcEpiPlugin/ReviewItemsForImport.aspx?" +
+                string responseMessage;
+                if (updateCount == 1)
+                {
+                    responseMessage = $"alert('{gcItem.Name} successfully imported!');";
+                }
+
+                else if (updateCount > 1)
+                {
+                    responseMessage = $"alert('{gcItem.Name} and {updateCount - 1} other items successfully imported!');";
+                }
+
+                else
+                {
+                    responseMessage = "alert('No items selected! Please select the checkbox next to the item you would " +
+                                      "like to import!');";
+                }
+                Response.Write($"<script> {responseMessage} window.location = '/modules/GcEpiPlugin/ReviewItemsForImport.aspx?" +
                                $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
 
             }

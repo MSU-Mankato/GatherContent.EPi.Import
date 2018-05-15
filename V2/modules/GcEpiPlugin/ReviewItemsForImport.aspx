@@ -100,10 +100,10 @@
                             <asp:Label runat="server" ID="importedOn"></asp:Label>
                         </td>
                         <td>
-                            <asp:CheckBox runat="server" ID="chkUpdateEpiContent" Text="Update Item" Visible="False" Enabled="False"/>
+                            <asp:CheckBox runat="server" ID="chkUpdateEpiContent" Text="Update Epi Item" Visible="False" Enabled="False"/>
                         </td>
                         <td>
-                            <asp:CheckBox runat="server" ID="chkUpdateGcContent" Text="Push to GC" Visible="False" Enabled="False"/>
+                            <asp:CheckBox runat="server" ID="chkUpdateGcContent" Text="Update GC Item" Visible="False" Enabled="False"/>
                         </td>
                     </tr>
                 </ItemTemplate>
