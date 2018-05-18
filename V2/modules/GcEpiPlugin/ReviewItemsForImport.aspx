@@ -71,7 +71,7 @@
                         <td><h4>Parent Page/Block</h4></td>
                         <td><h4>EPi Import Status</h4></td>
                         <td><h4>Imported on</h4></td>
-                        <td><h4>Update Episerver</h4></td>
+                        <td><h4>Update EPi</h4></td>
                         <td><h4>Update GC</h4></td>
                     </tr>
                     </thead>
@@ -119,7 +119,7 @@
                             <asp:Label runat="server" ID="importedOn"></asp:Label>
                         </td>
                         <td>
-                            <asp:CheckBox runat="server" ID="chkUpdateEpiContent" Text="Update Epi Item" Visible="False" Enabled="False"/>
+                            <asp:CheckBox runat="server" ID="chkUpdateEpiContent" Text="Update EPi Item" Visible="False" Enabled="False"/>
                         </td>
                         <td>
                             <asp:CheckBox runat="server" ID="chkUpdateGcContent" Text="Update GC Item" Visible="False" Enabled="False"/>
@@ -136,7 +136,7 @@
             <asp:Button runat="server" ID="btnImportItem" Text="Import Items" Enabled="False" OnClick="BtnImportItem_OnClick" 
                         OnClientClick="return confirmDialog('Are you sure you want to import these item(s)?');"/>
             <span style="float: right; margin-right: 1%;">
-                <asp:Button runat="server" ID="btnUpdateEpiItem" Text="Update EpiServer Items" Width="160px" 
+                <asp:Button runat="server" ID="btnUpdateEpiItem" Text="Update EPiServer Items" Width="160px" 
                                                                       Visible="False" Enabled="False"  OnClick="BtnUpdateEpiItem_OnClick"
                                                                       OnClientClick="return confirmDialog('Are you sure you want to update these item(s)?');"/>
                 &nbsp;

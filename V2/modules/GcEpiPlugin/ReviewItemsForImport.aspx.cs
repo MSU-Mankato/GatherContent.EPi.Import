@@ -757,7 +757,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     case "PageType":
                         var pageData = _contentRepository.Get<PageData>(importedItem.ContentGuid);
                         contentType= _contentTypeRepository.List().ToList().Find(i => i.ID == pageData.ContentTypeID);
-                        gcConfigs = MapValuesFromEpiToGC(contentType, currentMapping, gcConfigs, pageData);
+                        gcConfigs = MapValuesFromEpiToGc(contentType, currentMapping, gcConfigs, pageData);
                         //call to Gather Content item update method.
                         Client.SaveItem(int.Parse(itemId), configs: gcConfigs);
                         //update imported date in GcDynamicImports
@@ -769,7 +769,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var blockData = _contentRepository.Get<BlockData>(importedItem.ContentGuid);
                         var blockClone = blockData.CreateWritableClone() as IContent;
                         contentType = _contentTypeRepository.List().ToList().Find(i => i.ID == blockClone.ContentTypeID);
-                        gcConfigs = MapValuesFromEpiToGC(contentType, currentMapping, gcConfigs, blockData);
+                        gcConfigs = MapValuesFromEpiToGc(contentType, currentMapping, gcConfigs, blockData);
                         //call to Gather Content item update method.
                         Client.SaveItem(int.Parse(itemId), configs: gcConfigs);
                         //update imported date in GcDynamicImports
@@ -800,7 +800,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             }
         }
 
-        protected List<GcConfig> MapValuesFromEpiToGC(ContentType contentType, GcDynamicTemplateMappings currentMapping, 
+        protected List<GcConfig> MapValuesFromEpiToGc(ContentType contentType, GcDynamicTemplateMappings currentMapping, 
             List<GcConfig> gcConfigs, IContentData contentData)
         {
             foreach (var map in currentMapping.EpiFieldMaps)
@@ -893,6 +893,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var blockToUpdate = _contentRepository.Get<BlockData>(importedItem.ContentGuid);
                         var blockClone = blockToUpdate.CreateWritableClone();
                         var cloneContent = blockClone as IContent;
+
                         var blockType = _contentTypeRepository.List().ToList().Find(i => i.ID == cloneContent.ContentTypeID);
                         filteredFiles = MapValuesFromGcToEpi(cloneContent, blockType, currentMapping, gcItem);
                         saveAction = SaveContent(cloneContent, gcItem, currentMapping);
