@@ -38,6 +38,10 @@
         .auto-style5 {
             width: 1471px;
         }
+        .status {
+            text-align: center;
+            padding: 0.5%
+            }
         
     </style>
    
@@ -62,7 +66,7 @@
                     <tr>
                         <td></td>
                         <td><h4>Item</h4></td>
-                        <td><h4>GC Status</h4></td>
+                        <td><h4>Item Status</h4></td>
                         <td><h4>Updated in GC</h4></td>
                         <td><h4>Parent Page/Block</h4></td>
                         <td><h4>EPi Import Status</h4></td>
@@ -81,10 +85,25 @@
                             <asp:HyperLink runat="server" ID="lnkItemName" Target="_blank" CssClass="LinkNoUnderline">
                             </asp:HyperLink>
                         </td>
-                        <td>
-                            <asp:Label runat="server" ID="statusName">
-                            </asp:Label>
+                        <td class="status">
+                            <table align="center">
+                                <tr>
+                                    <td><p><b>GC :</b></p></td>
+                                    <td>
+                                        <asp:Label runat="server" ID="GcStatus">
+                                        </asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><p><b>EPi :</b></p></td>
+                                    <td>
+                                        <asp:Label runat="server" ID="EPiStatus">
+                                        </asp:Label>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
+                        
                         <td><asp:Label runat="server" ID="updatedAt">
                         </asp:Label></td>
                         <td>

@@ -466,10 +466,21 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     : _contentStore.Find(x => x.ItemId == gcItem.Id).LastImportFromGc.ToShortDateString();
             }
             
-            if (e.Item.FindControl("statusName") is Label statusNameLabel)
+            if (e.Item.FindControl("GcStatus") is Label gcStatusLabel)
                 // Explicitly make a rest call to fetch the current status of the item
                 // as the gcItem object's state might've changed when the execution reaches this part of the code.
-                statusNameLabel.Text = Client.GetItemById(gcItem.Id.ToString()).CurrentStatus.Data.Name;
+                gcStatusLabel.Text = Client.GetItemById(gcItem.Id.ToString()).CurrentStatus.Data.Name;
+
+            if (e.Item.FindControl("EPiStatus") is Label epiStatusLabel)
+            {
+                var contentData = currentMapping.PostType == "PageType"
+                    ? _contentRepository.Get<PageData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid)
+                    : _contentRepository.Get<BlockData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid) as IContent;
+                var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+                var updatedContentList = contentVersionRepository.List(contentData.ContentLink).OrderByDescending(v => v.Saved);
+                
+                epiStatusLabel.Text = updatedContentList.FirstOrDefault().Status.ToString(); 
+            }
 
             if (!(e.Item.FindControl("lnkItemName") is HyperLink linkItemName)) return;
             linkItemName.Text = gcItem.Name;
@@ -880,7 +891,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
                     case "BlockType":
                         var blockToUpdate = _contentRepository.Get<BlockData>(importedItem.ContentGuid);
-                        var blockClone = blockToUpdate.CreateWritableClone() as IContent;
+                        var blockClone = blockToUpdate.CreateWritableClone();
                         var cloneContent = blockClone as IContent;
                         var blockType = _contentTypeRepository.List().ToList().Find(i => i.ID == cloneContent.ContentTypeID);
                         filteredFiles = MapValuesFromGcToEpi(cloneContent, blockType, currentMapping, gcItem);
