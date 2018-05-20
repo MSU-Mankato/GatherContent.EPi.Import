@@ -86,7 +86,7 @@
                             </asp:HyperLink>
                         </td>
                         <td class="status">
-                            <table align="center">
+                            <table>
                                 <tr>
                                     <td><p><b>GC :</b></p></td>
                                     <td>

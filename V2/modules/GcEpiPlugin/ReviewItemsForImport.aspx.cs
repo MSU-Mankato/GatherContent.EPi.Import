@@ -473,14 +473,30 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             if (e.Item.FindControl("EPiStatus") is Label epiStatusLabel)
             {
-                var contentData = currentMapping.PostType == "PageType"
-                    ? _contentRepository.Get<PageData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid)
-                    : _contentRepository.Get<BlockData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid) as IContent;
-                var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
-                var updatedContentList = contentVersionRepository.List(contentData.ContentLink).OrderByDescending(v => v.Saved);
-                
-                epiStatusLabel.Text = updatedContentList.FirstOrDefault().Status.ToString(); 
-            }
+                var itemIdList =  _contentStore.Select(i =>i.ItemId).ToList();
+                if (!itemIdList.Contains(gcItem.Id))
+                {
+                    epiStatusLabel.Text = "---";
+                }
+                else
+                {
+                    var contentData = currentMapping.PostType == "PageType"
+                        ? _contentRepository.Get<PageData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid)
+                        : _contentRepository.Get<BlockData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid) as IContent;
+
+                    //check for item in trash
+                    if (recycleBin.Contains(contentData.ContentLink))
+                    {
+                        epiStatusLabel.Text = "Item in Trash";
+                    }
+                    else
+                    {
+                        var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+                        var updatedContentList = contentVersionRepository.List(contentData.ContentLink).OrderByDescending(v => v.Saved);
+                        epiStatusLabel.Text = updatedContentList.FirstOrDefault().Status.ToString();
+                    }
+                }
+              }
 
             if (!(e.Item.FindControl("lnkItemName") is HyperLink linkItemName)) return;
             linkItemName.Text = gcItem.Name;
