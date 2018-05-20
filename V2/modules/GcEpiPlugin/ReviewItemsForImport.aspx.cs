@@ -755,19 +755,20 @@ namespace GatherContentImport.modules.GcEpiPlugin
             Client = new GcConnectClient(_credentialsStore.First().ApiKey, _credentialsStore.First().Email);
             _mappingsStore = GcDynamicUtilities.RetrieveStore<GcDynamicTemplateMappings>()
                 .FindAll(i => i.AccountId == _credentialsStore.First().AccountId);
+            var updateCount = 0;
+            GcItem gcItem = new GcItem();
             
             foreach (var key in Request.Form)
             {
                 if (!key.ToString().Contains("chkGcUpdate")) continue;
                 var itemSplitString = key.ToString().Split('$');
                 var itemId = itemSplitString[2].Substring(11);
-                var gcItem = Client.GetItemById(itemId);
+                gcItem = Client.GetItemById(itemId);
                 var importedItem = _contentStore.Find(x => x.ItemId.ToString() == itemId);
                 var currentMapping = _mappingsStore.First(i => i.TemplateId == gcItem.TemplateId.ToString());
                 var gcConfigs = gcItem.Config.ToList();
                 ContentType contentType;
-                var updateCount = 0;
-
+               
                 switch (currentMapping.PostType)
                 {
                     case "PageType":
@@ -793,27 +794,27 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         updateCount++;
                         break;
                 }
-
-                string responseMessage;
-                if (updateCount == 1)
-                {
-                    responseMessage = $"alert('{gcItem.Name} successfully imported!');";
-                }
-
-                else if (updateCount > 1)
-                {
-                    responseMessage = $"alert('{gcItem.Name} and {updateCount - 1} other items successfully imported!');";
-                }
-
-                else
-                {
-                    responseMessage = "alert('No items selected! Please select the checkbox next to the item you would " +
-                                      "like to import!');";
-                }
-                Response.Write($"<script> {responseMessage} window.location = '/modules/GcEpiPlugin/ReviewItemsForImport.aspx?" +
-                               $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
-
             }
+
+            string responseMessage;
+            if (updateCount == 1)
+            {
+                responseMessage = $"alert('{gcItem.Name} successfully imported!');";
+            }
+
+            else if (updateCount > 1)
+            {
+                responseMessage = $"alert('{gcItem.Name} and {updateCount - 1} other items successfully Updated!');";
+            }
+
+            else
+            {
+                responseMessage = "alert('No items selected! please select the checkbox in the Update GC column you would " +
+                                  "like to update!');";
+            }
+
+            Response.Write($"<script> {responseMessage} window.location = '/modules/GcEpiPlugin/ReviewItemsForImport.aspx?" +
+                           $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
         }
 
         protected List<GcConfig> MapValuesFromEpiToGc(ContentType contentType, GcDynamicTemplateMappings currentMapping, 
@@ -874,6 +875,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             Client = new GcConnectClient(_credentialsStore.First().ApiKey, _credentialsStore.First().Email);
             _mappingsStore = GcDynamicUtilities.RetrieveStore<GcDynamicTemplateMappings>().
                 FindAll(i => i.AccountId == _credentialsStore.First().AccountId);
+            GcItem gcItem = new GcItem();
             foreach (var key in Request.Form)
             {
                 if (!key.ToString().Contains("chkEpiUpdate")) continue;
@@ -882,7 +884,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 // ItemId is extracted from the checkbox Id. The first part of it is always 'chkEpiUpdate'. So, the Id needs to be extracted
                 // from the 12th index.
                 var itemId = itemSplitString[2].Substring(12);
-                var gcItem = Client.GetItemById(itemId);
+                gcItem = Client.GetItemById(itemId);
                 var importedItem = _contentStore.Find(x => x.ItemId.ToString() == itemId);
                 var currentMapping = _mappingsStore.First(i => i.TemplateId == gcItem.TemplateId.ToString());
                 Tuple<SaveAction, string> saveAction;
@@ -921,25 +923,25 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         updateCounter++;
                         break;
                 }
-                string responseMessage;
-                if (updateCounter == 1)
-                {
-                    responseMessage = $"alert('{gcItem.Name} successfully updated!');";
-                }
-
-                else if (updateCounter > 1)
-                {
-                    responseMessage = $"alert('{gcItem.Name} and {updateCounter - 1} other items successfully updated!');";
-                }
-
-                else
-                {
-                    responseMessage = "alert('No items selected! Please select the checkbox in the Update Content column you would " +
-                                      "like to update!');";
-                }
-                Response.Write($"<script> {responseMessage} window.location = '/modules/GcEpiPlugin/ReviewItemsForImport.aspx?" +
-                               $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
             }
+            string responseMessage;
+            if (updateCounter == 1)
+            {
+                responseMessage = $"alert('{gcItem.Name} successfully updated!');";
+            }
+
+            else if (updateCounter > 1)
+            {
+                responseMessage = $"alert('{gcItem.Name} and {updateCounter - 1} other items successfully updated!');";
+            }
+
+            else
+            {
+                responseMessage = "alert('No items selected! Please select the checkbox in the Update EPi column you would " +
+                                  "like to update!');";
+            }
+            Response.Write($"<script> {responseMessage} window.location = '/modules/GcEpiPlugin/ReviewItemsForImport.aspx?" +
+                           $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
         }
         
         // A method to update an item on Dynamic Data Store.
