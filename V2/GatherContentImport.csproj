@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="modules\GcEpiPlugin\ClientResources\css\style.css" />
+    <Content Include="modules\GcEpiPlugin\SelectParent.aspx" />
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\web.config" />
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\EPiServer.Cms.TinyMce.zip" />
     <Content Include="modules\_protected\Shell\web.config" />
@@ -248,6 +249,7 @@
     <Compile Include="GcDynamicClasses\GcDynamicImports.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicTemplateMappings.cs" />
     <Compile Include="GcDynamicClasses\GcDynamicUtilities.cs" />
+    <Compile Include="GcEpiObjects\ItemTree.cs" />
     <Compile Include="Models\Blocks\SampleBlock.cs" />
     <Compile Include="Models\Media\GcEpiGenericFile.cs" />
     <Compile Include="Models\Media\GcEpiImageFile.cs" />
@@ -303,6 +305,13 @@
     </Compile>
     <Compile Include="modules\GcEpiPlugin\ReviewItemsForImport.aspx.designer.cs">
       <DependentUpon>ReviewItemsForImport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="modules\GcEpiPlugin\SelectParent.aspx.cs">
+      <DependentUpon>SelectParent.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="modules\GcEpiPlugin\SelectParent.aspx.designer.cs">
+      <DependentUpon>SelectParent.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -55,7 +55,7 @@
         <p style="font-style: italic;">Project: <asp:Label runat="server" ID="projectName"></asp:Label></p>
         <h4>Default Parent Page/Block: &nbsp;
             <asp:DropDownList runat="server" ID="ddlDefaultParent" class="chosen-select" Height="30px" Width="300px" /> &nbsp; &nbsp;
-            <asp:Button runat="server" Text="Set" ID="btnDefaultParentSave" OnClick="BtnDefaultParentSave_OnClick" OnClientClick="loadingAnimation()"/>
+            <asp:Button runat="server" Text="Set" ID="btnDefaultParentSave" OnClientClick="openPopupWindow();return false;"/>
         </h4>
     </div>
     <fieldset style="border: none;" class="auto-style5">
@@ -149,6 +149,14 @@
 </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js" type="text/javascript"></script>
 <script src="/modules/GcEpiPlugin/ClientResources/js/chosen.jquery.js" type="text/javascript"></script>
-<script src="/modules/GcEpiPlugin/ClientResources/js/loading.js" type="text/javascript"></script>
+<script src="/modules/GcEpiPlugin/ClientResources/js/loading.js" type="text/javascript">
+</script>
+<script>
+    function openPopupWindow() {
+        var postType = '<%= postType %>';
+        //Open the popup page  
+        window.open('SelectParent.aspx?PostType='+postType, 'popup_window', 'width=500,height=500,left=500,top=100,resizable=yes');  
+    }  
+</script>
 </body>
 </html>

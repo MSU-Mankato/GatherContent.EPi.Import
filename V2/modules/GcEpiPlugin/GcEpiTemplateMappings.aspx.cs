@@ -121,7 +121,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 linkAccountSlug.NavigateUrl = $"https://{slug}.gathercontent.com/";
             if (e.Item.FindControl("lnkProject") is HyperLink linkProject)
             {
-                if (thisProject.Name != null)
+                if (thisProject != null)
                 {
                     linkProject.Text = thisProject.Name;
                     linkProject.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.ProjectId}";
@@ -133,7 +133,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             }
             if (e.Item.FindControl("lnkTemplate") is HyperLink linkTemplate)
             {
-                if (thisTemplate.Name != null)
+                if (thisTemplate != null)
                 {
                     linkTemplate.Text = thisTemplate.Name;
                     linkTemplate.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";

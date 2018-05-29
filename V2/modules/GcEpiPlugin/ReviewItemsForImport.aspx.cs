@@ -35,6 +35,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
         private readonly List<GcDynamicImports> _contentStore = GcDynamicUtilities.RetrieveStore<GcDynamicImports>();
         private readonly List<SaveAction> _saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
         private readonly List<IContent> _sortedContent = new EditableList<IContent>();
+        public string postType;
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -46,6 +47,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             }
 
             if (IsPostBack) return;
+
             // Initial form population or http get.
             PopulateForm();
         }
@@ -83,6 +85,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             // Fetch the mapping for current template.
             var currentMapping = _mappingsStore.First(i => i.TemplateId == Session["TemplateId"].ToString());
+            postType = currentMapping.PostType;
 
             // Make a usable templateId and projectId
             var templateId = Convert.ToInt32(Session["TemplateId"]);
