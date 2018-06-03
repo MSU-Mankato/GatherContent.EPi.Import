@@ -19,11 +19,11 @@ using Newtonsoft.Json;
 
 namespace GatherContentImport.modules.GcEpiPlugin
 {
-    [GuiPlugIn(DisplayName = "SelectParent.aspx", Description = "Folder Selection for page import in EPiServer", Area = PlugInArea.AdminMenu, Url = "~/modules/GcEpiPlugin/SelectParent.aspx")]
+    [GuiPlugIn(DisplayName = "Select Parent", Description = "Folder Selection for page import in EPiServer", Area = PlugInArea.AdminMenu, Url = "~/modules/GcEpiPlugin/SelectParent.aspx")]
     public partial class SelectParent : SimplePage
     {
         private readonly IContentRepository _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-        public string jsonItemTree;
+        public string JsonItemTree;
        
         protected override void OnLoad(EventArgs e)
             {
@@ -44,15 +44,15 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (postType.Equals("PageType"))
             {
                 var parent = _contentRepository.Get<PageData>(ContentReference.RootPage);
-                ItemTree<PageData> contentItemTree = new ItemTree<PageData>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
-                SortContent<PageData>(parent, sortedDescendants, contentItemTree);
-                jsonItemTree = JsonConvert.SerializeObject(contentItemTree);
+                var contentItemTree = new ItemTree<PageData>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
+                SortContent(parent, sortedDescendants, contentItemTree);
+                JsonItemTree = JsonConvert.SerializeObject(contentItemTree);
             }
                 else
                 {
                     var parent = _contentRepository.Get<ContentFolder>(ContentReference.GlobalBlockFolder);
-                    ItemTree<ContentFolder> contentItemTree = new ItemTree<ContentFolder>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
-                    SortContent<ContentFolder>(parent, sortedDescendants, contentItemTree);
+                    var contentItemTree = new ItemTree<ContentFolder>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
+                    SortContent(parent, sortedDescendants, contentItemTree);
 
                 }
                

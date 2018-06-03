@@ -759,7 +759,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             _mappingsStore = GcDynamicUtilities.RetrieveStore<GcDynamicTemplateMappings>()
                 .FindAll(i => i.AccountId == _credentialsStore.First().AccountId);
             var updateCount = 0;
-            GcItem gcItem = new GcItem();
+            var gcItem = new GcItem();
             
             foreach (var key in Request.Form)
             {
@@ -820,7 +820,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                            $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
         }
 
-        protected List<GcConfig> MapValuesFromEpiToGc(ContentType contentType, GcDynamicTemplateMappings currentMapping, 
+        private static List<GcConfig> MapValuesFromEpiToGc(ContentType contentType, GcDynamicTemplateMappings currentMapping, 
             List<GcConfig> gcConfigs, IContentData contentData)
         {
             foreach (var map in currentMapping.EpiFieldMaps)
@@ -844,26 +844,23 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         foreach (var gcElement in gcConfig.Elements.ToList())
                         {
                             if (gcElement.Name != gcFieldName) continue;
-                            var parseGcElement = (dynamic) null;
+                            var epiContentData = contentData.Property[propDef.Name].Value;
+                            var updatedGcElement = string.Empty;
 
-                            switch (gcElement.Type)
-                                {
-                                    case "text":
-                                        parseGcElement = GcEpiContentParser.TextParser(gcElement.Value, propDef.Type.Name);
-                                        break;
-                                    case "section":
-                                        parseGcElement = GcEpiContentParser.TextParser(gcElement.Subtitle, propDef.Type.Name);
-                                        break;
-                                }
-                            var parseContentData = GcEpiContentParser.TextParser(contentData.Property[propDef.Name].Value.ToString(),
-                                    propDef.Type.Name);
-
-                        if (parseGcElement != null &&
-                                !parseGcElement.Equals(parseContentData))
+                            if (epiContentData != null)
                             {
-                                gcElement.Value = parseContentData.ToString();
+                                updatedGcElement =
+                                    GcEpiContentParser.GcPostTextParser(epiContentData, propDef.Type.Name, gcElement.Type);
                             }
 
+                            if (gcElement.Type == "text")
+                            {
+                                gcElement.Value = updatedGcElement;
+                            }
+                            else if (gcElement.Type == "section")
+                            {
+                                gcElement.Subtitle = updatedGcElement;
+                            }
                         }
                     }
                 }
@@ -878,7 +875,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             Client = new GcConnectClient(_credentialsStore.First().ApiKey, _credentialsStore.First().Email);
             _mappingsStore = GcDynamicUtilities.RetrieveStore<GcDynamicTemplateMappings>().
                 FindAll(i => i.AccountId == _credentialsStore.First().AccountId);
-            GcItem gcItem = new GcItem();
+            var gcItem = new GcItem();
             foreach (var key in Request.Form)
             {
                 if (!key.ToString().Contains("chkEpiUpdate")) continue;
@@ -948,7 +945,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
         }
         
         // A method to update an item on Dynamic Data Store.
-        public void UpdateItem(Guid contentGuid)
+        private static void UpdateItem(Guid contentGuid)
         {
             // Fetch the current time.
             var now = DateTime.Now.ToLocalTime();
