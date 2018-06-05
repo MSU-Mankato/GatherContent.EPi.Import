@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/chosen.css">
     <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/loading.css">
     <title>Review Items For Import</title>
-    <style type="text/css">
+<style type="text/css">
         .auto-style4 {
             width: 1477px;
         }
@@ -44,7 +44,7 @@
             }
         
     </style>
-   
+       
 </head>
 <body>
 <form id="form1" runat="server">
@@ -138,10 +138,10 @@
             <span style="float: right; margin-right: 1%;">
                 <asp:Button runat="server" ID="btnUpdateEpiItem" Text="Update EPiServer Items" Width="160px" 
                                                                       Visible="False" Enabled="False"  OnClick="BtnUpdateEpiItem_OnClick"
-                                                                      OnClientClick="return confirmDialog('Are you sure you want to update these item(s)?');"/>
+                                                                      OnClientClick="return confirmDialog('Are you sure you want to update these item(s) from GC to EPi? This change overwrites the previous content in EPi.');"/>
                 &nbsp;
                 <asp:Button runat="server" ID="btnUpdateGcItem" Text="Update GC Items" Width="120px" Visible="False" Enabled="False" OnClick="BtnUpdateGcItem_OnClick"
-                            OnClientClick="return confirmDialog('Are you sure you want to update these item(s)?');"/>
+                            OnClientClick="return confirmDialog('Are you sure you want to update these item(s) from EPi to GC? This change overwrites the previous content in GC.');"/>
 
             </span>
         </p>
@@ -153,7 +153,7 @@
 </script>
 <script>
     function openPopupWindow() {
-        var postType = '<%= postType %>';
+        var postType = '<%= PostType %>';
         //Open the popup page  
         window.open('SelectParent.aspx?PostType='+postType, 'popup_window', 'width=500,height=500,left=500,top=100,resizable=yes');  
     }  

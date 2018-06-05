@@ -35,7 +35,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
         private readonly List<GcDynamicImports> _contentStore = GcDynamicUtilities.RetrieveStore<GcDynamicImports>();
         private readonly List<SaveAction> _saveActions = Enum.GetValues(typeof(SaveAction)).Cast<SaveAction>().ToList();
         private readonly List<IContent> _sortedContent = new EditableList<IContent>();
-        public string postType;
+        public string PostType;
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -85,7 +85,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             // Fetch the mapping for current template.
             var currentMapping = _mappingsStore.First(i => i.TemplateId == Session["TemplateId"].ToString());
-            postType = currentMapping.PostType;
+            PostType = currentMapping.PostType;
 
             // Make a usable templateId and projectId
             var templateId = Convert.ToInt32(Session["TemplateId"]);
@@ -291,7 +291,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                             var blockData = _contentRepository.Get<BlockData>(cs.ContentGuid) as IContent;
 
                             /*
-                                <summary>
+                               <summary>
                                     Setting the parentId and making sure the drop down loads from Root Folder.
                                     This is necessary since the block is already imported.
                                     Eg: Let's say, there was a block which was imported under root folder. Now, the user sets some other folder
@@ -532,8 +532,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         mediaFieldsToImport.Add(gcFieldName);
                 }
 
-                /* 
-                    <summary>
+                /*
+                   <summary>
                         For the field name that matches the field name of Epi content type, find the GcElement whose name is 
                         the extracted gcFieldName. Assign updated value to the gcElements fields
                     </summary>
