@@ -54,10 +54,8 @@
 
 
 <script>
-    var expandBtnSpan = $('<span />').addClass('icon expand').html('&nbsp');
     var data = '<%= JsonItemTree %>';
     var x = JSON.parse(data);
-    var span = $("ul>li").wrapInner("<span></span>");
 
     function traverseTree(x) {
         
@@ -66,11 +64,15 @@
             var ul = $('<ul>');
             for (var i in x) {
                 if (typeof x[i].ItemName != 'undefined') {
+                    var expandBtnSpan = $('<span />').addClass('icon expand').html('&nbsp');
+                    var innerSpan = $('<span />').addClass('templatecontainer');
                     var li = $('<li/>').addClass('parent');
+
+                    li.append(expandBtnSpan).append(innerSpan);
                     var a = $('<a/>')
                         .addClass('containernode')
                         .text(x[i].ItemName)
-                        .appendTo(li);
+                        .appendTo(innerSpan);
                     ul.append(li);
                 }
                
