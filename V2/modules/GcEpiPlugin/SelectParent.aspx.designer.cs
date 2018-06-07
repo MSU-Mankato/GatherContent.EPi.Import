@@ -40,12 +40,12 @@ namespace GatherContentImport.modules.GcEpiPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlInputHidden FullRegion_selectedItemId;
         
         /// <summary>
-        /// FullRegion_cancelButton control.
+        /// FullRegion_selectedItemName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button FullRegion_cancelButton;
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden FullRegion_selectedItemName;
     }
 }

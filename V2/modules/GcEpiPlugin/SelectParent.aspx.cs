@@ -25,26 +25,32 @@ namespace GatherContentImport.modules.GcEpiPlugin
         private readonly IContentRepository _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
         private List<ContentReference> _recycleBin;
         public string JsonItemTree;
-       
+
         protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            // Fetch the items (if there are any) from trash.
+            _recycleBin = _contentRepository.GetDescendents(ContentReference.WasteBasket).ToList();
+
+            if (!IsPostBack)
             {
-                base.OnLoad(e);
-
-                // Fetch the items (if there are any) from trash.
-                _recycleBin = _contentRepository.GetDescendents(ContentReference.WasteBasket).ToList();
-
-                if (!IsPostBack)
-                    {
-                        PopulateForm();
-                    }
+                PopulateForm();
             }
+        }
 
-   
+
         public void PopulateForm()
         {
             var postType = Server.UrlDecode(Request.QueryString["PostType"]);
-                // Create an empty list to store all the content descendants.
-                List<IContent> sortedDescendants = new EditableList<IContent>();
+            // Create an empty list to store all the content descendants.
+            List<IContent> sortedDescendants = new EditableList<IContent>();
+
+            if (postType == null)
+            {
+                Response.Write("<script>alert('Please navigate to Gc-Epi Template Mappings and review the Items');" +
+                               "window.location='/modules/GcEpiPlugin/GcEpiTemplateMappings.aspx'</script>");
+            }
 
             if (postType != null && postType.Equals("PageType"))
             {
@@ -66,7 +72,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
         {
             // Fetch the immediate children of the parent into a list with the invariant culture (Language is not specific).
             var children = _contentRepository.GetChildren<T>(parent.ContentLink, CultureInfo.InvariantCulture);
-           
+
             foreach (var child in children)
             {
                 // If the page is in recycle bin or if the page itself is recycle bin,
@@ -76,7 +82,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 // Add the child to sorted descendants list.
                 sortedDescendants.Add(child);
                 contentItemTree.AddChild(child.ContentLink.ID, child.Name, child.ParentLink.ID);
-                
+
                 // Check if this child contains any children. If yes, then recursively call the function.   
                 if (_contentRepository.GetChildren<T>(child.ContentLink, CultureInfo.InvariantCulture).Any())
                 {
