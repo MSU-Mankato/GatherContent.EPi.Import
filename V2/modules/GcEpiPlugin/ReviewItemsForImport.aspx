@@ -54,7 +54,8 @@
         <h4><asp:Label runat="server" ID="templateDescription"></asp:Label></h4>
         <p style="font-style: italic;">Project: <asp:Label runat="server" ID="projectName"></asp:Label></p>
         <h4>Default Parent Page/Block: &nbsp;
-            <asp:DropDownList runat="server" ID="ddlDefaultParent" class="chosen-select" Height="30px" Width="300px" /> &nbsp; &nbsp;
+            <asp:DropDownList runat="server" ID="ddlDefaultParent" class="chosen-select" Height="30px" Width="300px" Visible="False" />
+            <input runat="server" ID="defaultSelectItem" Width="300px" />&nbsp; &nbsp;
             <asp:Button runat="server" Text="Set" ID="btnDefaultParentSave" OnClientClick="openPopupWindow();return false;"/>
         </h4>
     </div>
@@ -155,7 +156,8 @@
     function openPopupWindow() {
         var postType = '<%= PostType %>';
         //Open the popup page  
-        window.open('SelectParent.aspx?PostType='+postType, 'popup_window', 'width=500,height=500,left=500,top=100,resizable=yes');  
+        window.open('SelectParent.aspx?PostType=' + postType, 'popup_window', 'width=500,height=500,left=500,top=100,resizable=yes').focus();
+        return false;
     }  
 </script>
 </body>

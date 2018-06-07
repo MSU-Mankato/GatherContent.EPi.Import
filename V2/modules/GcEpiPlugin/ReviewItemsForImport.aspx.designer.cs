@@ -67,6 +67,15 @@ namespace GatherContentImport.modules.GcEpiPlugin {
         protected global::System.Web.UI.WebControls.DropDownList ddlDefaultParent;
         
         /// <summary>
+        /// defaultSelectItem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText defaultSelectItem;
+        
+        /// <summary>
         /// btnDefaultParentSave control.
         /// </summary>
         /// <remarks>

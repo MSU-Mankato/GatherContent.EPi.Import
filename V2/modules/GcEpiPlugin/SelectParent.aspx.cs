@@ -19,7 +19,7 @@ using Newtonsoft.Json;
 
 namespace GatherContentImport.modules.GcEpiPlugin
 {
-    [GuiPlugIn(DisplayName = "SelectParent", Description = "Folder Selection for page import in EPiServer", Area = PlugInArea.AdminMenu, Url = "~/modules/GcEpiPlugin/SelectParent.aspx")]
+    [GuiPlugIn(DisplayName = "Select Parent", Description = "Folder Selection for page import in EPiServer", Area = PlugInArea.AdminMenu, Url = "~/modules/GcEpiPlugin/SelectParent.aspx")]
     public partial class SelectParent : SimplePage
     {
         private readonly IContentRepository _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
@@ -39,6 +39,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     }
             }
 
+   
         public void PopulateForm()
         {
             var postType = Server.UrlDecode(Request.QueryString["PostType"]);
@@ -82,6 +83,11 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     SortContent<T>(child, sortedDescendants, contentItemTree);
                 }
             }
+        }
+
+        protected void Select_OnClick(object sender, EventArgs e)
+        {
+            var selectedItemId = FullRegion_selectedItemId.Value;
         }
     }
 }

@@ -31,13 +31,13 @@ namespace GatherContentImport.modules.GcEpiPlugin {
         protected global::System.Web.UI.HtmlControls.HtmlForm selectParentForm;
         
         /// <summary>
-        /// FullRegion_okButton control.
+        /// FullRegion_selectedItemId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button FullRegion_okButton;
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden FullRegion_selectedItemId;
         
         /// <summary>
         /// FullRegion_cancelButton control.
