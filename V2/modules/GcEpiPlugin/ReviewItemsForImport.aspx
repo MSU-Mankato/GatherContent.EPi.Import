@@ -64,9 +64,9 @@
             <div>
 
                 <asp:Button runat="server" Text="Select Default Parent" ID="btnDefaultParentSave" OnClientClick="openPopupWindow();return false;" />
-                <input runat="server" id="defaultSelectItemName" width="300px" />
+                <input runat="server" id="defaultSelectItemName" width="300px" disabled="true"/>
                 <input runat="server" id="defaultSelectItemId" width="300px" type="hidden" />&nbsp; &nbsp;
-            <asp:Button runat="server" Text="Set" ID="btnSetDefaultParentSave" OnClick="BtnSetDefaultParentSave_OnClick" />
+            <asp:Button runat="server" Text="Set" ID="btnSetDefaultParentSave" OnClick="BtnSetDefaultParentSave_OnClick" OnClientClick="loadingAnimation()"/>
             </div>
         </div>
         <fieldset style="border: none;" class="auto-style5">
