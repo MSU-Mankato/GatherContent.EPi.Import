@@ -36,8 +36,7 @@
                         <span class="icon expandlast" id="btnExpandRoot">&nbsp;</span>
                         <span class="templatecontainer">
                             <img class="typeicon" src="/App_Themes/Default/Images/ExplorerTree/PageTree/Root.gif">
-                            <a href="#" target="PreviewFrame" class="containernode">Root folder</a>
-                        </span>
+                            </span>
                         <ul id="FullRegion_pageTreeView_treeView">
                         </ul>
                     </li>
@@ -125,17 +124,27 @@
                     }
                 }
             }
-
+            // Parsing of root item of the json object
+            var aRootTag = $('<a/>').addClass('containernode').attr(
+                { 'href': '#', 'id': x.ItemId, 'onclick': 'highlightSelectedItem(this.id, "' + x.ItemName + '")' }).text(x.ItemName);
+            $('span.templatecontainer').attr('id', 'toggleColor' + x.ItemId).append(aRootTag);
 
             var tree = $('#FullRegion_pageTreeView_treeView');
             parseTree(tree, x.Children);
         });
 
+        var selectedId = 0;
         // Highlight selected item from tree.
         function highlightSelectedItem(id, name) {
+            // Removes selected class from previous selected item.
+            $('#toggleColor' + selectedId).removeClass('selected');
+
+            // Adds selected class to selected item.
             $('#toggleColor' + id).addClass('selected');
             $('#FullRegion_selectedItemId').val(id);
             $('#FullRegion_selectedItemName').val(name);
+
+            selectedId = id;
         }
 
         // Select item and pass selected item to parent page
