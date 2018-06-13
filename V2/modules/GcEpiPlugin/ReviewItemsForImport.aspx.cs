@@ -917,7 +917,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
         }
 
         // A method to update an item on Dynamic Data Store.
-        public void UpdateItem(Guid contentGuid)
+        private static void UpdateItem(Guid contentGuid)
         {
             // Fetch the current time.
             var now = DateTime.Now.ToLocalTime();

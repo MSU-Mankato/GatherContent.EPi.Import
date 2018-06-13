@@ -68,7 +68,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             if (Session["ProjectId"] == null || Session["TemplateId"] == null
                 || Session["PostType"] == null || (string)Session["PostType"] == "-1")
             {
-                Response.Write("<script>alert('Please set the MetaDataProducer Defaults!');" +
+                Response.Write("<script>alert('Please set the Mapping Defaults!');" +
                                "window.location='/modules/GcEpiPlugin/NewGcMappingStep3.aspx'</script>");
                 Visible = false;
                 return;

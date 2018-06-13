@@ -26,7 +26,7 @@
             <span id="FullRegion_Label1">Search</span>
             <input name="FullRegion$searchKey" type="text" id="FullRegion_searchKey" class="episize240">
             <span class="epi-cmsButton">
-                <input class=" epi-cmsButton-tools epi-cmsButton-Search" type="submit" name="FullRegion$searchButton" id="FullRegion_searchButton" value=" " title="Search" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)"></span>
+                <input class=" epi-cmsButton-tools epi-cmsButton-Search" type="button" name="FullRegion$searchButton" id="FullRegion_searchButton" value=" " title="Search" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)"></span>
         </div>
 
         <div class="episcroll episerver-pagebrowserContainer">
@@ -89,6 +89,8 @@
     <script type="text/javascript">
         var data = '<%= JsonItemTree %>';
         var x = JSON.parse(data);
+        var jsonItemListData = '<%= JsonItemList %>';
+        var parsedJsonItemListData = JSON.parse(jsonItemListData);
 
         // Creates tree structure out of nested json
         $(function () {
@@ -191,7 +193,15 @@
                 return false;
             });
         });
-
+        $('#FullRegion_searchButton').click(function() {
+            var searchText = $('#FullRegion_searchKey').val();
+            for (var i = 0; i < parsedJsonItemListData.length; i++) {
+                if (parsedJsonItemListData[i].ItemName === searchText) {
+                    return highlightSelectedItem(parsedJsonItemListData[i].ItemId, parsedJsonItemListData[i].ItemName);
+                }
+            }
+            return alert("This item does not exist!");
+        });
 
     </script>
 

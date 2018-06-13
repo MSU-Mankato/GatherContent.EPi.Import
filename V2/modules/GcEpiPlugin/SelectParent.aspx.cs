@@ -2,17 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Web.Security;
-using System.Web.UI.WebControls;
-using EPiServer.Personalization;
 using EPiServer.PlugIn;
-using EPiServer.Security;
-using EPiServer.Util.PlugIns;
-using System.Web.UI;
 using Castle.Components.DictionaryAdapter;
 using EPiServer;
 using EPiServer.Core;
-using EPiServer.DataAbstraction;
 using EPiServer.ServiceLocation;
 using GatherContentImport.GcEpiObjects;
 using Newtonsoft.Json;
@@ -24,7 +17,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
     {
         private readonly IContentRepository _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
         private List<ContentReference> _recycleBin;
-        public string JsonItemTree;
+        protected string JsonItemTree;
+        protected string JsonItemList;
 
         protected override void OnLoad(EventArgs e)
         {
@@ -40,31 +34,33 @@ namespace GatherContentImport.modules.GcEpiPlugin
         }
 
 
-        public void PopulateForm()
+        private void PopulateForm()
         {
             var postType = Server.UrlDecode(Request.QueryString["PostType"]);
-            // Create an empty list to store all the content descendants.
-            List<IContent> sortedDescendants = new EditableList<IContent>();
-
             if (postType == null)
             {
                 Response.Write("<script>alert('Please navigate to Gc-Epi Template Mappings and review the Items');" +
                                "window.location='/modules/GcEpiPlugin/GcEpiTemplateMappings.aspx'</script>");
             }
 
+            // Create an empty list to store all the content descendants.
+            var sortedDescendants = new EditableList<IContent>();
+            
             if (postType != null && postType.Equals("PageType"))
             {
                 var parent = _contentRepository.Get<PageData>(ContentReference.RootPage);
-                ItemTree<PageData> contentItemTree = new ItemTree<PageData>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
-                SortContent<PageData>(parent, sortedDescendants, contentItemTree);
+                var contentItemTree = new ItemTree<PageData>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
+                SortContent(parent, sortedDescendants, contentItemTree);
                 JsonItemTree = JsonConvert.SerializeObject(contentItemTree);
+                JsonItemList = GetJsonItemList(parent, sortedDescendants);
             }
             else
             {
                 var parent = _contentRepository.Get<ContentFolder>(ContentReference.GlobalBlockFolder);
-                ItemTree<ContentFolder> contentItemTree = new ItemTree<ContentFolder>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
-                SortContent<ContentFolder>(parent, sortedDescendants, contentItemTree);
+                var contentItemTree = new ItemTree<ContentFolder>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
+                SortContent(parent, sortedDescendants, contentItemTree);
                 JsonItemTree = JsonConvert.SerializeObject(contentItemTree);
+                JsonItemList = GetJsonItemList(parent, sortedDescendants);
             }
         }
 
@@ -94,6 +90,20 @@ namespace GatherContentImport.modules.GcEpiPlugin
         protected void Select_OnClick(object sender, EventArgs e)
         {
             var selectedItemId = FullRegion_selectedItemId.Value;
+        }
+
+        private static string GetJsonItemList(IContent parent, ICollection<IContent> sortedDescendants)
+        {
+            sortedDescendants.Add(parent);
+            sortedDescendants.Remove(sortedDescendants.FirstOrDefault(i => i.ContentLink.ID == 2));
+            var jsonItemDictionary = sortedDescendants.Select(descendant => new Dictionary<string, string>
+                {
+                    {"ItemId", descendant.ContentLink.ID.ToString()},
+                    {"ItemName", descendant.Name},
+                    {"ParentItemId", descendant.ParentLink.ID.ToString()}
+                })
+                .ToList();
+            return JsonConvert.SerializeObject(jsonItemDictionary);
         }
     }
 }
