@@ -31,7 +31,7 @@
 
         <div class="episcroll episerver-pagebrowserContainer">
             <div class="episerver-pagetreeview">
-                <ul>
+                <ul id="FullRegion_treeView">
                     <li class="parentlast">
                         <span class="icon expandlast" id="btnExpandRoot">&nbsp;</span>
                         <span class="templatecontainer">
@@ -91,6 +91,8 @@
         var x = JSON.parse(data);
         var jsonItemListData = '<%= JsonItemList %>';
         var parsedJsonItemListData = JSON.parse(jsonItemListData);
+        //Array of searched li elements
+        var searchedLi = [];
 
         // Creates tree structure out of nested json
         $(function () {
@@ -126,6 +128,7 @@
                     }
                 }
             }
+
             // Parsing of root item of the json object
             var aRootTag = $('<a/>').addClass('containernode').attr(
                 { 'href': '#', 'id': x.ItemId, 'onclick': 'highlightSelectedItem(this.id, "' + x.ItemName + '")' }).text(x.ItemName);
@@ -133,6 +136,35 @@
 
             var tree = $('#FullRegion_pageTreeView_treeView');
             parseTree(tree, x.Children);
+
+            $("span#btnExpand").click(function () {
+                $(this).siblings("ul.ullist").toggle();
+
+                // Filter leaf nodes and assign respective classes.
+                if (!$(this).siblings("ul.ullist").children('li').length) {
+                    if ($(this).hasClass("expand")) {
+                        $(this).removeClass("expand").addClass("leafnode");
+                    } else {
+                        $(this).removeClass("expandlast").addClass("leafnodelast");
+                    }
+                }
+                else {
+                    if ($(this).hasClass("collapselast") || $(this).hasClass("expandlast")) {
+                        $(this).toggleClass("collapselast expandlast");
+                    }
+                    if ($(this).hasClass("collapse") || $(this).hasClass("expand")) {
+                        $(this).toggleClass("expand collapse");
+                    }
+                }
+                return false;
+            });
+
+            // For root item toggle button
+            $("span#btnExpandRoot").click(function() {
+                $(this).siblings("ul#FullRegion_pageTreeView_treeView").toggle();
+                $(this).toggleClass("expandlast collapselast");
+                return false;
+            });
         });
 
         var selectedId = 0;
@@ -160,48 +192,29 @@
         }
 
 
-        // For node items toggle button
-        $(document).ready(function () {
-            $("span#btnExpand").click(function () {
-                $(this).siblings("ul.ullist").toggle();
-
-                // Filter leaf nodes and assign respective classes.
-                if (!$(this).siblings("ul.ullist").children('li').length) {
-                    if ($(this).hasClass("expand")) {
-                        $(this).removeClass("expand").addClass("leafnode");
-                    } else {
-                        $(this).removeClass("expandlast").addClass("leafnodelast");
-                    }
-                }
-                else {
-                    if ($(this).hasClass("collapselast") || $(this).hasClass("expandlast")) {
-                        $(this).toggleClass("collapselast expandlast");
-                    }
-                    if ($(this).hasClass("collapse") || $(this).hasClass("expand")) {
-                        $(this).toggleClass("expand collapse");
-                    }
-                }
-                return false;
+       // Search Function
+        $('#FullRegion_searchButton').click(function () {
+            var li;
+            //remove selection from previous search
+            searchedLi.forEach(function(item) {
+                $(item).removeClass('selected');
             });
-        });
+           
+           var ul = $('#FullRegion_treeView').find("li");
+           var searchText = $('#FullRegion_searchKey').val().toUpperCase();
 
-        // For root item toggle button
-        $(document).ready(function() {
-            $("span#btnExpandRoot").click(function() {
-                $(this).siblings("ul#FullRegion_pageTreeView_treeView").toggle();
-                $(this).toggleClass("expandlast collapselast");
-                return false;
-            });
-        });
-        $('#FullRegion_searchButton').click(function() {
-            var searchText = $('#FullRegion_searchKey').val();
-            for (var i = 0; i < parsedJsonItemListData.length; i++) {
-                if (parsedJsonItemListData[i].ItemName === searchText) {
-                    return highlightSelectedItem(parsedJsonItemListData[i].ItemId, parsedJsonItemListData[i].ItemName);
+            for(var i =0; i<ul.length; i++) 
+            {
+                var a = $(ul[0]).find('a')[i];
+                if (a != undefined) {
+                    if (a.text.toUpperCase().indexOf(searchText) > -1) {
+                       li = $(ul[0]).find('.templatecontainer')[i];
+                        $(li).addClass('selected');
+                       searchedLi.push(li);
+                    } 
                 }
-            }
-            return alert("This item does not exist!");
-        });
+       }
+           });
 
     </script>
 
