@@ -455,16 +455,21 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         ? _contentRepository.Get<PageData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid)
                         : _contentRepository.Get<BlockData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid) as IContent;
 
-                    //check for item in trash
-                    if (recycleBin.Contains(contentData.ContentLink))
+                    if (contentData != null)
                     {
-                        epiStatusLabel.Text = "Item in Trash";
-                    }
-                    else
-                    {
-                        var contentVersionRepository = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
-                        var updatedContentList = contentVersionRepository.List(contentData.ContentLink).OrderByDescending(v => v.Saved);
-                        epiStatusLabel.Text = updatedContentList.FirstOrDefault().Status.ToString();
+                        //check for item in trash
+                        if (recycleBin.Contains(contentData.ContentLink))
+                        {
+                            epiStatusLabel.Text = "Item in Trash";
+                        }
+                        else
+                        {
+                            var contentVersionRepository =
+                                ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+                            var updatedContentList = contentVersionRepository.List(contentData.ContentLink)
+                                .OrderByDescending(v => v.Saved);
+                            epiStatusLabel.Text = updatedContentList.FirstOrDefault().Status.ToString();
+                        }
                     }
                 }
             }

@@ -194,12 +194,19 @@
 
        // Search Function
         $('#FullRegion_searchButton').click(function () {
+            // Toggle all items in the tree
+            $("ul").show();
+            var e = $("expand"), el = $("expandlast");
+            e.addClass("collapse").removeClass("expand");
+            e.addClass("collapselast").removeClass("expandlast");
+           
             var li;
             //remove selection from previous search
             searchedLi.forEach(function(item) {
                 $(item).removeClass('selected');
             });
-           
+            searchedLi = [];
+          
            var ul = $('#FullRegion_treeView').find("li");
            var searchText = $('#FullRegion_searchKey').val().toUpperCase();
 
@@ -212,9 +219,12 @@
                         $(li).addClass('selected');
                        searchedLi.push(li);
                     } 
-                }
-       }
-           });
+                 }
+            }
+            if (searchedLi.length < 1) {
+                alert("This item does not exist!");
+            }
+            });
 
     </script>
 
