@@ -224,7 +224,15 @@
             if (searchedLi.length < 1) {
                 alert("This item does not exist!");
             }
-            });
+        });
+
+        //Prevent postback on hitting enter in search input area
+        $('#FullRegion_searchKey').keydown(function(event){
+            if(event.keyCode === 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
 
     </script>
 
