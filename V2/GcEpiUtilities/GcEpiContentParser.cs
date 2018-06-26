@@ -93,17 +93,17 @@ namespace GatherContentImport.GcEpiUtilities
 
             // Initialize a new MediaData object.
             MediaData file;
-            if (fileExtensions["Image"].Contains(fileExtension))
+            if (fileExtensions["Image"].Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
             {
                 file = contentRepository.GetDefault<GcEpiImageFile>(contentLink);
             }
 
-            else if (fileExtensions["Generic"].Contains(fileExtension))
+            else if (fileExtensions["Generic"].Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
             {
                 file = contentRepository.GetDefault<GcEpiGenericFile>(contentLink);
             }
 
-            else if (fileExtensions["Video"].Contains(fileExtension))
+            else if (fileExtensions["Video"].Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
             {
                 file = contentRepository.GetDefault<GcEpiVideoFile>(contentLink);
             }

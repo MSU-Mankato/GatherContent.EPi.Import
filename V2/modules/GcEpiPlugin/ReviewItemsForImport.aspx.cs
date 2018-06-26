@@ -391,6 +391,12 @@ namespace GatherContentImport.modules.GcEpiPlugin
                         var content = currentMapping.PostType == "PageType"
                             ? _contentRepository.Get<PageData>(importedItem.ContentGuid)
                             : _contentRepository.Get<BlockData>(importedItem.ContentGuid) as IContent;
+
+
+                        // WARNING! Work in Progress.
+                        var contentCache = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+                        var updatedContentList = contentCache.List(content.ContentLink);
+
                         if (!recycleBin.Contains(content.ContentLink))
                         {
                             checkBoxEpiItemUpdate.Enabled = true;
@@ -555,10 +561,11 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             var epiStatusFromMapping = statusMapsForThisItem.MappedEpiserverStatus.Split('~')[0];
             var onImportGcStatusFromMapping = statusMapsForThisItem.OnImportChangeGcStatus.Split('~')[0];
-
             var saveAction = epiStatusFromMapping is "Use Default Status"
                 ? _saveActions.Find(i => i.ToString() == currentMapping.DefaultStatus)
                 : _saveActions.Find(i => i.ToString() == epiStatusFromMapping);
+
+            // Save the content with appropriate save action.
             _contentRepository.Save(content, saveAction);
 
             // Change the status on GatherContent if the user selected any option other than 'Do not change'.
@@ -735,7 +742,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 .FindAll(i => i.AccountId == _credentialsStore.First().AccountId);
             var updateCount = 0;
             var gcItem = new GcItem();
-            
+
             foreach (var key in Request.Form)
             {
                 if (!key.ToString().Contains("chkGcUpdate")) continue;
@@ -795,7 +802,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                            $"&TemplateId={Session["TemplateId"]}&ProjectId={Session["ProjectId"]}'</script>");
         }
 
-        private static List<GcConfig> MapValuesFromEpiToGc(ContentType contentType, GcDynamicTemplateMappings currentMapping, 
+        private static List<GcConfig> MapValuesFromEpiToGc(ContentType contentType, GcDynamicTemplateMappings currentMapping,
             List<GcConfig> gcConfigs, IContentData contentData)
         {
             foreach (var map in currentMapping.EpiFieldMaps)
@@ -816,30 +823,30 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
                 foreach (var gcConfig in gcConfigs)
                 {
-                   foreach (var gcElement in gcConfig.Elements.ToList())
+                    foreach (var gcElement in gcConfig.Elements.ToList())
+                    {
+                        if (gcElement.Name != gcFieldName) continue;
+                        var epiContentData = contentData.Property[propDef.Name].Value;
+                        var updatedGcElement = string.Empty;
+
+                        if (epiContentData != null)
                         {
-                            if (gcElement.Name != gcFieldName) continue;
-                            var epiContentData = contentData.Property[propDef.Name].Value;
-                            var updatedGcElement = string.Empty;
-
-                            if (epiContentData != null)
-                            {
-                                updatedGcElement =
-                                    GcEpiContentParser.GcPostTextParser(epiContentData, propDef.Type.Name, gcElement.Type);
-                            }
-
-                            if (gcElement.Type == "text")
-                            {
-                                gcElement.Value = updatedGcElement;
-                            }
-                            else if (gcElement.Type == "section")
-                            {
-                                gcElement.Subtitle = updatedGcElement;
-                            }
+                            updatedGcElement =
+                                GcEpiContentParser.GcPostTextParser(epiContentData, propDef.Type.Name, gcElement.Type);
                         }
 
+                        if (gcElement.Type == "text")
+                        {
+                            gcElement.Value = updatedGcElement;
+                        }
+                        else if (gcElement.Type == "section")
+                        {
+                            gcElement.Subtitle = updatedGcElement;
+                        }
                     }
+
                 }
+            }
             return gcConfigs;
         }
 
@@ -904,12 +911,10 @@ namespace GatherContentImport.modules.GcEpiPlugin
             {
                 responseMessage = $"alert('{gcItem.Name} successfully updated!');";
             }
-
             else if (updateCounter > 1)
             {
                 responseMessage = $"alert('{gcItem.Name} and {updateCounter - 1} other items successfully updated!');";
             }
-
             else
             {
                 responseMessage = "alert('No items selected! Please select the checkbox in the Update EPi column you would " +
