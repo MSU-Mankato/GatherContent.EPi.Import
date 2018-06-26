@@ -1,4 +1,5 @@
-<%@ Page Language="c#" Codebehind="ReviewItemsForImport.aspx.cs" AutoEventWireup="False" Inherits="GatherContentImport.modules.GcEpiPlugin.ReviewItemsForImport" Title="ReviewItemsForImport" Async="true" %>
+<%@ Page Language="c#" CodeBehind="ReviewItemsForImport.aspx.cs" AutoEventWireup="False" Inherits="GatherContentImport.modules.GcEpiPlugin.ReviewItemsForImport" Title="ReviewItemsForImport" Async="true" %>
+
 <html>
 <head id="Head1" runat="server">
     <link href="/EPiServer/CMS/App_Themes/Default/Styles/system.css" type="text/css" rel="stylesheet">
@@ -10,116 +11,184 @@
         .auto-style4 {
             width: 1477px;
         }
-        .auto-style4 tr:nth-child(even){
-            background-color: #f2f2f2;
+
+            .auto-style4 tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .auto-style4 thead {
+                background-color: #d2d2d2;
+            }
+
+                .auto-style4 thead tr td {
+                    font-weight: bold;
+                }
+
+        .LinkNoUnderline {
+            text-decoration: none;
         }
-        .auto-style4 thead {
-            background-color: #d2d2d2;
-        }
-        .auto-style4 thead tr td{
-            font-weight: bold;
-        }
-        .LinkNoUnderline
-        {
-            text-decoration:none;
-        }
-        .btn 
-        {
+
+        .btn {
             padding: 2px 20px;
             text-decoration: none;
             border: solid 1px #000;
             background-color: #ababab;
         }
+
         td {
             padding-top: 1%;
             text-align: center;
         }
-        
+
         .auto-style5 {
             width: 1471px;
         }
-        
+
+        .status {
+            text-align: center;
+            padding: 0.5%
+        }
     </style>
-   
+
 </head>
 <body>
-<form id="form1" runat="server">
-    <div  style="margin-left: 1%;">
-        <h1>GatherContent</h1>
-        <h2>Import Items For: <asp:Label runat="server" ID="templateName"></asp:Label></h2>
-        <h4><asp:Label runat="server" ID="templateDescription"></asp:Label></h4>
-        <p style="font-style: italic;">Project: <asp:Label runat="server" ID="projectName"></asp:Label></p>
-        <h4>Default Parent Page/Block: &nbsp;
-            <asp:DropDownList runat="server" ID="ddlDefaultParent" class="chosen-select" Height="30px" Width="300px" /> &nbsp; &nbsp;
-            <asp:Button runat="server" Text="Set" ID="btnDefaultParentSave" OnClick="BtnDefaultParentSave_OnClick" OnClientClick="loadingAnimation()"/>
-        </h4>
-    </div>
-    <fieldset style="border: none;" class="auto-style5">
-        <table class="auto-style4">
-            <asp:Repeater runat="server" ID="rptGcItems" OnItemCreated="RptGcItems_OnItemCreated">
-                <HeaderTemplate>
-                    <thead>
-                    <tr>
-                        <td></td>
-                        <td><h4>Item</h4></td>
-                        <td><h4>GC Status</h4></td>
-                        <td><h4>Updated in GC</h4></td>
-                        <td><h4>Parent Page/Block</h4></td>
-                        <td><h4>EPi Import Status</h4></td>
-                        <td><h4>Imported on</h4></td>
-                        <td><h4>Pull from GC</h4></td>
-                    </tr>
-                    </thead>
-                </HeaderTemplate>
-                <ItemTemplate>
-                    <tr>
-                        <td>
-                            <asp:CheckBox ID="chkItem" runat="server" Enabled="False" Visible="False"/>
-                        </td>
-                        <td>
-                            <asp:HyperLink runat="server" ID="lnkItemName" Target="_blank" CssClass="LinkNoUnderline">
-                            </asp:HyperLink>
-                        </td>
-                        <td>
-                            <asp:Label runat="server" ID="statusName">
-                            </asp:Label>
-                        </td>
-                        <td><asp:Label runat="server" ID="updatedAt">
-                        </asp:Label></td>
-                        <td>
-                            <h4>
-                                <asp:DropDownList runat="server" ID="ddlParentId" class="chosen-select" Height="30px" Width="300px" Enabled="False">
-                                </asp:DropDownList>
-                            </h4>
-                        </td>
-                        <td>
-                            <asp:HyperLink runat="server" Target="_blank" ID="lnkIsImported" CssClass="LinkNoUnderline"></asp:HyperLink>
-                        </td>
-                        <td>
-                            <asp:Label runat="server" ID="importedOn"></asp:Label>
-                        </td>
-                        <td>
-                            <asp:CheckBox runat="server" ID="chkUpdateContent" Text="Update Item" Visible="False" Enabled="False"/>
-                        </td>
-                    </tr>
-                </ItemTemplate>
-                <FooterTemplate>
-                
-                </FooterTemplate>
-            </asp:Repeater>
-        </table>
-        <p>
-            <asp:Button runat="server" ID="btnPrevious" Text="Back" PostBackUrl="GcEpiTemplateMappings.aspx" OnClientClick ="loadingAnimation()"/>
-            <asp:Button runat="server" ID="btnImportItem" Text="Import Items" Enabled="False" OnClick="BtnImportItem_OnClick" 
-                        OnClientClick="return confirmDialog('Are you sure you want to import these item(s)?');"/>
-            <span style="float: right; margin-right: 2%;"><asp:Button runat="server" ID="btnUpdateItem" Text="Update Items"
-                                                                      Visible="False" Enabled="False" OnClick="BtnUpdateItem_OnClick"
-                                                                      OnClientClick="return confirmDialog('Are you sure you want to update these item(s)?');"/></span>
-        </p>
-    </fieldset>
-</form>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js" type="text/javascript"></script>
-<script src="/modules/GcEpiPlugin/ClientResources/js/chosen.jquery.js" type="text/javascript"></script>
-<script src="/modules/GcEpiPlugin/ClientResources/js/loading.js" type="text/javascript"></script>
+    <form id="form1" runat="server">
+        <div style="margin-left: 1%;">
+            <h1>GatherContent</h1>
+            <h2>Import Items For:
+                <asp:Label runat="server" ID="templateName"></asp:Label></h2>
+            <h4>
+                <asp:Label runat="server" ID="templateDescription"></asp:Label></h4>
+            <p style="font-style: italic;">Project:
+                <asp:Label runat="server" ID="projectName"></asp:Label></p>
+            <div>
+
+                <asp:Button runat="server" Text="Select Default Parent" ID="btnDefaultParentSave" OnClientClick="openPopupWindow();return false;" />
+                <input runat="server" id="defaultSelectItemName" width="300px" disabled="true"/>
+                <input runat="server" id="defaultSelectItemId" width="300px" type="hidden" />&nbsp; &nbsp;
+            <asp:Button runat="server" Text="Set" ID="btnSetDefaultParentSave" OnClick="BtnSetDefaultParentSave_OnClick" OnClientClick="loadingAnimation()"/>
+            </div>
+        </div>
+        <fieldset style="border: none;" class="auto-style5">
+            <table class="auto-style4">
+                <asp:Repeater runat="server" ID="rptGcItems" OnItemCreated="RptGcItems_OnItemCreated">
+                    <HeaderTemplate>
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <h4>Item</h4>
+                                </td>
+                                <td>
+                                    <h4>Item Status</h4>
+                                </td>
+                                <td>
+                                    <h4>Updated in GC</h4>
+                                </td>
+                                <td>
+                                    <h4>Parent Page/Block</h4>
+                                </td>
+                                <td>
+                                    <h4>EPi Import Status</h4>
+                                </td>
+                                <td>
+                                    <h4>Imported on</h4>
+                                </td>
+                                <td>
+                                    <h4>Update EPi</h4>
+                                </td>
+                                <td>
+                                    <h4>Update GC</h4>
+                                </td>
+                            </tr>
+                        </thead>
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                        <tr>
+                            <td>
+                                <asp:CheckBox ID="chkItem" runat="server" Enabled="False" Visible="False" />
+                            </td>
+                            <td>
+                                <asp:HyperLink runat="server" ID="lnkItemName" Target="_blank" CssClass="LinkNoUnderline">
+                                </asp:HyperLink>
+                            </td>
+                            <td class="status">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <p><b>GC :</b></p>
+                                        </td>
+                                        <td>
+                                            <asp:Label runat="server" ID="GcStatus">
+                                            </asp:Label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p><b>EPi :</b></p>
+                                        </td>
+                                        <td>
+                                            <asp:Label runat="server" ID="EPiStatus">
+                                            </asp:Label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                            <td>
+                                <asp:Label runat="server" ID="updatedAt">
+                                </asp:Label></td>
+                            <td>
+                                <h4>
+                                    <asp:DropDownList runat="server" ID="ddlParentId" class="chosen-select" Height="30px" Width="300px" Enabled="False">
+                                    </asp:DropDownList>
+                                </h4>
+                            </td>
+                            <td>
+                                <asp:HyperLink runat="server" Target="_blank" ID="lnkIsImported" CssClass="LinkNoUnderline"></asp:HyperLink>
+                            </td>
+                            <td>
+                                <asp:Label runat="server" ID="importedOn"></asp:Label>
+                            </td>
+                            <td>
+                                <asp:CheckBox runat="server" ID="chkUpdateEpiContent" Text="Update EPi Item" Visible="False" Enabled="False" />
+                            </td>
+                            <td>
+                                <asp:CheckBox runat="server" ID="chkUpdateGcContent" Text="Update GC Item" Visible="False" Enabled="False" />
+                            </td>
+                        </tr>
+                    </ItemTemplate>
+                    <FooterTemplate>
+                    </FooterTemplate>
+                </asp:Repeater>
+            </table>
+            <p>
+                <asp:Button runat="server" ID="btnPrevious" Text="Back" PostBackUrl="GcEpiTemplateMappings.aspx" OnClientClick="loadingAnimation()" />
+                <asp:Button runat="server" ID="btnImportItem" Text="Import Items" Enabled="False" OnClick="BtnImportItem_OnClick"
+                    OnClientClick="return confirmDialog('Are you sure you want to import these item(s)?');" />
+                <span style="float: right; margin-right: 1%;">
+                    <asp:Button runat="server" ID="btnUpdateEpiItem" Text="Update EPiServer Items" Width="160px"
+                        Visible="False" Enabled="False" OnClick="BtnUpdateEpiItem_OnClick"
+                        OnClientClick="return confirmDialog('Are you sure you want to update these item(s) from GC to EPi? This change overwrites the previous content in EPi.');" />
+                    &nbsp;
+                <asp:Button runat="server" ID="btnUpdateGcItem" Text="Update GC Items" Width="120px" Visible="False" Enabled="False" OnClick="BtnUpdateGcItem_OnClick"
+                    OnClientClick="return confirmDialog('Are you sure you want to update these item(s) from EPi to GC? This change overwrites the previous content in GC.');" />
+
+                </span>
+            </p>
+        </fieldset>
+    </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js" type="text/javascript"></script>
+    <script src="/modules/GcEpiPlugin/ClientResources/js/chosen.jquery.js" type="text/javascript"></script>
+    <script src="/modules/GcEpiPlugin/ClientResources/js/loading.js" type="text/javascript">
+    </script>
+    <script>
+        function openPopupWindow() {
+            var postType = '<%= PostType %>';
+            //Open the popup page  
+            window.open('SelectParent.aspx?PostType=' + postType, 'popup_window', 'width=500,height=500,left=500,top=100,resizable=yes').focus();
+            return false;
+        }
+    </script>
 </body>
 </html>

@@ -59,22 +59,36 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
         protected void BtnDeleteTemplate_OnClick(object sender, EventArgs e)
         {
+            Client = new GcConnectClient(_credentialsStore.ToList().First().ApiKey, _credentialsStore.ToList().First().Email);
             var mappingCount = 0;
+            var deleteCount = 0;
             foreach (var key in Request.Form)
             {
                 if (!key.ToString().StartsWith("rptTableMappings")) continue;
                 var splitStrings = key.ToString().Split('$');
                 var templateId = splitStrings[2];
-
                 var index = _mappingsStore.FindIndex(i => i.TemplateId == templateId);
-                GcDynamicUtilities.DeleteItem<GcDynamicTemplateMappings>(_mappingsStore[index].Id);
-                mappingCount++;
-            }
+
+                // Revoke delete if the current template mapping has some items imported already. 
+                var importedItems = GcDynamicUtilities.RetrieveStore<GcDynamicImports>();
+                if (importedItems.Any(i =>
+                    Client.GetItemById(i.ItemId.ToString()).TemplateId.ToString() == templateId))
+                {
+                    deleteCount++;
+                }
+                else
+                {
+                    GcDynamicUtilities.DeleteItem<GcDynamicTemplateMappings>(_mappingsStore[index].Id);
+                    mappingCount++;
+                }
+              }
             const string windowLocation = "window.location = '/modules/GcEpiPlugin/GcEpiTemplateMappings.aspx'";
             Response.Write(mappingCount > 0 ? $"<script>alert('{mappingCount} template mapping(s) successfully deleted!');" +
-                                              $"{windowLocation}</script>" :
-                                               "<script>alert('No mappings selected! Please select the checkbox next to the " +
-                                              $"mapping you would like to delete!');{windowLocation}</script>");
+                                              $"{windowLocation}</script>" : 
+                                               deleteCount > 0 ? $"<script>alert('{deleteCount} template mappings could not be" +
+                                                                 $" deleted as some of the items were imported');{windowLocation}</script>":
+                                                                "<script>alert('No mappings selected! Please select the checkbox next to the " +
+                                                                $"mapping you would like to delete!');{windowLocation}</script>");
         }
 
         protected void RptTableMappings_OnItemCreated(object sender, RepeaterItemEventArgs e)
@@ -107,7 +121,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 linkAccountSlug.NavigateUrl = $"https://{slug}.gathercontent.com/";
             if (e.Item.FindControl("lnkProject") is HyperLink linkProject)
             {
-                if (thisProject.Name != null)
+                if (thisProject != null)
                 {
                     linkProject.Text = thisProject.Name;
                     linkProject.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.ProjectId}";
@@ -119,7 +133,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
             }
             if (e.Item.FindControl("lnkTemplate") is HyperLink linkTemplate)
             {
-                if (thisTemplate.Name != null)
+                if (thisTemplate != null)
                 {
                     linkTemplate.Text = thisTemplate.Name;
                     linkTemplate.NavigateUrl = $"https://{slug}.gathercontent.com/templates/{map.TemplateId}";

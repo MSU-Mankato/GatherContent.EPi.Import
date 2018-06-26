@@ -157,5 +157,38 @@ namespace GatherContentImport.GcEpiUtilities
                 return false;
             }
         }
+
+        public static string GcPostTextParser(object contentData, string propertyType, string gcType)
+        {
+            var rawResult = string.Empty;
+            switch (propertyType)
+            {
+                case "Date":
+                case "Number":
+                case "FloatNumber":
+                case "Url":
+                case "String":
+                case "LongString": 
+                    rawResult = contentData.ToString();
+                    break;
+                case "StringList":
+                    rawResult = ((IEnumerable<string>) contentData).Aggregate(rawResult, (current, tag) => current + (tag + ", "));
+                    rawResult.Remove(rawResult.Length - 3);
+                    break;
+                default:
+                    rawResult = Regex.Replace(contentData.ToString(), "<.*?>|&.*?;", string.Empty).Trim();
+                    break;
+            }
+
+            switch (gcType)
+            {
+                case "text":
+                    return $"<p>\n   {rawResult}\n</p>";
+                case "section":
+                    return $"<p>{rawResult}</p>";
+                default:
+                    return "";
+            }
+        }
     }
 }
