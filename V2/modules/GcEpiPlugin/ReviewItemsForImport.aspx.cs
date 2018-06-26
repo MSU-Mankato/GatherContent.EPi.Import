@@ -444,7 +444,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
             if (e.Item.FindControl("EPiStatus") is Label epiStatusLabel)
             {
-                var itemIdList = _contentStore.Select(i => i.ItemId).ToList();
+                var cStore = GcDynamicUtilities.RetrieveStore<GcDynamicImports>();
+                var itemIdList = cStore.Select(i => i.ItemId).ToList();
                 if (!itemIdList.Contains(gcItem.Id))
                 {
                     epiStatusLabel.Text = "---";
@@ -452,8 +453,8 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 else
                 {
                     var contentData = currentMapping.PostType == "PageType"
-                        ? _contentRepository.Get<PageData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid)
-                        : _contentRepository.Get<BlockData>(_contentStore.Find(x => x.ItemId == gcItem.Id).ContentGuid) as IContent;
+                        ? _contentRepository.Get<PageData>(cStore.Find(x => x.ItemId == gcItem.Id).ContentGuid)
+                        : _contentRepository.Get<BlockData>(cStore.Find(x => x.ItemId == gcItem.Id).ContentGuid) as IContent;
 
                     if (contentData != null)
                     {

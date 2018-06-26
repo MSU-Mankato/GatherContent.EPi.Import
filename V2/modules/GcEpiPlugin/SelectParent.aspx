@@ -9,14 +9,14 @@
     <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/chosen.css">
     <link rel="stylesheet" href="/modules/GcEpiPlugin/ClientResources/css/loading.css">
     <link type='text/css' rel='Stylesheet' href='/Util/styles/pagetreeview.css'>
-    
-    <style>
-        ul ul {
-            display: none;
-        }
+    <link type='text/css' rel='Stylesheet' href='/Util/styles/pagetreeview.css' />
 
-       </style>
     <title>Select Default Parent</title>
+    <style>
+        .found {
+           background: #abaaaa;
+        }
+    </style>
 </head>
 <body class="epi-applicationSidebar">
     <form id="selectParentForm" runat="server">
@@ -33,10 +33,10 @@
             <div class="episerver-pagetreeview">
                 <ul id="FullRegion_treeView">
                     <li class="parentlast">
-                        <span class="icon expandlast" id="btnExpandRoot">&nbsp;</span>
+                        <span class="icon collapselast" id="btnExpandRoot">&nbsp;</span>
                         <span class="templatecontainer">
                             <img class="typeicon" src="/App_Themes/Default/Images/ExplorerTree/PageTree/Root.gif">
-                            </span>
+                        </span>
                         <ul id="FullRegion_pageTreeView_treeView">
                         </ul>
                     </li>
@@ -67,26 +67,15 @@
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="/EPiServer/Shell/11.2.0.0/ClientResources/ShellCore.js"></script>
     <script type="text/javascript" src="/EPiServer/CMS/11.2.0.0/ClientResources/ReportCenter/ReportCenter.js"></script>
-
     <script src="/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZHL4XgZJAWRSoJmhp9VIRDSrDSTzS7iFY8NXY_K4Y7eNLiEwmHiX3R-lfQlpFWNSQQ2&amp;t=636590685237014043" type="text/javascript"></script>
-
-
     <script src="/Util/javascript/episerverscriptmanager.js" type="text/javascript"></script>
     <script src="/EPiServer/CMS/javascript/system.js" type="text/javascript"></script>
     <script src="/EPiServer/CMS/javascript/dialog.js" type="text/javascript"></script>
     <script src="/EPiServer/CMS/javascript/system.aspx" type="text/javascript"></script>
     <script src="/EPiServer/CMS/javascript/epitooltip.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        //<![CDATA[
-        function _pageExplorerInit(treeView) {
-            treeView.OnNodeOver = EPi.ToolTip.Show;
-            initPageTreeView(treeView);
-        }
-//]]>
-    </script>
-    <link type='text/css' rel='Stylesheet' href='/Util/styles/pagetreeview.css'></link>
     <script src="/EPiServer/CMS/javascript/pagetreeview.js" type="text/javascript"></script>
-    <script type="text/javascript">
+    <script>
+
         var data = '<%= JsonItemTree %>';
         var x = JSON.parse(data);
         var jsonItemListData = '<%= JsonItemList %>';
@@ -96,76 +85,78 @@
 
         // Creates tree structure out of nested json
         $(function () {
-            function parseTree(ul, tree) {
-                for (var i = 0; i < tree.length; i++) {
-                    var expandBtnSpan = $('<span />');
-                    var innerSpan = $('<span />').addClass('templatecontainer').attr('id', 'toggleColor' + tree[i].ItemId);
-                    var li = $('<li/>');
-
-                    if (i === tree.length - 1) {
-                        expandBtnSpan.addClass('icon expandlast').attr('id', 'btnExpand')
-                            .html('&nbsp');
-                        li.addClass('parentlast').appendTo(ul);
-                    } else {
-                        li.addClass('parent').appendTo(ul);
-                        expandBtnSpan.addClass('icon expand').attr('id', 'btnExpand')
-                            .html('&nbsp');
-                    }
-
-                    li.append(expandBtnSpan).append(innerSpan);
-
-                    var aItem = $('<a/>')
-                        .addClass('containernode')
-                        .attr(
-                        { 'href': '#', 'id': tree[i].ItemId, 'onclick': 'highlightSelectedItem(this.id, "' + tree[i].ItemName + '")' })
-                        .text(tree[i].ItemName)
-                        .appendTo(innerSpan);
-
-                    if (tree[i].Children != null) {
-                        var subul = $('<ul class="ullist"></ul>');
-                        $(li).append(subul);
-                        parseTree($(subul), tree[i].Children);
-                    }
-                }
-            }
-
             // Parsing of root item of the json object
-            var aRootTag = $('<a/>').addClass('containernode').attr(
+            var aRootTag = $('<a />').addClass('containernode').attr(
                 { 'href': '#', 'id': x.ItemId, 'onclick': 'highlightSelectedItem(this.id, "' + x.ItemName + '")' }).text(x.ItemName);
             $('span.templatecontainer').attr('id', 'toggleColor' + x.ItemId).append(aRootTag);
 
             var tree = $('#FullRegion_pageTreeView_treeView');
             parseTree(tree, x.Children);
 
-            $("span#btnExpand").click(function () {
-                $(this).siblings("ul.ullist").toggle();
+            // Add toggle function for nodes
+            $("span#btnExpand").click(toggleChild);
+            $("span#btnExpandRoot").click(toggleRoot);
 
-                // Filter leaf nodes and assign respective classes.
-                if (!$(this).siblings("ul.ullist").children('li').length) {
-                    if ($(this).hasClass("expand")) {
-                        $(this).removeClass("expand").addClass("leafnode");
-                    } else {
-                        $(this).removeClass("expandlast").addClass("leafnodelast");
-                    }
-                }
-                else {
-                    if ($(this).hasClass("collapselast") || $(this).hasClass("expandlast")) {
-                        $(this).toggleClass("collapselast expandlast");
-                    }
-                    if ($(this).hasClass("collapse") || $(this).hasClass("expand")) {
-                        $(this).toggleClass("expand collapse");
-                    }
-                }
-                return false;
-            });
+            // Call searh function
+            $('#FullRegion_searchButton').click(searchItem);
 
-            // For root item toggle button
-            $("span#btnExpandRoot").click(function() {
-                $(this).siblings("ul#FullRegion_pageTreeView_treeView").toggle();
-                $(this).toggleClass("expandlast collapselast");
-                return false;
-            });
         });
+
+        // For root item toggle button
+        function toggleRoot() {
+            $(this).siblings("ul#FullRegion_pageTreeView_treeView").toggle();
+            $(this).toggleClass("collapselast expandlast");
+            return false;
+        }
+
+        // For children item toggle button
+        function toggleChild() {
+            $(this).siblings("ul.ullist").toggle();
+
+            // Filter leaf nodes and assign respective classes.
+            if (!$(this).siblings("ul.ullist").children('li').length) {
+                if ($(this).hasClass("collapse")) {
+                    $(this).removeClass("collapse").addClass("leafnode");
+                } else {
+                    $(this).removeClass("collapselast").addClass("leafnodelast");
+                }
+            }
+            else {
+                if ($(this).hasClass("collapselast") || $(this).hasClass("expandlast")) {
+                    $(this).toggleClass("collapselast expandlast");
+                }
+                if ($(this).hasClass("collapse") || $(this).hasClass("expand")) {
+                    $(this).toggleClass("expand collapse");
+                }
+            }
+            return false;
+        }
+
+        function searchItem() {
+            var li;
+            //remove selection from previous search
+            searchedLi.forEach(function (item) {
+                $(item).removeClass('found');
+            });
+            searchedLi = [];
+
+            var ul = $('#FullRegion_treeView').find("li");
+            var searchText = $('#FullRegion_searchKey').val().toUpperCase();
+
+            for (var i = 0; i < ul.length; i++) {
+                var a = $(ul[0]).find('a')[i];
+                if (a != undefined) {
+                    if (a.text.toUpperCase().indexOf(searchText) > -1) {
+                        li = $(ul[0]).find('.templatecontainer')[i];
+                        $(li).addClass('found');
+                        searchedLi.push(li);
+                    }
+                }
+            }
+            if (searchedLi.length < 1) {
+                alert("This item does not exist!");
+            }
+        }
 
         var selectedId = 0;
         // Highlight selected item from tree.
@@ -191,51 +182,47 @@
             return false;
         }
 
+        // Creates tree structure out of nested json
+        function parseTree(ul, tree) {
+            for (var i = 0; i < tree.length; i++) {
+                var expandBtnSpan = $('<span />');
+                var innerSpan = $('<span />').addClass('templatecontainer').attr('id', 'toggleColor' + tree[i].ItemId);
+                var li = $('<li/>');
 
-       // Search Function
-        $('#FullRegion_searchButton').click(function () {
-            // Toggle all items in the tree
-            $("ul").show();
-            var e = $("expand"), el = $("expandlast");
-            e.addClass("collapse").removeClass("expand");
-            e.addClass("collapselast").removeClass("expandlast");
-           
-            var li;
-            //remove selection from previous search
-            searchedLi.forEach(function(item) {
-                $(item).removeClass('selected');
-            });
-            searchedLi = [];
-          
-           var ul = $('#FullRegion_treeView').find("li");
-           var searchText = $('#FullRegion_searchKey').val().toUpperCase();
+                if (i === tree.length - 1) {
+                    expandBtnSpan.addClass('icon collapselast').attr('id', 'btnExpand')
+                        .html('&nbsp');
+                    li.addClass('parentlast').appendTo(ul);
+                } else {
+                    li.addClass('parent').appendTo(ul);
+                    expandBtnSpan.addClass('icon collapse').attr('id', 'btnExpand')
+                        .html('&nbsp');
+                }
 
-            for(var i =0; i<ul.length; i++) 
-            {
-                var a = $(ul[0]).find('a')[i];
-                if (a != undefined) {
-                    if (a.text.toUpperCase().indexOf(searchText) > -1) {
-                       li = $(ul[0]).find('.templatecontainer')[i];
-                        $(li).addClass('selected');
-                       searchedLi.push(li);
-                    } 
-                 }
+                li.append(expandBtnSpan).append(innerSpan);
+
+                var aItem = $('<a/>')
+                    .addClass('containernode')
+                    .attr(
+                        { 'href': '#', 'id': tree[i].ItemId, 'onclick': 'highlightSelectedItem(this.id, "' + tree[i].ItemName + '")' })
+                    .text(tree[i].ItemName)
+                    .appendTo(innerSpan);
+
+                if (tree[i].Children != null) {
+                    var subul = $('<ul class="ullist"></ul>');
+                    $(li).append(subul);
+                    parseTree($(subul), tree[i].Children);
+                }
             }
-            if (searchedLi.length < 1) {
-                alert("This item does not exist!");
-            }
-        });
-
+        }
         //Prevent postback on hitting enter in search input area
-        $('#FullRegion_searchKey').keydown(function(event){
-            if(event.keyCode === 13) {
+        $('#FullRegion_searchKey').keydown(function (event) {
+            if (event.keyCode === 13) {
                 event.preventDefault();
                 return false;
             }
         });
 
     </script>
-
-
 </body>
 </html>
