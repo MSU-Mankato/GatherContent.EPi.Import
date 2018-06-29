@@ -123,7 +123,7 @@
                                             </asp:Label>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr style="background-color : transparent;">
                                         <td>
                                             <p><b>EPi :</b></p>
                                         </td>
