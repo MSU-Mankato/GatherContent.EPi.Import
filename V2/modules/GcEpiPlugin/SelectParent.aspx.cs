@@ -36,6 +36,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
 
         private void PopulateForm()
         {
+           
             var postType = Server.UrlDecode(Request.QueryString["PostType"]);
             if (postType == null)
             {
@@ -51,7 +52,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 var parent = _contentRepository.Get<PageData>(ContentReference.RootPage);
                 var contentItemTree = new ItemTree<PageData>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
                 SortContent(parent, sortedDescendants, contentItemTree);
-                JsonItemTree = JsonConvert.SerializeObject(contentItemTree);
+                JsonItemTree = JsonConvert.SerializeObject(contentItemTree, JsonSettings());
                 JsonItemList = GetJsonItemList(parent, sortedDescendants);
             }
             else
@@ -59,7 +60,7 @@ namespace GatherContentImport.modules.GcEpiPlugin
                 var parent = _contentRepository.Get<ContentFolder>(ContentReference.GlobalBlockFolder);
                 var contentItemTree = new ItemTree<ContentFolder>(parent.ContentTypeID, parent.Name, parent.ParentLink.ID);
                 SortContent(parent, sortedDescendants, contentItemTree);
-                JsonItemTree = JsonConvert.SerializeObject(contentItemTree);
+                JsonItemTree = JsonConvert.SerializeObject(contentItemTree, JsonSettings());
                 JsonItemList = GetJsonItemList(parent, sortedDescendants);
             }
         }
@@ -103,7 +104,16 @@ namespace GatherContentImport.modules.GcEpiPlugin
                     {"ParentItemId", descendant.ParentLink.ID.ToString()}
                 })
                 .ToList();
-            return JsonConvert.SerializeObject(jsonItemDictionary);
+            return JsonConvert.SerializeObject(jsonItemDictionary, JsonSettings());
+        }
+
+        private static JsonSerializerSettings JsonSettings()
+        {
+            return new JsonSerializerSettings
+            {
+                StringEscapeHandling = StringEscapeHandling.EscapeHtml
+            };
+
         }
     }
 }

@@ -76,10 +76,10 @@
     <script src="/EPiServer/CMS/javascript/pagetreeview.js" type="text/javascript"></script>
     <script>
 
-        var data = '<%= JsonItemTree %>';
-        var x = JSON.parse(data);
-        var jsonItemListData = '<%= JsonItemList %>';
-        var parsedJsonItemListData = JSON.parse(jsonItemListData);
+        var x = <%= JsonItemTree %>;
+        //var x = JSON.parse(data);
+        //var jsonItemListData = '<%= JsonItemList %>';
+        var parsedJsonItemListData = <%= JsonItemList %>;//JSON.parse(jsonItemListData);
         //Array of searched li elements
         var searchedLi = [];
 
